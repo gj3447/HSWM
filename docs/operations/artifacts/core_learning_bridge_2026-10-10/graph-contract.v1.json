@@ -1,0 +1,248 @@
+{
+  "schema": "hswm-core-learning-graph-contract/v1",
+  "authority": "SECONDARY_AI_DESIGN",
+  "identity": {
+    "root": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+    "members": "sym:Concept:hswm-core-learning-2026-10-10-{id}",
+    "bridgeRoles": "Distinct selection and learning occurrences; role ordinal retained",
+    "scope": "E1..E6 are topic properties, not six subsystems or R1..R6"
+  },
+  "competency_questions": [
+    {
+      "query": "elements",
+      "question": "What are the six elements, their AI origin, canon source and verification question?",
+      "subjects": [
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5",
+        "E6"
+      ]
+    },
+    {
+      "query": "bridge",
+      "question": "What must follow which stage, what existing component is reusable, and what remains unconnected?",
+      "subjects": [
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B6",
+        "B7"
+      ]
+    },
+    {
+      "query": "gaps",
+      "question": "Which open compatibility gap blocks which stage?",
+      "subjects": [
+        "G1",
+        "G2",
+        "G3",
+        "G4",
+        "G5",
+        "G6",
+        "G7",
+        "G8"
+      ]
+    },
+    {
+      "query": "sources",
+      "question": "Which bytes and authority class support this graph?",
+      "subjects": [
+        "U1",
+        "S0",
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "predicate": "HAS_SOURCE",
+      "scope": "SOURCE_CATALOG",
+      "domain": [
+        "CORE_BUNDLE"
+      ],
+      "range": [
+        "CORE_SOURCE"
+      ],
+      "cardinality": "7",
+      "direction": "domain to range",
+      "meaning": "Navigate to source descriptors"
+    },
+    {
+      "predicate": "HAS_SOURCE",
+      "scope": "AI_ELEMENT_ORIGIN",
+      "domain": [
+        "CORE_ELEMENT"
+      ],
+      "range": [
+        "CORE_SOURCE"
+      ],
+      "cardinality": "1",
+      "direction": "domain to range",
+      "meaning": "AI summary origin, not user ratification"
+    },
+    {
+      "predicate": "HAS_SOURCE",
+      "scope": "CANON_CORRESPONDENCE",
+      "domain": [
+        "CORE_ELEMENT"
+      ],
+      "range": [
+        "CORE_SOURCE"
+      ],
+      "cardinality": "1",
+      "direction": "domain to range",
+      "meaning": "AI correspondence to existing canon; source section authority unchanged"
+    },
+    {
+      "predicate": "HAS_CONCEPT",
+      "scope": "CORE_MEMBER",
+      "domain": [
+        "CORE_BUNDLE"
+      ],
+      "range": [
+        "CORE_ELEMENT",
+        "CORE_BRIDGE",
+        "CORE_COMPONENT",
+        "CORE_GAP",
+        "CORE_CLI"
+      ],
+      "cardinality": "20",
+      "direction": "domain to range",
+      "meaning": "Local navigation, no automatic neighbor activation"
+    },
+    {
+      "predicate": "HAS_PARTICIPATION",
+      "scope": "BRIDGE_ROLE",
+      "domain": [
+        "CORE_BRIDGE"
+      ],
+      "range": [
+        "CORE_PARTICIPATION"
+      ],
+      "cardinality": "2",
+      "direction": "domain to range",
+      "meaning": "Separate role occurrences selection/learning"
+    },
+    {
+      "predicate": "REFERENCES",
+      "scope": "ROLE_TARGET",
+      "domain": [
+        "CORE_PARTICIPATION"
+      ],
+      "range": [
+        "CORE_ELEMENT"
+      ],
+      "cardinality": "1",
+      "direction": "domain to range",
+      "meaning": "Selection targets E2; learning targets E4"
+    },
+    {
+      "predicate": "HAS_CONCEPT",
+      "scope": "LEARNING_LANE",
+      "domain": [
+        "CORE_BRIDGE"
+      ],
+      "range": [
+        "CORE_LANE"
+      ],
+      "cardinality": "2",
+      "direction": "domain to range",
+      "meaning": "Separate activation policy and relation semantic revision"
+    },
+    {
+      "predicate": "HAS_CONCEPT",
+      "scope": "BRIDGE_STAGE",
+      "domain": [
+        "CORE_BRIDGE"
+      ],
+      "range": [
+        "CORE_STAGE"
+      ],
+      "cardinality": "7",
+      "direction": "domain to range",
+      "meaning": "Ordered proposed bridge stages"
+    },
+    {
+      "predicate": "REFERENCES",
+      "scope": "PREREQUISITE",
+      "domain": [
+        "CORE_STAGE"
+      ],
+      "range": [
+        "CORE_STAGE"
+      ],
+      "cardinality": "0 for B1; 1 immediate predecessor otherwise",
+      "direction": "domain to range",
+      "meaning": "Consumer stage points to prerequisite"
+    },
+    {
+      "predicate": "REFERENCES",
+      "scope": "REUSABLE_COMPONENT",
+      "domain": [
+        "CORE_STAGE"
+      ],
+      "range": [
+        "CORE_COMPONENT"
+      ],
+      "cardinality": "1..2",
+      "direction": "domain to range",
+      "meaning": "Existing source capability, not proof of integration"
+    },
+    {
+      "predicate": "REFERENCES",
+      "scope": "BLOCKS_STAGE",
+      "domain": [
+        "CORE_GAP"
+      ],
+      "range": [
+        "CORE_STAGE"
+      ],
+      "cardinality": "2..3",
+      "direction": "domain to range",
+      "meaning": "Unresolved compatibility requirement points to blocked stage"
+    },
+    {
+      "predicate": "REFERENCES",
+      "scope": "OWNED_USAGE",
+      "domain": [
+        "CORE_CLI"
+      ],
+      "range": [
+        "CORE_USAGE"
+      ],
+      "cardinality": "1",
+      "direction": "domain to range",
+      "meaning": "CLI to its owned usage"
+    },
+    {
+      "predicate": "REFERENCES",
+      "scope": "EXISTING_CONTEXT_IMPLEMENTATION",
+      "domain": [
+        "CORE_BRIDGE"
+      ],
+      "range": [
+        "ANCHOR"
+      ],
+      "cardinality": "1",
+      "direction": "domain to range",
+      "meaning": "Reuses existing context adapter; no identity or authority merge"
+    }
+  ],
+  "projection": "Existing native RDF v2, SPARQL 1.1, SHACL 1.0 and PROV-O; no new standard or dependency",
+  "loss": [
+    "Design graph contains no runtime events, outcomes or learned weights",
+    "External files are observations pinned in source-review, not automatically dereferenced live bindings",
+    "Ordered source/role identity contracts are design text until the adapter implements them",
+    "Structure/hash conformance does not establish source truth, meaning, permission or efficacy"
+  ],
+  "cycles": "No global DAG restriction; the seven proposed stages have a local immediate-prerequisite order",
+  "rollback": "Remove this new bundle/artifacts/query folder, workspace entry and navigation links; preserve historical evidence and canonical graph"
+}

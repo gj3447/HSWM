@@ -1,0 +1,10 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?id ?name ?status ?work ?previous ?component ?implementation ?source WHERE {
+ ?bridge a role:CORE_BRIDGE ; r:HAS_CONCEPT ?stage .
+ ?stage a role:CORE_STAGE ; p:stage_id ?id ; p:name ?name ; p:status ?status ;
+   p:work ?work ; r:REFERENCES ?reusable .
+ ?reusable a role:CORE_COMPONENT ; p:name ?component ; p:implementation ?implementation ; p:source_path ?source .
+ OPTIONAL { ?stage r:REFERENCES ?dependency . ?dependency a role:CORE_STAGE ; p:stage_id ?previous . }
+} ORDER BY ?id ?component

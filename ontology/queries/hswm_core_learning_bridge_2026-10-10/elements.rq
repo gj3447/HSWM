@@ -1,0 +1,10 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?id ?name ?question ?authority ?origin ?canonSource WHERE {
+ ?element a role:CORE_ELEMENT ; p:element_id ?id ; p:name ?name ; p:question ?question ;
+   p:authority_class ?authority ; r:HAS_SOURCE ?summary, ?canon .
+ ?summary p:source_authority "SECONDARY_AI_SUMMARY" ; p:source_path ?origin .
+ ?canon p:source_authority ?sourceAuthority ; p:source_path ?canonSource .
+ FILTER (?sourceAuthority != "SECONDARY_AI_SUMMARY")
+} ORDER BY ?id

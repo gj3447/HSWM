@@ -1,0 +1,1637 @@
+{
+  "schema_version": "hswm-core-selection-learning-bridge/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+  "status": "SOURCE_BOUND_LOCAL_DESIGN",
+  "nonclaim": "NOT_CONNECTED_W_LOOP_NOT_LIVE_KG_WRITE_NOT_MODEL_EFFICACY",
+  "authority_boundary": "AI synthesis and proposed bridge; original canon and single-owner authority unchanged",
+  "source_accessed_on": "2026-10-10",
+  "artifact_bindings": [
+    {
+      "path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+      "sha256": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373"
+    },
+    {
+      "path": "docs/canon/USER_PRIMARY_CHU_BEING_HSWM_STRUCTURE_2026-10-07.md",
+      "sha256": "edf0f916564602ae21ce5b008f7a6aac0cbda077b5c788c15b546574f76ac41e"
+    },
+    {
+      "path": "docs/canon/USER_PRIMARY_HSWM_OPTIMIZATION_RULES_2026-10-07.md",
+      "sha256": "656f50366980dbe0d3d816c3d95ba84d4e73b6bf1abf7cb7dcb3b1831cd4c45e"
+    },
+    {
+      "path": "docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md",
+      "sha256": "af5490bcb3aa7830dbfcf9c806c0e9d0b966d4c3a4e246ef1140f77bd3d8c32a"
+    },
+    {
+      "path": "docs/operations/HSWM_CORE_SELECTION_LEARNING_BRIDGE_2026-10-10.md",
+      "sha256": "dc40e619126d53804dd85e460ae5550c55aaa6c578fbc0de2cad0c38e990fb36"
+    },
+    {
+      "path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/conversation-sources.v1.json",
+      "sha256": "5311ffed059c28113766dfd8d9a5d4be5135dca858080125c55225f4a4a192ba"
+    },
+    {
+      "path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+      "sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c"
+    },
+    {
+      "path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/graph-contract.v1.json",
+      "sha256": "49faba3b5c9cf0c91db5468c84a89507b1f9999f3c435dd610b10276cdaca9e3"
+    },
+    {
+      "path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/source-review.v1.json",
+      "sha256": "50eb76b6855a4231ae8077123b5cfc8b8738222333dec8feeed3f696b6a7ce21"
+    },
+    {
+      "path": "ontology/development/HSWM_JEV_CONTEXT_SELECTION_2026-10-09.v1.json",
+      "sha256": "21bc3b208aa7049fd8f8dc5c253e013a1a6f921edaa50a677127ef88f1460351"
+    },
+    {
+      "path": "ontology/queries/hswm_core_learning_bridge_2026-10-10/bridge.rq",
+      "sha256": "e928229b194bd4b6518e7e5b7e7c29e9a62ed3c90b7a91b3b74c58c22c8b4681"
+    },
+    {
+      "path": "ontology/queries/hswm_core_learning_bridge_2026-10-10/elements.rq",
+      "sha256": "1a99739b78dad8dd67b283c2fdd4e88ac7379b0aad9f6e8d235288cfecd209e3"
+    },
+    {
+      "path": "ontology/queries/hswm_core_learning_bridge_2026-10-10/gaps.rq",
+      "sha256": "2cc0b0d075ac2bbc8640bf14a4833e35ff2e483658cb0f1be97b8b6f02dd9e1c"
+    },
+    {
+      "path": "ontology/queries/hswm_core_learning_bridge_2026-10-10/shapes.ttl",
+      "sha256": "48a0a0d3d4f8f3d4da2cb07b14c6cf72ec8197888c53816bea198ad96d2eab54"
+    },
+    {
+      "path": "ontology/queries/hswm_core_learning_bridge_2026-10-10/sources.rq",
+      "sha256": "c53793094755f80f245db81288675ace5fcbca2b22923bd58327f30a4f915c6e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-workspace",
+      "sha256": "319f0632981cc3489161d85bd7e4344d2895862be9c186e18d5a4e04837bbf79"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+      "sha256": "92df930ce95eab43c27445f5ccae0eeda9f5eb44c233bcfe92f428ec703bea9b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-context-domain.ts",
+      "sha256": "83a391e0bdd7e7f2cb3022581e8a845666b601524867b1818a9d405eb30c5a90"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-context-runtime.ts",
+      "sha256": "ced0b60107f58ad1e4d47ddc989cce3a10ce9d7cda3a4e193bb641a7d7a51d4f"
+    },
+    {
+      "path": "tests/effect-runtime/core-learning-bridge-graph.test.ts",
+      "sha256": "42a9ee8f85c67ccd5226d298bef3aa37215994bc19160bc4e47282ef52ffd109"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 40,
+    "anchors": 1,
+    "relations": 92
+  },
+  "anchors": [
+    {
+      "uid": "sym:AbstractNode:hswm-jev-context-2026-10-09-root",
+      "name": "HSWM Jev context implementation",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "labels": [
+        "Concept",
+        "CoreLearning",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM 여섯 요소와 선택·학습 연결",
+        "description": "HSWM 여섯 요소와 선택·학습 연결",
+        "standard_graph_role": "CORE_BUNDLE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_CORE_SELECTION_LEARNING_BRIDGE_2026-10-10.md",
+        "source_sha256": "dc40e619126d53804dd85e460ae5550c55aaa6c578fbc0de2cad0c38e990fb36",
+        "status": "LOCAL_DESIGN_GRAPH",
+        "loop_implemented": false,
+        "measured_efficacy": false
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-U1",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "이번 사용자 작업 요청",
+        "description": "이번 사용자 작업 요청",
+        "standard_graph_role": "CORE_SOURCE",
+        "authority_class": "PRIMARY_USER_UTTERANCE",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/conversation-sources.v1.json",
+        "source_sha256": "5311ffed059c28113766dfd8d9a5d4be5135dca858080125c55225f4a4a192ba",
+        "source_authority": "PRIMARY_USER_UTTERANCE",
+        "utterance_verbatim": "ㅇㅇ 일단 그 내용 표준그래프엔지니어링으로 구축해주고 2번이랑 4번 어케 이어줘야할지 한번 생각해줘봐봐 ㅇㅇ",
+        "source_fragment": "userRequest.verbatim"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-S0",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "앞선 여섯 요소의 AI 요약",
+        "description": "앞선 여섯 요소의 AI 요약",
+        "standard_graph_role": "CORE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/conversation-sources.v1.json",
+        "source_sha256": "5311ffed059c28113766dfd8d9a5d4be5135dca858080125c55225f4a4a192ba",
+        "source_authority": "SECONDARY_AI_SUMMARY",
+        "source_fragment": "assistantElements",
+        "status": "AI_SUMMARY_NOT_USER_RATIFICATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-S1",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "그래프 상태와 국소 연산자 원문·해석",
+        "description": "그래프 상태와 국소 연산자 원문·해석",
+        "standard_graph_role": "CORE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md",
+        "source_sha256": "af5490bcb3aa7830dbfcf9c806c0e9d0b966d4c3a4e246ef1140f77bd3d8c32a",
+        "source_authority": "MIXED_USER_SOURCE_AND_AI_COMMENTARY"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-S2",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "HSWM 헌법",
+        "description": "HSWM 헌법",
+        "standard_graph_role": "CORE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+        "source_sha256": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373",
+        "source_authority": "CANON_DOCUMENT_SEE_SECTION_AUTHORITY"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-S3",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "동일 규모와 최적화 원문·해석",
+        "description": "동일 규모와 최적화 원문·해석",
+        "standard_graph_role": "CORE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/canon/USER_PRIMARY_HSWM_OPTIMIZATION_RULES_2026-10-07.md",
+        "source_sha256": "656f50366980dbe0d3d816c3d95ba84d4e73b6bf1abf7cb7dcb3b1831cd4c45e",
+        "source_authority": "MIXED_USER_SOURCE_AND_AI_COMMENTARY"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-S4",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "CHU 존재·HSWM 구조·선의 공리 원문·해석",
+        "description": "CHU 존재·HSWM 구조·선의 공리 원문·해석",
+        "standard_graph_role": "CORE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/canon/USER_PRIMARY_CHU_BEING_HSWM_STRUCTURE_2026-10-07.md",
+        "source_sha256": "edf0f916564602ae21ce5b008f7a6aac0cbda077b5c788c15b546574f76ac41e",
+        "source_authority": "MIXED_USER_SOURCE_AND_AI_COMMENTARY"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-S5",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "HSWM_LIKENESS 소유 코드 관측",
+        "description": "HSWM_LIKENESS 소유 코드 관측",
+        "standard_graph_role": "CORE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/source-review.v1.json",
+        "source_sha256": "50eb76b6855a4231ae8077123b5cfc8b8738222333dec8feeed3f696b6a7ce21",
+        "source_authority": "SECONDARY_AI_SOURCE_OBSERVATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-E1",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "지속되는 지능의 상태",
+        "description": "지속되는 지능의 상태",
+        "standard_graph_role": "CORE_ELEMENT",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_CORE_SELECTION_LEARNING_BRIDGE_2026-10-10.md",
+        "source_sha256": "dc40e619126d53804dd85e460ae5550c55aaa6c578fbc0de2cad0c38e990fb36",
+        "element_id": "E1",
+        "question": "정확한 그래프 버전과 경험 계보가 다음 계산을 조건화하는가?",
+        "status": "AI_SYNTHESIS",
+        "description_origin": "SECONDARY_AI_SUMMARY"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-E2",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "필요한 문맥을 고르는 능력",
+        "description": "필요한 문맥을 고르는 능력",
+        "standard_graph_role": "CORE_ELEMENT",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_CORE_SELECTION_LEARNING_BRIDGE_2026-10-10.md",
+        "source_sha256": "dc40e619126d53804dd85e460ae5550c55aaa6c578fbc0de2cad0c38e990fb36",
+        "element_id": "E2",
+        "question": "필수 관계·역할·근거·예외를 보존하면서 작업에 맞는 문맥을 선택하는가?",
+        "status": "AI_SYNTHESIS",
+        "description_origin": "SECONDARY_AI_SUMMARY"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-E3",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "조합으로 의미가 생기는 구조",
+        "description": "조합으로 의미가 생기는 구조",
+        "standard_graph_role": "CORE_ELEMENT",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_CORE_SELECTION_LEARNING_BRIDGE_2026-10-10.md",
+        "source_sha256": "dc40e619126d53804dd85e460ae5550c55aaa6c578fbc0de2cad0c38e990fb36",
+        "element_id": "E3",
+        "question": "단독 관계와 공동 조합의 판단 차이 및 분할·병합의 의미 손실은 무엇인가?",
+        "status": "AI_SYNTHESIS",
+        "description_origin": "SECONDARY_AI_SUMMARY"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-E4",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "결과에 근거한 W 학습",
+        "description": "결과에 근거한 W 학습",
+        "standard_graph_role": "CORE_ELEMENT",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_CORE_SELECTION_LEARNING_BRIDGE_2026-10-10.md",
+        "source_sha256": "dc40e619126d53804dd85e460ae5550c55aaa6c578fbc0de2cad0c38e990fb36",
+        "element_id": "E4",
+        "question": "귀속 가능한 결과가 정당한 상태 수정과 다음 행동의 변화로 이어지는가?",
+        "status": "AI_SYNTHESIS",
+        "description_origin": "SECONDARY_AI_SUMMARY"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-E5",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "명확한 자원 예산과 개선 기준",
+        "description": "명확한 자원 예산과 개선 기준",
+        "standard_graph_role": "CORE_ELEMENT",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_CORE_SELECTION_LEARNING_BRIDGE_2026-10-10.md",
+        "source_sha256": "dc40e619126d53804dd85e460ae5550c55aaa6c578fbc0de2cad0c38e990fb36",
+        "element_id": "E5",
+        "question": "고정 자원·측정 자원·비교 분포 아래 성공률과 비용을 함께 확인하는가?",
+        "status": "AI_SYNTHESIS",
+        "description_origin": "SECONDARY_AI_SUMMARY"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-E6",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "CHU의 정체성과 선의 공리",
+        "description": "CHU의 정체성과 선의 공리",
+        "standard_graph_role": "CORE_ELEMENT",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_CORE_SELECTION_LEARNING_BRIDGE_2026-10-10.md",
+        "source_sha256": "dc40e619126d53804dd85e460ae5550c55aaa6c578fbc0de2cad0c38e990fb36",
+        "element_id": "E6",
+        "question": "최적화의 목적·허용 조건·공리의 적용 의미를 보존하고 사례로 검토하는가?",
+        "status": "AI_SYNTHESIS",
+        "description_origin": "SECONDARY_AI_SUMMARY"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-bridge",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "문맥 선택에서 결과 학습으로, 수정에서 다음 선택으로",
+        "description": "문맥 선택에서 결과 학습으로, 수정에서 다음 선택으로",
+        "standard_graph_role": "CORE_BRIDGE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_CORE_SELECTION_LEARNING_BRIDGE_2026-10-10.md",
+        "source_sha256": "dc40e619126d53804dd85e460ae5550c55aaa6c578fbc0de2cad0c38e990fb36",
+        "status": "PROPOSED_NOT_CONNECTED"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-selection",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "selection",
+        "description": "selection",
+        "standard_graph_role": "CORE_PARTICIPATION",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_CORE_SELECTION_LEARNING_BRIDGE_2026-10-10.md",
+        "source_sha256": "dc40e619126d53804dd85e460ae5550c55aaa6c578fbc0de2cad0c38e990fb36",
+        "role": "selection",
+        "ordinal": 0
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-learning",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "learning",
+        "description": "learning",
+        "standard_graph_role": "CORE_PARTICIPATION",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_CORE_SELECTION_LEARNING_BRIDGE_2026-10-10.md",
+        "source_sha256": "dc40e619126d53804dd85e460ae5550c55aaa6c578fbc0de2cad0c38e990fb36",
+        "role": "learning",
+        "ordinal": 1
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-L1",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "활성화 정책 학습",
+        "description": "활성화 정책 학습",
+        "standard_graph_role": "CORE_LANE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "lane_id": "L1",
+        "priority": 1,
+        "target": "CONTEXT_CONDITIONED_ACTIVATION_POLICY",
+        "status": "PROPOSED_NOT_CONNECTED",
+        "boundary": "Finite context×coalition utility is not the complete Semantic Weight or canonical semantic revision"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-L2",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "관계 의미·전이 성향 수정",
+        "description": "관계 의미·전이 성향 수정",
+        "standard_graph_role": "CORE_LANE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "lane_id": "L2",
+        "priority": 2,
+        "target": "CANONICAL_RELATION_SEMANTIC_REVISION",
+        "status": "PROPOSED_NOT_CONNECTED",
+        "boundary": "Multi-frame context trace is incompatible with single-relation SemanticTrace; never cast, relabel, or duplicate joint credit"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-C1",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "native context plan/selection/assembly/trace",
+        "description": "native context plan/selection/assembly/trace",
+        "standard_graph_role": "CORE_COMPONENT",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "src/hswm/effect-runtime/src/semantic-context-runtime.ts",
+        "source_sha256": "ced0b60107f58ad1e4d47ddc989cce3a10ce9d7cda3a4e193bb641a7d7a51d4f",
+        "repository": "HSWM",
+        "implementation": "assembleSemanticContext / executeSemanticContext / stageSemanticContextOutcome",
+        "status": "EXISTING_COMPONENT_NOT_INTEGRATED_BRIDGE"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-C2",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "fixed randomized producer and receipts",
+        "description": "fixed randomized producer and receipts",
+        "standard_graph_role": "CORE_COMPONENT",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/source-review.v1.json",
+        "source_sha256": "50eb76b6855a4231ae8077123b5cfc8b8738222333dec8feeed3f696b6a7ce21",
+        "repository": "HSWM_LIKENESS",
+        "implementation": "src/w-producer.ts: chooseWithTickets; CHOICE/LOAD/FINISH",
+        "status": "EXISTING_COMPONENT_NOT_INTEGRATED_BRIDGE"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-C3",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "raw eligibility and finite W evaluation",
+        "description": "raw eligibility and finite W evaluation",
+        "standard_graph_role": "CORE_COMPONENT",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/source-review.v1.json",
+        "source_sha256": "50eb76b6855a4231ae8077123b5cfc8b8738222333dec8feeed3f696b6a7ce21",
+        "repository": "HSWM_LIKENESS",
+        "implementation": "docs/W_LEARNING.md: w audit/export/run/replay",
+        "status": "EXISTING_COMPONENT_NOT_INTEGRATED_BRIDGE"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-C4",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "single-relation semantic revision proposal",
+        "description": "single-relation semantic revision proposal",
+        "standard_graph_role": "CORE_COMPONENT",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+        "source_sha256": "92df930ce95eab43c27445f5ccae0eeda9f5eb44c233bcfe92f428ec703bea9b",
+        "repository": "HSWM",
+        "implementation": "prepareLlmSemanticRelationRevision / learnLlmSemanticRelation",
+        "status": "EXISTING_COMPONENT_NOT_INTEGRATED_BRIDGE"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-B1",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "작업·후보·평가 계약 사전 고정",
+        "description": "작업·후보·평가 계약 사전 고정",
+        "standard_graph_role": "CORE_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "stage_id": "B1",
+        "ordinal": 0,
+        "work": "동일성 대응, unit/family/split, source/action revisions, 평가 계약과 예산 고정",
+        "status": "PROPOSED_NOT_CONNECTED"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-B2",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "실제 선택과 확률 기록",
+        "description": "실제 선택과 확률 기록",
+        "standard_graph_role": "CORE_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "stage_id": "B2",
+        "ordinal": 1,
+        "work": "plan에 결속된 외부 SelectionEvent; Jev 제안은 별도 기록",
+        "status": "PROPOSED_NOT_CONNECTED"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-B3",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "원문·역할 보존 실행과 전체 시도 기록",
+        "description": "원문·역할 보존 실행과 전체 시도 기록",
+        "standard_graph_role": "CORE_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "stage_id": "B3",
+        "ordinal": 2,
+        "work": "incidence manifest, CHOICE/LOAD/FINISH, 실패·기권·비용 포함",
+        "status": "PROPOSED_NOT_CONNECTED"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-B4",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "독립 결과 판정과 적격성 검사",
+        "description": "독립 결과 판정과 적격성 검사",
+        "standard_graph_role": "CORE_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "stage_id": "B4",
+        "ordinal": 3,
+        "work": "독립 gold/actual 파일, 과업에 맞는 EXACT_BYTES 판정, 전체 집단 audit",
+        "status": "PROPOSED_NOT_CONNECTED"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-B5",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "train 학습과 별도 holdout 비교",
+        "description": "train 학습과 별도 holdout 비교",
+        "standard_graph_role": "CORE_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "stage_id": "B5",
+        "ordinal": 4,
+        "work": "context×coalition utility 및 충분한 support; 정책 적용 범위 명시",
+        "status": "PROPOSED_NOT_CONNECTED"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-B6",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "범위가 정해진 수정 후보",
+        "description": "범위가 정해진 수정 후보",
+        "standard_graph_role": "CORE_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "stage_id": "B6",
+        "ordinal": 5,
+        "work": "L1 정책과 L2 의미 수정 분리; 귀속 근거와 owner adapter",
+        "status": "PROPOSED_NOT_CONNECTED"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-B7",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "적용 revision과 다음 행동 확인",
+        "description": "적용 revision과 다음 행동 확인",
+        "standard_graph_role": "CORE_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "stage_id": "B7",
+        "ordinal": 6,
+        "work": "owner 적용·복원 영수증 및 다음 선택/행동의 정확한 readback",
+        "status": "PROPOSED_NOT_CONNECTED"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-G1",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "관련성 확률과 실제 선택 확률 구분",
+        "description": "Jev confidence는 propensity 또는 reward가 아니다. 실제 logger의 선택 확률을 별도 기록한다.",
+        "standard_graph_role": "CORE_GAP",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "gap_id": "G1",
+        "status": "OPEN"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-G2",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "고정 분포와 support",
+        "description": "v1의 fixed randomized logging과 feasible 후보 집합을 epoch 전에 고정한다. 미선택 행동의 결과를 만들지 않는다.",
+        "standard_graph_role": "CORE_GAP",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "gap_id": "G2",
+        "status": "OPEN"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-G3",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "외부 선택 입력",
+        "description": "native assembler는 Jev receipt를 재검증한다. 외부 선택을 가짜 receipt로 포장하지 않고 새 typed selection 계약을 만든다.",
+        "standard_graph_role": "CORE_GAP",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "gap_id": "G3",
+        "status": "OPEN"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-G4",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "다중 관계 역할과 원문 identity",
+        "description": "정확한 relation/participant revision, frame/slot ordinal, owner, reference type, exception을 보존하고 원문 bytes를 직접 읽는다.",
+        "standard_graph_role": "CORE_GAP",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "gap_id": "G4",
+        "status": "OPEN"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-G5",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "예산 단위 변환",
+        "description": "전체 JSON payload, unique 원문 bytes, token과 artifact 상한을 구분한다. 초과하면 거부하고 자르지 않는다.",
+        "standard_graph_role": "CORE_GAP",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "gap_id": "G5",
+        "status": "OPEN"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-G6",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "전달·수신 확인·의미 이해 구분",
+        "description": "DELIVERED와 READ_ACKNOWLEDGED는 모델 이해의 증명이 아니다. caller outcome은 독립 성공 판정이 아니다.",
+        "standard_graph_role": "CORE_GAP",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "gap_id": "G6",
+        "status": "OPEN"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-G7",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "전체 집단과 미관측",
+        "description": "정상 trace 밖의 NONE/NEED_MORE/실패/중단도 attempt에 보존한다. unknown은 null, 부적격 시도는 v1 전체 export를 막는다.",
+        "standard_graph_role": "CORE_GAP",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "gap_id": "G7",
+        "status": "OPEN"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-G8",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "owner 적용과 다음 선택",
+        "description": "로컬 replay는 live 적용이 아니다. 승인된 policy/semantic revision이 다음 선택을 바꾸는 통합 경로가 필요하다.",
+        "standard_graph_role": "CORE_GAP",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/artifacts/core_learning_bridge_2026-10-10/design.v1.json",
+        "source_sha256": "fc2e4a9d10365fd34179b5cb3a403fba7c57dc275bdebcde577d86fad784480c",
+        "gap_id": "G8",
+        "status": "OPEN"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-cli",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "hswm-workspace core-learning",
+        "description": "hswm-workspace core-learning",
+        "standard_graph_role": "CORE_CLI",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "src/hswm/effect-runtime/bin/hswm-workspace",
+        "source_sha256": "319f0632981cc3489161d85bd7e4344d2895862be9c186e18d5a4e04837bbf79",
+        "command": "src/hswm/effect-runtime/bin/hswm-workspace",
+        "help": "src/hswm/effect-runtime/bin/hswm-workspace --help",
+        "entry": "core-learning"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-usage",
+      "labels": [
+        "Concept",
+        "CoreLearning"
+      ],
+      "properties": {
+        "name": "core-learning  조회·검증 사용법",
+        "description": "core-learning  조회·검증 사용법",
+        "standard_graph_role": "CORE_USAGE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_DESIGN_NOT_CONNECTED_LEARNING_NOT_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_VIEW_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_CORE_SELECTION_LEARNING_BRIDGE_2026-10-10.md",
+        "source_sha256": "dc40e619126d53804dd85e460ae5550c55aaa6c578fbc0de2cad0c38e990fb36"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-U1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_CATALOG",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S0",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_CATALOG",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_CATALOG",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S2",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_CATALOG",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S3",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_CATALOG",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S4",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_CATALOG",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S5",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_CATALOG",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-E1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-E1",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S0",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "AI_ELEMENT_ORIGIN",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-E1",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CANON_CORRESPONDENCE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-E2",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-E2",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S0",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "AI_ELEMENT_ORIGIN",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-E2",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CANON_CORRESPONDENCE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-E3",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-E3",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S0",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "AI_ELEMENT_ORIGIN",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-E3",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S2",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CANON_CORRESPONDENCE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-E4",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-E4",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S0",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "AI_ELEMENT_ORIGIN",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-E4",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S2",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CANON_CORRESPONDENCE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-E5",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-E5",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S0",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "AI_ELEMENT_ORIGIN",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-E5",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S3",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CANON_CORRESPONDENCE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-E6",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-E6",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S0",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "AI_ELEMENT_ORIGIN",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-E6",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-S4",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CANON_CORRESPONDENCE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-bridge",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-bridge",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-selection",
+      "type": "HAS_PARTICIPATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BRIDGE_ROLE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-selection",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-E2",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ROLE_TARGET",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-bridge",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-learning",
+      "type": "HAS_PARTICIPATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BRIDGE_ROLE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-learning",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-E4",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ROLE_TARGET",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-bridge",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-L1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LEARNING_LANE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-bridge",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-L2",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LEARNING_LANE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C2",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C3",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C4",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-bridge",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BRIDGE_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B1",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REUSABLE_COMPONENT",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B1",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C2",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REUSABLE_COMPONENT",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-bridge",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B2",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BRIDGE_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B2",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PREREQUISITE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B2",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REUSABLE_COMPONENT",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B2",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C2",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REUSABLE_COMPONENT",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-bridge",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B3",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BRIDGE_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B3",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B2",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PREREQUISITE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B3",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REUSABLE_COMPONENT",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B3",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C2",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REUSABLE_COMPONENT",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-bridge",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B4",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BRIDGE_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B4",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B3",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PREREQUISITE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B4",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C2",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REUSABLE_COMPONENT",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B4",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C3",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REUSABLE_COMPONENT",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-bridge",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B5",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BRIDGE_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B5",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B4",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PREREQUISITE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B5",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C3",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REUSABLE_COMPONENT",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-bridge",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B6",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BRIDGE_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B6",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B5",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PREREQUISITE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B6",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C3",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REUSABLE_COMPONENT",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B6",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C4",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REUSABLE_COMPONENT",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-bridge",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B7",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BRIDGE_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B7",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B6",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PREREQUISITE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B7",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REUSABLE_COMPONENT",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-B7",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-C4",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REUSABLE_COMPONENT",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-G1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G1",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B2",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G1",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B5",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-G2",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G2",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G2",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B2",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G2",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B5",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-G3",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G3",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B2",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G3",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B3",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-G4",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G4",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G4",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B3",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G4",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B6",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-G5",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G5",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G5",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B3",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-G6",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G6",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B3",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G6",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B4",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-G7",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G7",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B3",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G7",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B4",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G7",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B5",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-G8",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G8",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B6",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-G8",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-B7",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BLOCKS_STAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-cli",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CORE_MEMBER",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-cli",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-usage",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OWNED_USAGE",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-core-learning-2026-10-10-bridge",
+      "to_uid": "sym:AbstractNode:hswm-jev-context-2026-10-09-root",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXISTING_CONTEXT_IMPLEMENTATION",
+      "status": "DESIGN_CORRESPONDENCE_NOT_EXECUTION_OR_AUTHORITY"
+    }
+  ]
+}

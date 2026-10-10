@@ -1,0 +1,339 @@
+{
+  "schema": "hswm-core-selection-learning-design/v1",
+  "authority": "SECONDARY_AI_DESIGN",
+  "status": "PROPOSED_NOT_CONNECTED",
+  "elements": [
+    {
+      "id": "E1",
+      "name": "지속되는 지능의 상태",
+      "question": "정확한 그래프 버전과 경험 계보가 다음 계산을 조건화하는가?",
+      "source": "S1"
+    },
+    {
+      "id": "E2",
+      "name": "필요한 문맥을 고르는 능력",
+      "question": "필수 관계·역할·근거·예외를 보존하면서 작업에 맞는 문맥을 선택하는가?",
+      "source": "S1"
+    },
+    {
+      "id": "E3",
+      "name": "조합으로 의미가 생기는 구조",
+      "question": "단독 관계와 공동 조합의 판단 차이 및 분할·병합의 의미 손실은 무엇인가?",
+      "source": "S2"
+    },
+    {
+      "id": "E4",
+      "name": "결과에 근거한 W 학습",
+      "question": "귀속 가능한 결과가 정당한 상태 수정과 다음 행동의 변화로 이어지는가?",
+      "source": "S2"
+    },
+    {
+      "id": "E5",
+      "name": "명확한 자원 예산과 개선 기준",
+      "question": "고정 자원·측정 자원·비교 분포 아래 성공률과 비용을 함께 확인하는가?",
+      "source": "S3"
+    },
+    {
+      "id": "E6",
+      "name": "CHU의 정체성과 선의 공리",
+      "question": "최적화의 목적·허용 조건·공리의 적용 의미를 보존하고 사례로 검토하는가?",
+      "source": "S4"
+    }
+  ],
+  "lanes": [
+    {
+      "id": "L1",
+      "name": "활성화 정책 학습",
+      "priority": 1,
+      "target": "CONTEXT_CONDITIONED_ACTIVATION_POLICY",
+      "frozen": [
+        "relation originals",
+        "graph snapshot",
+        "model",
+        "context definitions",
+        "feasible role-preserving coalitions"
+      ],
+      "change": "Owner-scoped policy/placement revision consumed by the next selector",
+      "boundary": "Finite context×coalition utility is not the complete Semantic Weight or canonical semantic revision"
+    },
+    {
+      "id": "L2",
+      "name": "관계 의미·전이 성향 수정",
+      "priority": 2,
+      "target": "CANONICAL_RELATION_SEMANTIC_REVISION",
+      "frozen": [
+        "target owner and write scope",
+        "complete joint read set",
+        "trace/outcome identity and attribution grounds"
+      ],
+      "change": "Explicit semantic/exception/disposition hypothesis with native successor lineage and owner admission",
+      "boundary": "Multi-frame context trace is incompatible with single-relation SemanticTrace; never cast, relabel, or duplicate joint credit"
+    }
+  ],
+  "stages": [
+    {
+      "id": "B1",
+      "name": "작업·후보·평가 계약 사전 고정",
+      "ordinal": 0,
+      "requires": [],
+      "work": "동일성 대응, unit/family/split, source/action revisions, 평가 계약과 예산 고정",
+      "components": [
+        "C1",
+        "C2"
+      ],
+      "status": "PROPOSED_NOT_CONNECTED"
+    },
+    {
+      "id": "B2",
+      "name": "실제 선택과 확률 기록",
+      "ordinal": 1,
+      "requires": [
+        "B1"
+      ],
+      "work": "plan에 결속된 외부 SelectionEvent; Jev 제안은 별도 기록",
+      "components": [
+        "C1",
+        "C2"
+      ],
+      "status": "PROPOSED_NOT_CONNECTED"
+    },
+    {
+      "id": "B3",
+      "name": "원문·역할 보존 실행과 전체 시도 기록",
+      "ordinal": 2,
+      "requires": [
+        "B2"
+      ],
+      "work": "incidence manifest, CHOICE/LOAD/FINISH, 실패·기권·비용 포함",
+      "components": [
+        "C1",
+        "C2"
+      ],
+      "status": "PROPOSED_NOT_CONNECTED"
+    },
+    {
+      "id": "B4",
+      "name": "독립 결과 판정과 적격성 검사",
+      "ordinal": 3,
+      "requires": [
+        "B3"
+      ],
+      "work": "독립 gold/actual 파일, 과업에 맞는 EXACT_BYTES 판정, 전체 집단 audit",
+      "components": [
+        "C2",
+        "C3"
+      ],
+      "status": "PROPOSED_NOT_CONNECTED"
+    },
+    {
+      "id": "B5",
+      "name": "train 학습과 별도 holdout 비교",
+      "ordinal": 4,
+      "requires": [
+        "B4"
+      ],
+      "work": "context×coalition utility 및 충분한 support; 정책 적용 범위 명시",
+      "components": [
+        "C3"
+      ],
+      "status": "PROPOSED_NOT_CONNECTED"
+    },
+    {
+      "id": "B6",
+      "name": "범위가 정해진 수정 후보",
+      "ordinal": 5,
+      "requires": [
+        "B5"
+      ],
+      "work": "L1 정책과 L2 의미 수정 분리; 귀속 근거와 owner adapter",
+      "components": [
+        "C3",
+        "C4"
+      ],
+      "status": "PROPOSED_NOT_CONNECTED"
+    },
+    {
+      "id": "B7",
+      "name": "적용 revision과 다음 행동 확인",
+      "ordinal": 6,
+      "requires": [
+        "B6"
+      ],
+      "work": "owner 적용·복원 영수증 및 다음 선택/행동의 정확한 readback",
+      "components": [
+        "C1",
+        "C4"
+      ],
+      "status": "PROPOSED_NOT_CONNECTED"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "G1",
+      "name": "관련성 확률과 실제 선택 확률 구분",
+      "description": "Jev confidence는 propensity 또는 reward가 아니다. 실제 logger의 선택 확률을 별도 기록한다.",
+      "blocks": [
+        "B2",
+        "B5"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2",
+      "name": "고정 분포와 support",
+      "description": "v1의 fixed randomized logging과 feasible 후보 집합을 epoch 전에 고정한다. 미선택 행동의 결과를 만들지 않는다.",
+      "blocks": [
+        "B1",
+        "B2",
+        "B5"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G3",
+      "name": "외부 선택 입력",
+      "description": "native assembler는 Jev receipt를 재검증한다. 외부 선택을 가짜 receipt로 포장하지 않고 새 typed selection 계약을 만든다.",
+      "blocks": [
+        "B2",
+        "B3"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G4",
+      "name": "다중 관계 역할과 원문 identity",
+      "description": "정확한 relation/participant revision, frame/slot ordinal, owner, reference type, exception을 보존하고 원문 bytes를 직접 읽는다.",
+      "blocks": [
+        "B1",
+        "B3",
+        "B6"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G5",
+      "name": "예산 단위 변환",
+      "description": "전체 JSON payload, unique 원문 bytes, token과 artifact 상한을 구분한다. 초과하면 거부하고 자르지 않는다.",
+      "blocks": [
+        "B1",
+        "B3"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G6",
+      "name": "전달·수신 확인·의미 이해 구분",
+      "description": "DELIVERED와 READ_ACKNOWLEDGED는 모델 이해의 증명이 아니다. caller outcome은 독립 성공 판정이 아니다.",
+      "blocks": [
+        "B3",
+        "B4"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G7",
+      "name": "전체 집단과 미관측",
+      "description": "정상 trace 밖의 NONE/NEED_MORE/실패/중단도 attempt에 보존한다. unknown은 null, 부적격 시도는 v1 전체 export를 막는다.",
+      "blocks": [
+        "B3",
+        "B4",
+        "B5"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G8",
+      "name": "owner 적용과 다음 선택",
+      "description": "로컬 replay는 live 적용이 아니다. 승인된 policy/semantic revision이 다음 선택을 바꾸는 통합 경로가 필요하다.",
+      "blocks": [
+        "B6",
+        "B7"
+      ],
+      "status": "OPEN"
+    }
+  ],
+  "firstImplementation": [
+    "Plan-bound external SelectionEvent and complete-frame assembly boundary",
+    "Native-to-raw-telemetry identity and outcome mapper",
+    "Producer json-process runner adapter with request/receipt binding"
+  ],
+  "identityContract": {
+    "attempt": "Allocate before choice; preserve run/parent/unit/family/split and declared cohort even on abstention/failure",
+    "contextAction": "Stable UID/revision across independent units; per-event plan hashes are evidence, not action identity",
+    "canonicalKey": [
+      "schema",
+      "lineage",
+      "atomUid",
+      "revision"
+    ],
+    "incidenceManifest": [
+      "relationKey",
+      "frameOrdinal",
+      "slotRole",
+      "slotOrdinal",
+      "participantKey",
+      "owner",
+      "referenceType",
+      "exceptionRefs",
+      "mandatory"
+    ],
+    "originals": "Read relation content descriptor bytes and participant original UTF-8 bytes; parsed semantic JSON reserialization is not original bytes",
+    "mapping": "RuleUnit UID/revision/evidenceId and action member role/ordinal retain exact source identity; scope flat member roles by frame and keep the incidence manifest",
+    "stalePolicy": "A semantic/source/model/context revision change requires reevaluating the scope of old utility and activation policies"
+  },
+  "probabilityContract": {
+    "jev": "ADVISORY_RELEVANCE",
+    "logging": "ACTUAL_FIXED_RANDOMIZED_ACTION_PROBABILITY",
+    "utility": "OUTCOME_AND_COST_ESTIMATE",
+    "authorization": "OWNER_SCOPE_SEPARATE_FROM_ALL_SCORES",
+    "initialLogger": "Freeze feasible actions and integer tickets per context; record draw, all tickets including zero, and selected tickets/totalTickets",
+    "jevRole": "SHADOW_ADVICE_ONLY_IN_FIRST_FIXED_LOGGER_PILOT",
+    "unsupportedPropensity": null
+  },
+  "measurementContract": {
+    "attemptPopulation": "WHOLE_PREDECLARED_COHORT",
+    "unknown": null,
+    "outcome": "EXACT_BYTES only for tasks whose canonical expected bytes define correctness; preserve caller claims separately",
+    "independence": "Predeclare unit/family train-holdout split and oracle; distinct files do not prove no oracle leakage",
+    "readAcknowledgement": "RECEIVER_SELF_REPORT_NOT_MODEL_UNDERSTANDING",
+    "failure": "Retain original NONE/NEED_MORE and failed/timed-out/interrupted/unknown receipts; no success relabeling",
+    "export": "BLOCK_WHOLE_COHORT_IF_ANY_ATTEMPT_INELIGIBLE",
+    "comparison": "Existing v1 baseline versus learned policy; Jev-only third arm needs another evaluation adapter",
+    "sampleSize": null,
+    "thresholds": null,
+    "actualModelCalls": 0,
+    "efficacy": "UNMEASURED"
+  },
+  "budgetContract": {
+    "nativeContext": {
+      "unit": "COMPLETE_JSON_PAYLOAD_BYTES",
+      "maximum": 524288
+    },
+    "likenessContext": {
+      "unit": "UNIQUE_ORIGINAL_SOURCE_BYTES",
+      "maximum": "PER_DECLARED_CONTEXT"
+    },
+    "producerRequest": {
+      "unit": "REQUEST_BYTES",
+      "maximum": 262144
+    },
+    "learningArtifact": {
+      "unit": "FILE_BYTES",
+      "maximum": 2097152
+    },
+    "unknownTokens": null,
+    "overflow": "REJECT_WITHOUT_TRUNCATION"
+  },
+  "completionEvidence": [
+    "Whole-cohort source-bound trace and independent outcome",
+    "Predeclared heldout utility/success/support assessment",
+    "Owner-scoped applied revision and rollback receipt",
+    "Next selector reads that exact revision and a paired behavior observation"
+  ],
+  "excludedClaims": [
+    "No automatic W loop implemented in this graph",
+    "No neural model parameter update measured",
+    "No causal per-relation credit from a joint outcome",
+    "No moral understanding, global optimality or superintelligence proof"
+  ]
+}

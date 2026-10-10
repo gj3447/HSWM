@@ -1,0 +1,81 @@
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix core: <https://hswm.invalid/core-learning/2026-10-10/> .
+
+core:SourceBinding a sh:NodeShape ;
+ sh:targetClass role:CORE_BUNDLE, role:CORE_ELEMENT, role:CORE_SOURCE, role:CORE_BRIDGE,
+   role:CORE_PARTICIPATION, role:CORE_LANE, role:CORE_STAGE, role:CORE_GAP,
+   role:CORE_COMPONENT, role:CORE_CLI, role:CORE_USAGE ;
+ sh:property [ sh:path p:source_path ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+core:AiInterpretation a sh:NodeShape ;
+ sh:targetClass role:CORE_BUNDLE, role:CORE_ELEMENT, role:CORE_BRIDGE, role:CORE_PARTICIPATION,
+   role:CORE_LANE, role:CORE_STAGE, role:CORE_GAP, role:CORE_COMPONENT, role:CORE_CLI, role:CORE_USAGE ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] .
+
+core:Bundle a sh:NodeShape ; sh:targetClass role:CORE_BUNDLE ;
+ sh:property [ sh:path p:loop_implemented ; sh:hasValue false ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:measured_efficacy ; sh:hasValue false ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:class role:CORE_SOURCE ; sh:minCount 7 ; sh:maxCount 7 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:minCount 20 ; sh:maxCount 20 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CORE_ELEMENT ] ; sh:qualifiedMinCount 6 ; sh:qualifiedMaxCount 6 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CORE_BRIDGE ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+
+core:Element a sh:NodeShape ; sh:targetClass role:CORE_ELEMENT ;
+ sh:property [ sh:path p:element_id ; sh:in ("E1" "E2" "E3" "E4" "E5" "E6") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:status ; sh:hasValue "AI_SYNTHESIS" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:question ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:class role:CORE_SOURCE ; sh:minCount 2 ; sh:maxCount 2 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:qualifiedValueShape [ sh:property [ sh:path p:source_authority ; sh:hasValue "SECONDARY_AI_SUMMARY" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+
+core:Bridge a sh:NodeShape ; sh:targetClass role:CORE_BRIDGE ;
+ sh:property [ sh:path p:status ; sh:hasValue "PROPOSED_NOT_CONNECTED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_PARTICIPATION ; sh:class role:CORE_PARTICIPATION ; sh:minCount 2 ; sh:maxCount 2 ] ;
+ sh:property [ sh:path r:HAS_PARTICIPATION ; sh:qualifiedValueShape [ sh:property [ sh:path p:role ; sh:hasValue "selection" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+ sh:property [ sh:path r:HAS_PARTICIPATION ; sh:qualifiedValueShape [ sh:property [ sh:path p:role ; sh:hasValue "learning" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CORE_STAGE ] ; sh:qualifiedMinCount 7 ; sh:qualifiedMaxCount 7 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CORE_LANE ] ; sh:qualifiedMinCount 2 ; sh:qualifiedMaxCount 2 ] .
+
+core:Participation a sh:NodeShape ; sh:targetClass role:CORE_PARTICIPATION ;
+ sh:property [ sh:path [ sh:inversePath r:HAS_PARTICIPATION ] ; sh:class role:CORE_BRIDGE ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:class role:CORE_ELEMENT ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:or (
+   [ sh:property [ sh:path p:role ; sh:hasValue "selection" ; sh:maxCount 1 ] ;
+     sh:property [ sh:path p:ordinal ; sh:hasValue 0 ; sh:maxCount 1 ] ;
+     sh:property [ sh:path r:REFERENCES ; sh:node [ sh:property [ sh:path p:element_id ; sh:hasValue "E2" ] ] ] ]
+   [ sh:property [ sh:path p:role ; sh:hasValue "learning" ; sh:maxCount 1 ] ;
+     sh:property [ sh:path p:ordinal ; sh:hasValue 1 ; sh:maxCount 1 ] ;
+     sh:property [ sh:path r:REFERENCES ; sh:node [ sh:property [ sh:path p:element_id ; sh:hasValue "E4" ] ] ] ]
+ ) .
+
+core:Stage a sh:NodeShape ; sh:targetClass role:CORE_STAGE ;
+ sh:property [ sh:path p:status ; sh:hasValue "PROPOSED_NOT_CONNECTED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:maxInclusive 6 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:CORE_COMPONENT ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 2 ] ;
+ sh:or (
+   [ sh:property [ sh:path p:stage_id ; sh:hasValue "B1" ] ;
+     sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:CORE_STAGE ] ; sh:qualifiedMaxCount 0 ] ]
+   [ sh:property [ sh:path p:stage_id ; sh:in ("B2" "B3" "B4" "B5" "B6" "B7") ] ;
+     sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:CORE_STAGE ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ]
+ ) .
+
+core:Lane a sh:NodeShape ; sh:targetClass role:CORE_LANE ;
+ sh:property [ sh:path p:status ; sh:hasValue "PROPOSED_NOT_CONNECTED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:target ; sh:in ("CONTEXT_CONDITIONED_ACTIVATION_POLICY" "CANONICAL_RELATION_SEMANTIC_REVISION") ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+core:Gap a sh:NodeShape ; sh:targetClass role:CORE_GAP ;
+ sh:property [ sh:path p:status ; sh:hasValue "OPEN" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:class role:CORE_STAGE ; sh:minCount 2 ; sh:maxCount 3 ] .
+
+core:Component a sh:NodeShape ; sh:targetClass role:CORE_COMPONENT ;
+ sh:property [ sh:path p:status ; sh:hasValue "EXISTING_COMPONENT_NOT_INTEGRATED_BRIDGE" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:implementation ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+core:Cli a sh:NodeShape ; sh:targetClass role:CORE_CLI ;
+ sh:property [ sh:path p:command ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:help ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:class role:CORE_USAGE ; sh:minCount 1 ; sh:maxCount 1 ] .

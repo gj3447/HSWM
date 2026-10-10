@@ -46,6 +46,10 @@
 정확한 역할·예외 원문으로 조립하고 CLI·실행 기록·표준 그래프로 연결합니다.
 `hswm-workspace show jev-context`에서 계약과 scripted fixture를 조회합니다. 실제 모델 효능은 미측정입니다.
 
+[여섯 핵심 요소와 선택→W 학습 연결](docs/operations/HSWM_CORE_SELECTION_LEARNING_BRIDGE_2026-10-10.md)은
+문맥 선택(E2)과 결과 학습(E4)을 실행 기록·독립 평가·수정·다음 선택으로 잇는 설계입니다.
+`hswm-workspace show core-learning`에서 기존 부품과 미구현 연결을 구분해 조회합니다.
+
 [KG·작업환경](docs/operations/HSWM_KG_WORKSPACE_2026-09-22.md) · [Semantic Weight·이론 기반](docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md) · [심층 연구·실현 경로](docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md) · [Jev 통합 연구 작업 계획](docs/operations/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.md) · [Jev 연구·그래프 엔지니어링](docs/research/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.md) · [지식 지도·개발 현황](docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md) · [연구 도구·표준 조사](docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md) · [그래프 구조](#graph-model) · [빠른 실행](#quick-start) · [개발 실사용](#development) · [근거와 판정](#evidence) · [전체 문서](INDEX.md)
 
 > **2026-09-07 · 실사용 가능한 로컬 적응 프로토타입**<br>

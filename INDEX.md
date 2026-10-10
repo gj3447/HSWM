@@ -65,6 +65,10 @@ decoded 모형·TS adapter 검사·운영 시간 순서·실제 모델 효능의
 `validation-contracts`에서 출처와 미평가 작업을 조회하며, SHACL/SPARQL 구조 검사와
 fixture 검증을 실제 모델 효능과 구별한다. 적용한 스킬·표준의 범위도 명시한다.
 
+2026-10-10 [여섯 핵심 요소와 선택→W 학습 연결](docs/operations/HSWM_CORE_SELECTION_LEARNING_BRIDGE_2026-10-10.md)은
+E1–E6의 AI 해석·사용자 출처와 E2↔E4의 일곱 단계·두 학습 방향·여덟 호환성 결손을 연결합니다.
+`hswm-workspace show core-learning`에서 조회하며, 실제 자동 학습이나 효능 검증 완료를 뜻하지 않습니다.
+
 2026-10-09 [Jev 문맥 선택 구현](docs/operations/HSWM_JEV_CONTEXT_SELECTION_2026-10-09.md)은
 caller-scoped 후보 → Jev 제안 → 필수·선택 관계 원문 → LLM 실행·관측을 연결합니다.
 `hswm-context` CLI와 `hswm-workspace show jev-context`의 SPARQL·SHACL을 제공합니다.

@@ -1,0 +1,60 @@
+{
+  "schema": "hswm-core-source-review/v1",
+  "observedOn": "2026-10-10",
+  "authority": "SECONDARY_AI_LOCAL_SOURCE_OBSERVATION",
+  "repository": "HSWM_LIKENESS",
+  "gitRevision": "723d1baf66e3119419936c53c51abfb666a19096",
+  "files": [
+    {
+      "path": "docs/W_LEARNING.md",
+      "sha256": "4de0202cab125b67d639e81b669c872e081bc082d4ee87808e2027d620c18042",
+      "bytes": 30287,
+      "trackedChanges": true
+    },
+    {
+      "path": "docs/W_PRODUCER_V1.json",
+      "sha256": "7f5e15d5f29dd27a143f2f82b5e17512412ebb0dad1848d060ef99f340b6f06b",
+      "bytes": 13466,
+      "trackedChanges": true
+    },
+    {
+      "path": "docs/W_IMPROVEMENT_PLAN.v1.json",
+      "sha256": "16cb223e06eb0b8b4b04d291725adedbc04cb2f55033aac0a2a2724835502516",
+      "bytes": 47088,
+      "trackedChanges": true
+    },
+    {
+      "path": "src/w-contract.ts",
+      "sha256": "43bb460361be018c57749fbae0baa42f514b640d840fafe1da0c02c31cfbf3e0",
+      "bytes": 9952,
+      "trackedChanges": true
+    },
+    {
+      "path": "src/w-producer.ts",
+      "sha256": "d453669dba0c1754b5b9e2a4078a70c3e29b2bff6265126f3879623699263db1",
+      "bytes": 11062,
+      "trackedChanges": true
+    },
+    {
+      "path": "src/w-telemetry.ts",
+      "sha256": "94b244b37acc6171a8f1e5d06cac18412667548552d15c1cfbe5b415b47dc1a1",
+      "bytes": 5609,
+      "trackedChanges": true
+    }
+  ],
+  "readScope": {
+    "docs/W_LEARNING.md": "complete",
+    "docs/W_PRODUCER_V1.json": "complete",
+    "docs/W_IMPROVEMENT_PLAN.v1.json": "estimands, evaluationPlan, dataContract, activationDesign, integration, implementationPlan, sourceSnapshot",
+    "src/w-contract.ts": "typed declarations and validation entry",
+    "src/w-producer.ts": "producer/request/response schemas, bounded constants and choice mapping",
+    "src/w-telemetry.ts": "raw event and attempt schemas"
+  },
+  "historicalKgNote": {
+    "uid": "sym:Note:chatgpt-w-learning-runtime-v1-20260930",
+    "authority": "SECONDARY_AI",
+    "review": "PENDING",
+    "use": "Historical discovery only; current contract claims use the observed owner files"
+  },
+  "boundary": "Portable source observation, not live USL binding, permission, independent code audit, model execution or efficacy evidence"
+}

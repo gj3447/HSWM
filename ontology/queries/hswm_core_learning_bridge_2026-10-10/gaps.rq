@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?id ?name ?description ?status ?blockedStage WHERE {
+ ?gap a role:CORE_GAP ; p:gap_id ?id ; p:name ?name ; p:description ?description ;
+   p:status ?status ; r:REFERENCES ?stage .
+ ?stage a role:CORE_STAGE ; p:stage_id ?blockedStage .
+} ORDER BY ?id ?blockedStage

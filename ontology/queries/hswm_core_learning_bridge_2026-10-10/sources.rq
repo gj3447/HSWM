@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?name ?sourceAuthority ?path ?sha256 ?fragment WHERE {
+ ?root a role:CORE_BUNDLE ; r:HAS_SOURCE ?source .
+ ?source a role:CORE_SOURCE ; p:name ?name ; p:source_authority ?sourceAuthority ;
+   p:source_path ?path ; p:source_sha256 ?sha256 .
+ OPTIONAL { ?source p:source_fragment ?fragment . }
+} ORDER BY ?path ?name

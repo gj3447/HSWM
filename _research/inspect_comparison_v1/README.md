@@ -95,3 +95,66 @@ the local execution boundary. Invalid model output and HTTP failures remain
 scored failures. A Python-side bridge timeout records at most one possible
 request attempt rather than claiming a confirmed model call. Live `.eval` logs
 default to the ignored checkout `.hswm-local/inspect-live-eval/` directory.
+
+## Single-case initial-versus-oracle diagnostic
+
+`prepare_oracle_diagnostic.mts` and `oracle_single_diagnostic.py` reuse the
+existing E1 bridge and paired Inspect evaluator. They prepare four historical
+W1 families, selecting one case for every `(target, pel, nub)` stratum: eight
+cases per family, 32 cases total, and at most 64 request attempts across the
+initial and oracle relation texts. These are **development-exposed synthetic
+cases**, not a fresh final holdout. `train` is the existing loader's split name;
+this diagnostic does not train a model or provide examples to GEPA.
+
+The evaluator keeps labels, case IDs and oracle-selection metadata out of model
+requests. It measures environmental correctness separately from consistency
+with the initial relation's own rule. The initial rule ignores `pel`, so perfect
+execution of that rule need not produce the environment's correct answer.
+HTTP, timeout and invalid-output failures remain in the declared cohort.
+
+Preparation and plan verification make no model requests. From the checkout
+root, use a new private destination:
+
+```sh
+node _research/inspect_comparison_v1/prepare_oracle_diagnostic.mts \
+  .hswm-local/oracle-diagnostic-2026-10-10-v1
+_research/inspect_comparison_v1/.venv/bin/python \
+  _research/inspect_comparison_v1/oracle_single_diagnostic.py plan \
+  .hswm-local/oracle-diagnostic-2026-10-10-v1 \
+  --out .hswm-local/oracle-diagnostic-2026-10-10-v1-plan.json
+```
+
+The existing isolated environment pins Inspect `0.3.260`; use the locked uv
+environment if it is not already prepared. Source and fixture hashes are checked
+before execution. Both fixture and result destinations refuse overwrite.
+
+After the existing project access, transport and host-side preflight requirements
+are satisfied, `run` requires an explicit current endpoint and served model ID:
+
+```sh
+_research/inspect_comparison_v1/.venv/bin/python \
+  _research/inspect_comparison_v1/oracle_single_diagnostic.py run \
+  .hswm-local/oracle-diagnostic-2026-10-10-v1 \
+  --out .hswm-local/oracle-diagnostic-2026-10-10-v1-run \
+  --base-url "$HSWM_APPROVED_MODEL_BASE_URL" --model "$HSWM_APPROVED_MODEL_ID"
+```
+
+The historical endpoint/model in `execution.json` is not a readiness attestation.
+The actual explicit run configuration must be recorded with the result.
+There are no retries or automatic service starts.
+
+The manifest fixes a **development screening decision** before any outputs:
+oracle environmental correctness at least 30/32, initial-rule consistency at
+least 30/32, oracle correctness at least 7/8 in every family, all 64 outputs valid,
+and all exception cases retained. Passing permits a next diagnostic; it does not
+establish HSWM efficacy, a population effect, or a learned graph update. A future
+final comparison requires unexposed task families. Batch size and output format
+are unchanged here, so differences from older experiments cannot be attributed
+to either factor.
+
+Validation on 2026-10-10: the existing and diagnostic Python tests passed
+(18 tests), the native fixture/bridge tests passed (4 tests), and the fixture
+generator passed strict TypeScript checking. These use local fixtures and
+loopback responses; they do not measure model efficacy. The offline plan was
+generated from the final source-pinned fixture above. No real-model diagnostic
+has been run.

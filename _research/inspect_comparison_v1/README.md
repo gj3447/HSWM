@@ -157,4 +157,27 @@ Validation on 2026-10-10: the existing and diagnostic Python tests passed
 generator passed strict TypeScript checking. These use local fixtures and
 loopback responses; they do not measure model efficacy. The offline plan was
 generated from the final source-pinned fixture above. No real-model diagnostic
-has been run.
+had been run at that point.
+
+On 2026-10-11, the first real-model diagnostic completed on the existing DGX.
+The operator's `ssh dgx` alias reaches the remote `~/bin/hswm-run`; absence of a
+local wrapper does not indicate that the remote wrapper is unavailable:
+
+```sh
+ssh dgx '~/bin/hswm-run --help'
+ssh dgx '~/bin/hswm-run preflight'
+```
+
+The remote noninteractive PATH may omit `~/.local/bin`, which contains Node and
+uv. Use the existing executables after checking their versions. A remote checkout
+may predate this diagnostic: stage an exact, hashed source/fixture/lockfile bundle
+and use `hswm-run exec NEW_RUN_ID --profile hswm -- COMMAND`; do not assume the
+remote checkout matches the local source. Keep its isolated environment in wrapper
+scratch and its selected inputs/results under `HSWM_OUTPUT_ROOT` for durable
+publication to the user's data-01 storage.
+
+Run `oracle-e1-20261011T022429Z` completed 64 requests against `qwen3-4b-real`:
+64/64 valid outputs, oracle environmental correctness 17/32, initial-rule
+consistency 22/32, and initial environmental correctness 18/32. The frozen screen
+returned `REVISE_LOCAL_EXECUTION`; the wrapper's successful process exit is not
+a scientific pass. Existing plan/source snapshots were preserved.

@@ -12,6 +12,8 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
+from hswm.infrastructure import kg_publication_integrity
+
 SCHEMA_VERSION = "hswm-ragnarok-pidna-research-ontology/v1"
 BUNDLE_UID = "sym:AbstractNode:hswm-ragnarok-pidna-research-ontology-2026-08-29"
 REGISTRY_UID = "sym:KG_INFRA:schema-registry-v1-2026-08-03"
@@ -675,6 +677,8 @@ def publish(
     upgrade_exact_previous: bool = False,
 ) -> dict[str, int]:
     """Create, verify, or exactly upgrade the projection; anchors remain MATCH-only."""
+    kg_publication_integrity.validate_bundle_for_publication(data)
+
     try:
         from neo4j import GraphDatabase
     except ImportError as error:  # pragma: no cover
@@ -686,6 +690,8 @@ def publish(
         with driver.session(database=config["database"]) as session:
 
             def transaction(tx: Any) -> dict[str, int]:
+                kg_publication_integrity.assert_uid_kind_constraints(tx, data)
+                kg_publication_integrity.serialize_on_schema_registry(tx)
                 _registry_readback(tx, data)
                 anchor_uids = [row["uid"] for row in data["anchors"]]
                 present_anchors = _find_unique_nodes(tx, anchor_uids)

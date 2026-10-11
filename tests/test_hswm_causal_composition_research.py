@@ -454,6 +454,18 @@ class _PublishTx:
         self.bad_final_count = bad_final_count
 
     def run(self, query: str, **kwargs: object) -> _PublishResult:
+        if query.startswith("SHOW CONSTRAINTS"):
+            return _PublishResult(rows=[
+                {"name": f"{label}_uid", "type": "UNIQUENESS", "entityType": "NODE",
+                 "labelsOrTypes": [label], "properties": ["uid"]}
+                for label in self.state["allowed_labels"] + ["SchemaRegistry"]
+            ])
+        if "__hswm_publication_transaction_lock" in query:
+            # Model the existing lock's final, byte-preserving registry readback.
+            return _PublishResult(single={"uid": publisher.REGISTRY_UID, "properties": {
+                "uid": publisher.REGISTRY_UID, "allowed_labels": self.state["allowed_labels"],
+                "allowed_reltypes": self.state["allowed_reltypes"],
+            }})
         if "SchemaRegistry" in query:
             return _PublishResult(
                 single={

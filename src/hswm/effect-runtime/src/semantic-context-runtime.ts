@@ -16,20 +16,23 @@ export const prepareSemanticContext = (runtime: Runtime, specification: unknown)
 })
 
 /** A new snapshot must reproduce the complete plan, including caller policy and candidate descriptors. */
-const checkPlan = (runtime: Runtime, plan: ContextPlan) => Effect.gen(function* () {
+export const checkSemanticContextPlan = (runtime: Runtime, plan: ContextPlan) => Effect.gen(function* () {
   const current = yield* prepareSemanticContext(runtime, plan.spec)
   if (current.planSha256 !== plan.planSha256) return yield* Effect.fail(contextError("PLAN_STALE", "Graph state or candidate binding changed; prepare and decide again"))
 })
 
-export const assembleSemanticContext = (runtime: Runtime, plan: ContextPlan, rawDecision: unknown) => Effect.gen(function* () {
-  yield* checkPlan(runtime, plan)
-  const selection = yield* selectContext(plan, rawDecision)
+type BoundSelection = { readonly planSha256: string; readonly status: string; readonly candidateId: string | null }
+/** Explicit typed selection boundary shared by Jev and owner-admitted policy readers. It confers no write authority. */
+export const assembleSelectedSemanticContext = <S extends BoundSelection>(runtime: Runtime, plan: ContextPlan, selection: S) => Effect.gen(function* () {
+  yield* checkSemanticContextPlan(runtime, plan)
+  if (!["SELECTED", "NONE", "NEED_MORE"].includes(selection.status)) return yield* Effect.fail(contextError("SELECTION_INVALID", "Unknown context selection status"))
+  if (selection.planSha256 !== plan.planSha256) return yield* Effect.fail(contextError("REQUEST_MISMATCH", "Selection belongs to a different plan"))
   if (selection.status !== "SELECTED") return { selection, assembly: null }
   const candidate = plan.spec.candidates.find(c => c.id === selection.candidateId)
   if (candidate === undefined) return yield* Effect.fail(contextError("CANDIDATE_MISSING", "Selected candidate was not in the bound plan"))
   const roots = [...new Set([...plan.spec.mandatoryRelationUids, ...candidate.relationUids])]
   const frames: ReadonlyArray<SemanticReadFrame> = yield* Effect.forEach(roots, uid => readLlmSemanticFrame(runtime, uid, plan.spec.event), { concurrency: 1 })
-  yield* checkPlan(runtime, plan)
+  yield* checkSemanticContextPlan(runtime, plan)
   if (frames.some(f => f.stateRevision !== plan.stateRevision)) return yield* Effect.fail(contextError("PLAN_STALE", "A frame was read from a different snapshot"))
   const payload = {
     contract: "hswm-semantic-context-predict/v1" as const,
@@ -43,6 +46,8 @@ export const assembleSemanticContext = (runtime: Runtime, plan: ContextPlan, raw
   const bound = { contract: "hswm-semantic-context-assembly/v1" as const, planSha256: plan.planSha256, selection, payload, contextBytes }
   return { selection, assembly: { ...bound, assemblySha256: contextHash(bound) } }
 })
+export const assembleSemanticContext = (runtime: Runtime, plan: ContextPlan, rawDecision: unknown) =>
+  selectContext(plan, rawDecision).pipe(Effect.flatMap(selection => assembleSelectedSemanticContext(runtime, plan, selection)))
 export type ContextAssembly = NonNullable<Effect.Effect.Success<ReturnType<typeof assembleSemanticContext>>["assembly"]>
 
 const PredictionSchema = Schema.Struct({
@@ -50,17 +55,17 @@ const PredictionSchema = Schema.Struct({
   uncertainty: Schema.String.pipe(Schema.minLength(1), Schema.maxLength(8192))
 })
 /** This call stages immutable evidence only. It has no canonical submit or W-update path. */
-export const executeSemanticContext = (runtime: Runtime, plan: ContextPlan, rawDecision: unknown, rawCell: unknown, http: AdaptiveHttpClientShape) => Effect.gen(function* () {
+export const executeSelectedSemanticContext = <S extends BoundSelection>(runtime: Runtime, plan: ContextPlan, selection: S, rawCell: unknown, http: AdaptiveHttpClientShape) => Effect.gen(function* () {
   const cell = yield* decodeLifecycleCell(rawCell)
-  const prepared = yield* assembleSemanticContext(runtime, plan, rawDecision)
+  const prepared = yield* assembleSelectedSemanticContext(runtime, plan, selection)
   if (prepared.assembly === null) return { ...prepared, trace: null }
   const assembly = prepared.assembly
   const executionId = yield* Effect.sync(randomUUID)
   const requestContent = yield* runtime.stageContent("application/vnd.hswm.semantic-context-request-v1+json", encode({ executionId, assembly }))
-  yield* checkPlan(runtime, plan)
+  yield* checkSemanticContextPlan(runtime, plan)
   const response = yield* executeAdaptiveCell({ kind: "llm", cell_id: "semantic-context", ...cell }, { prompt: contextJson(assembly.payload) }, process.cwd(), 120_000).pipe(Effect.provideService(AdaptiveHttpClient, http))
   if (response.status !== "SUCCEEDED") return yield* Effect.fail(contextError("CONTEXT_EXECUTION_FAILED", "LLM transport did not complete; no retry or outcome fabricated"))
-  yield* checkPlan(runtime, plan)
+  yield* checkSemanticContextPlan(runtime, plan)
   const decoded = yield* parseJson(response.output).pipe(Either.mapLeft(() => contextError("PREDICTION_INVALID", "Expected strict prediction JSON")))
   const prediction = yield* Schema.decodeUnknownEither(PredictionSchema)(decoded, { onExcessProperty: "error" }).pipe(Either.mapLeft(() => contextError("PREDICTION_INVALID", "Expected prediction and uncertainty only")))
   const responseContent = yield* runtime.stageContent("application/vnd.hswm.semantic-context-response-v1+json", new TextEncoder().encode(response.output))
@@ -74,6 +79,8 @@ export const executeSemanticContext = (runtime: Runtime, plan: ContextPlan, rawD
   const traceContent = yield* runtime.stageContent("application/vnd.hswm.semantic-context-trace-v1+json", encode(trace))
   return { ...prepared, trace: { ...trace, traceContent } }
 })
+export const executeSemanticContext = (runtime: Runtime, plan: ContextPlan, rawDecision: unknown, rawCell: unknown, http: AdaptiveHttpClientShape) =>
+  selectContext(plan, rawDecision).pipe(Effect.flatMap(selection => executeSelectedSemanticContext(runtime, plan, selection, rawCell, http)))
 
 const Descriptor = Schema.Struct({
   mediaType: Schema.Literal("application/vnd.hswm.semantic-context-trace-v1+json"),

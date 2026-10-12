@@ -1,0 +1,12 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+SELECT ?id ?meaning ?authority ?source ?sha256 ?utterance ?relatedUid WHERE {
+ ?requirement a role:SEMANTIC_TOPOLOGY_REQUIREMENT ; p:requirement_id ?id ;
+   p:description ?meaning ; p:authority_class ?authority ;
+   r:HAS_SOURCE ?original ; r:REFERENCES ?related .
+ ?original a role:SEMANTIC_TOPOLOGY_SOURCE ; p:source_path ?source ;
+   p:source_sha256 ?sha256 ; p:utterance_verbatim ?utterance .
+ ?related kb:uid ?relatedUid .
+} ORDER BY ?id ?relatedUid

@@ -4,6 +4,11 @@
 필요한 검사 → Git 기록을 기본으로 한다. RDF·SHACL·SPARQL·PROV 기반 작업과 주제별
 참조를 안내하며, 아래 날짜별 기록은 당시 출처와 재현 정보를 보존한다.
 
+2026-10-12 [자동 W 갱신과 의미론적 연결·구조 최적화](docs/canon/USER_PRIMARY_HSWM_SEMANTIC_TOPOLOGY_OPTIMIZATION_2026-10-12.md)는
+연결 강화·약화, 의미 기여가 작은 중복·중첩의 정리, 의미론적 공간의 연결 최적화,
+노드·허브 생성과 노드 제거에 관한 사용자 원문을 보존한다. `semantic-topology`에서
+원문과 다섯 AI 재서술을 구분해 조회한다. 이번 기록은 자동 구조 수정의 실행 결과가 아니다.
+
 2026-10-04 [허용·거절을 보존하는 Lean 추상화](docs/research/HSWM_OPERATIONAL_QUOTIENT_LEAN_2026-10-04.md)는
 출력만 관찰하던 기존 동치의 공백을 닫고 Step/Learn 보존과 학습 후 구별되는 반례를 증명한다.
 새 선언 14개와 기존 lifecycle·통계 증명을 재검사했다. 작업공간은 `operational-quotient`이며

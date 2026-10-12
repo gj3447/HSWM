@@ -187,11 +187,14 @@ def evaluate_relation(
     example: LiveExample,
     execution: Execution,
     bridge_command: Sequence[str] = DEFAULT_BRIDGE,
+    renderer: str = "legacy",
 ) -> dict[str, Any]:
     """Execute one candidate relation through the bridge; targets never enter its stdin."""
     _nonblank(candidate_text, "candidate_text")
     _validate_execution(execution)
-    payload = {"input": example.input, "relation_text": candidate_text, "execution": execution.as_dict()}
+    if renderer not in ("legacy", "ordered"):
+        raise ValueError("renderer must be legacy or ordered")
+    payload = {"input": example.input, "relation_text": candidate_text, "execution": execution.as_dict(), "renderer": renderer}
     payload_text = json.dumps(payload, separators=(",", ":"), ensure_ascii=False)
     try:
         completed = subprocess.run(
@@ -217,11 +220,11 @@ def dataset_for(examples: Iterable[LiveExample]) -> MemoryDataset:
 
 
 @solver
-def live_relation_solver(relation_text: str, execution: Execution, bridge_command: Sequence[str] = DEFAULT_BRIDGE):
+def live_relation_solver(relation_text: str, execution: Execution, bridge_command: Sequence[str] = DEFAULT_BRIDGE, renderer: str = "legacy"):
     """Use the bridge result as output while retaining malformed model responses as failures."""
     async def solve(state: TaskState, generate: Generate) -> TaskState:
         example = LiveExample(str(state.sample_id), "heldout", dict(state.metadata["live_input"]), state.target.text)
-        result = evaluate_relation(relation_text, example, execution, bridge_command)
+        result = evaluate_relation(relation_text, example, execution, bridge_command, renderer)
         state.output.completion = result["answer"] if result["valid"] else INVALID_COMPLETION
         state.output.metadata = {"hswm_bridge": result}
         return state
@@ -236,13 +239,14 @@ def live_exact_answer():
     return score
 
 
-def relation_task(examples: list[LiveExample], relation_text: str, execution: Execution, bridge_command: Sequence[str], name: str) -> Task:
-    return Task(dataset=dataset_for(examples), solver=live_relation_solver(relation_text, execution, bridge_command), scorer=live_exact_answer(), name=name)
+def relation_task(examples: list[LiveExample], relation_text: str, execution: Execution, bridge_command: Sequence[str], name: str, renderer: str = "legacy") -> Task:
+    return Task(dataset=dataset_for(examples), solver=live_relation_solver(relation_text, execution, bridge_command, renderer), scorer=live_exact_answer(), name=name)
 
 
 def run_live(
     examples: list[LiveExample], baseline_text: str, candidate_text: str, execution: Execution,
     log_dir: Path, bridge_command: Sequence[str] = DEFAULT_BRIDGE, dataset_sha256: str | None = None,
+    baseline_renderer: str = "legacy", candidate_renderer: str = "legacy", candidate_first: bool = False,
 ) -> tuple[Any, Any]:
     """Evaluate two relation texts on the same frozen examples and require successful Inspect logs."""
     _nonblank(baseline_text, "baseline_text")
@@ -261,20 +265,16 @@ def run_live(
         "candidate_relation_sha256": hashlib.sha256(candidate_text.encode()).hexdigest(),
         "execution": execution.as_dict(),
         "evidence_kind": "LOCAL_RELATION_TEXT_EXECUTION_NOT_CANONICAL_REVISION",
-        "max_model_call_attempts": 2 * len(examples),
+        "max_model_call_attempts": 2 * len(examples), "baseline_renderer": baseline_renderer, "candidate_renderer": candidate_renderer,
     }
-    logs = eval(
-        [
-            relation_task(examples, baseline_text, execution, bridge_command, f"w1_e1_baseline_{source_digest[:12]}"),
-            relation_task(examples, candidate_text, execution, bridge_command, f"w1_e1_candidate_{source_digest[:12]}"),
-        ],
-        model=None, log_dir=str(log_dir), fail_on_error=True,
-        metadata=metadata, max_tasks=1,
-    )
+    baseline_task = relation_task(examples, baseline_text, execution, bridge_command, f"w1_e1_baseline_{source_digest[:12]}", baseline_renderer)
+    candidate_task = relation_task(examples, candidate_text, execution, bridge_command, f"w1_e1_candidate_{source_digest[:12]}", candidate_renderer)
+    ordered_tasks = [candidate_task, baseline_task] if candidate_first else [baseline_task, candidate_task]
+    logs = eval(ordered_tasks, model=None, log_dir=str(log_dir), fail_on_error=True, metadata=metadata, max_tasks=1)
     failed = [str(log.status) for log in logs if log.status != "success"]
     if failed:
         raise RuntimeError(f"Inspect evaluation did not succeed: {', '.join(failed)}")
-    baseline, candidate = logs
+    candidate, baseline = logs if candidate_first else (logs[1], logs[0])
     return baseline, candidate
 
 

@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { test } from 'node:test';
 import { localSemanticCases } from '../../src/hswm/effect-runtime/src/local-semantic-execution-domain.ts';
-import { evaluate, validateRequest } from '../../_research/inspect_comparison_v1/hswm_bridge.mts';
+import { buildRequest, evaluate, renderCandidate, validateRequest } from '../../_research/inspect_comparison_v1/hswm_bridge.mts';
 
 test('native E1 HTTP path retains invalid outputs, omits labels, and records usage', async () => {
   let reply = '{"answer":1}', count = 0, captured: any;
@@ -51,4 +51,27 @@ test('fixture export keeps heldout disjoint and oracle meaning out of optimizer 
     assert.notEqual(baseline, localSemanticCases[0]!.input.relation.semanticText);
     assert.throws(() => execFileSync(process.execPath, ['_research/inspect_comparison_v1/prepare_fixture.mts', destination], { stdio: 'pipe' }));
   } finally { await rm(root, { recursive: true }); }
+});
+
+
+test('ordered renderer preserves every allowed input value while legacy bytes stay historical', () => {
+  const input = localSemanticCases[0]!.input;
+  const relation = 'oracle relation';
+  assert.equal(renderCandidate(input, relation), JSON.stringify({ ...input, relation: { ...input.relation, semanticText: relation } }));
+  const ordered = renderCandidate(input, relation, 'ordered');
+  for (const value of [relation, input.relation.disposition, input.relation.uncertainty, ...input.relation.exceptionRefs, JSON.stringify(input.priorEvidence), String(input.fields.context.pel), String(input.fields.exception.nub)]) assert(ordered.includes(value));
+  assert(!ordered.includes('target'));
+  const execution = { base_url: 'http://127.0.0.1:8001', model: 'fixture-model', max_tokens: 32, timeout_seconds: 5, seed: 0 };
+  assert.equal(JSON.stringify(buildRequest(input, relation, execution)), JSON.stringify(buildRequest(input, relation, execution, 'legacy')));
+});
+
+test('all local inputs have lossless ordered presentation and no evaluator fields', () => {
+  for (const item of localSemanticCases) {
+    const input = item.input, text = renderCandidate(input, input.relation.semanticText, 'ordered');
+    for (const value of [input.relation.semanticText, input.relation.disposition, input.relation.uncertainty, ...input.relation.exceptionRefs, JSON.stringify(input.priorEvidence), `dax=${input.fields.subject.dax}`, `wug=${input.fields.subject.wug}`, `zif=${input.fields.subject.zif}`, `pel=${input.fields.context.pel}`, `nub=${input.fields.exception.nub}`]) assert(text.includes(value));
+    assert.match(text, /0:subject:LOCAL_SEMANTIC_INPUT\n1:context:LOCAL_SEMANTIC_INPUT\n2:exception:LOCAL_SEMANTIC_INPUT/);
+    const request = buildRequest(input, input.relation.semanticText, { base_url: 'http://127.0.0.1:8001', model: 'fixture', max_tokens: 32, timeout_seconds: 5, seed: 0 });
+    assert.equal(request.messages[1]!.content, JSON.stringify(input) + '\n' + request.messages[1]!.content.slice(JSON.stringify(input).length + 1));
+    assert(!request.messages[1]!.content.includes('target'));
+  }
 });

@@ -155,8 +155,11 @@ def test_live_bridge_callable_hides_evaluator_fields(monkeypatch: pytest.MonkeyP
 
     monkeypatch.setattr(live_eval.subprocess, "run", fake_run)
     assert live_eval.evaluate_relation("candidate relation", example, execution, ("fake-bridge",))["answer"] == "1"
-    assert set(captured) == {"input", "relation_text", "execution"}
+    assert set(captured) == {"input", "relation_text", "execution", "renderer"}
+    assert captured["renderer"] == "legacy"
     assert captured["relation_text"] == "candidate relation"
+    assert live_eval.evaluate_relation("candidate relation", example, execution, ("fake-bridge",), "ordered")["answer"] == "1"
+    assert captured["renderer"] == "ordered"
     assert "target" not in json.dumps(captured)
     assert "heldout-1" not in json.dumps(captured)
 
@@ -183,7 +186,8 @@ def test_live_task_scores_invalid_bridge_output_as_failure(tmp_path: Path, monke
     ]
     execution = live_eval.Execution("http://127.0.0.1:8001", "qwen3-4b-real", 32, 3, 0)
 
-    def fake_evaluate(relation, example, execution, bridge_command):
+    def fake_evaluate(relation, example, execution, bridge_command, renderer="legacy"):
+        assert renderer in ("legacy", "ordered")
         if relation == "baseline":
             return {"valid": False, "answer": None, "error_kind": "HTTP_503", "request_sha256": None, "response_sha256": None, "model": execution.model, "usage": None, "latency_ms": 1.0, "model_calls": 1}
         return {"valid": True, "answer": example.target, "error_kind": None, "request_sha256": "a" * 64, "response_sha256": "b" * 64, "model": execution.model, "usage": None, "latency_ms": 1.0, "model_calls": 1}

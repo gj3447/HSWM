@@ -7,7 +7,8 @@ import {
 } from '../../src/hswm/effect-runtime/src/local-semantic-execution-domain.ts';
 
 type Execution = { base_url: string; model: string; max_tokens: number; timeout_seconds: number; seed: number };
-type BridgeRequest = { input: LocalSemanticInput; relation_text: string; execution: Execution };
+type Renderer = 'legacy' | 'ordered';
+type BridgeRequest = { input: LocalSemanticInput; relation_text: string; execution: Execution; renderer?: Renderer };
 const sha = (text: string) => createHash('sha256').update(text).digest('hex');
 const object = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
 const exact = (v: Record<string, unknown>, keys: string[]) => Object.keys(v).sort().join(',') === keys.sort().join(',');
@@ -15,7 +16,7 @@ const nonempty = (v: unknown): v is string => typeof v === 'string' && !!v.trim(
 const integer = (v: unknown, low: number, high: number): v is number => typeof v === 'number' && Number.isSafeInteger(v) && v >= low && v <= high;
 
 export function validateRequest(raw: unknown): BridgeRequest {
-  if (!object(raw) || !exact(raw, ['input', 'relation_text', 'execution']) || !nonempty(raw.relation_text) || raw.relation_text.length > 8192)
+  if (!object(raw) || !(['input', 'relation_text', 'execution'].every(key => key in raw) && Object.keys(raw).every(key => ['input', 'relation_text', 'execution', 'renderer'].includes(key))) || !nonempty(raw.relation_text) || raw.relation_text.length > 8192)
     throw new Error('Invalid bridge request or relation text');
   const input = raw.input, exec = raw.execution;
   if (!object(input)) throw new Error('Expected local semantic input');
@@ -40,21 +41,40 @@ export function validateRequest(raw: unknown): BridgeRequest {
   const url = new URL(exec.base_url);
   if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.search || url.hash || !['','/','/v1','/v1/'].includes(url.pathname))
     throw new Error('Expected an HTTP model base URL without credentials');
+  if (raw.renderer !== undefined && raw.renderer !== 'legacy' && raw.renderer !== 'ordered') throw new Error('Invalid renderer');
   return raw as unknown as BridgeRequest;
 }
 
-export async function evaluate(raw: unknown) {
-  const { input, relation_text, execution } = validateRequest(raw);
-  const candidateInput = { ...input, relation: { ...input.relation, semanticText: relation_text } };
-  const request = {
+export function renderCandidate(input: LocalSemanticInput, relationText: string, renderer: Renderer = 'legacy'): string {
+  const candidateInput = { ...input, relation: { ...input.relation, semanticText: relationText } };
+  if (renderer === 'legacy') return JSON.stringify(candidateInput);
+  const r = candidateInput.relation, f = candidateInput.fields;
+  // Explicit presentation only: every LocalSemanticInput value is retained.
+  return [
+    'RELATION', `semanticText=${JSON.stringify(r.semanticText)}`, `disposition=${JSON.stringify(r.disposition)}`,
+    `uncertainty=${JSON.stringify(r.uncertainty)}`, `exceptionRefs=${JSON.stringify(r.exceptionRefs)}`,
+    'ROLES', ...candidateInput.roles.slice().sort((a, b) => a.ordinal - b.ordinal).map(x => `${x.ordinal}:${x.role}:${x.referenceType}`),
+    `PRIOR_EVIDENCE=${JSON.stringify(candidateInput.priorEvidence)}`,
+    'SUBJECT', `dax=${f.subject.dax}`, `wug=${f.subject.wug}`, `zif=${f.subject.zif}`,
+    'CONTEXT', `pel=${f.context.pel}`, 'EXCEPTION', `nub=${f.exception.nub}`
+  ].join('\n');
+}
+
+export function buildRequest(input: LocalSemanticInput, relationText: string, execution: Execution, renderer: Renderer = 'legacy') {
+  return {
     model: execution.model, temperature: 0, seed: execution.seed, max_tokens: execution.max_tokens,
     chat_template_kwargs: { enable_thinking: false },
     messages: [
       { role: 'system', content: 'Execute the supplied local semantic relation using its ordered roles, context and exceptions. Return only the required JSON output.' },
-      { role: 'user', content: JSON.stringify(candidateInput) + '\n' + localSemanticModeInstructions.E1 }
+      { role: 'user', content: renderCandidate(input, relationText, renderer) + '\n' + localSemanticModeInstructions.E1 }
     ],
     response_format: { type: 'json_schema', json_schema: { name: 'hswm_w1_e1', strict: true, schema: localSemanticModeSchemas.E1 } }
   };
+}
+
+export async function evaluate(raw: unknown) {
+  const { input, relation_text, execution, renderer = 'legacy' } = validateRequest(raw);
+  const request = buildRequest(input, relation_text, execution, renderer);
   const requestText = JSON.stringify(request), started = performance.now();
   let responseText: string | null = null;
   let usage: { input_tokens: number; output_tokens: number; total_tokens: number } | null = null;

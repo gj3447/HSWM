@@ -181,3 +181,58 @@ Run `oracle-e1-20261011T022429Z` completed 64 requests against `qwen3-4b-real`:
 consistency 22/32, and initial environmental correctness 18/32. The frozen screen
 returned `REVISE_LOCAL_EXECUTION`; the wrapper's successful process exit is not
 a scientific pass. Existing plan/source snapshots were preserved.
+
+## Renderer comparison (development screen)
+
+`renderer_comparison.py` compares the historical bridge JSON presentation
+(`legacy`) with a deterministic ordered presentation (`ordered`). Both arms use
+the same frozen **oracle** relation text; this is a presentation diagnostic, not
+an initial-versus-oracle comparison. The 32 historical cases are
+`DEVELOPMENT_EXPOSED`, so neither arm is a final holdout.
+
+Plan/verification is local and makes no model request. The runner checks the
+source-pinned oracle fixture before it opens the output directory. A run has at
+most 64 attempts (four families × eight cases × two renderers), no retries, and
+refuses to overwrite an output directory.
+
+```sh
+_research/inspect_comparison_v1/.venv/bin/python \
+  _research/inspect_comparison_v1/renderer_comparison.py plan \
+  .hswm-local/oracle-diagnostic-2026-10-10-v1 \
+  --out .hswm-local/renderer-comparison-plan.json
+
+_research/inspect_comparison_v1/.venv/bin/python \
+  _research/inspect_comparison_v1/renderer_comparison.py run \
+  .hswm-local/oracle-diagnostic-2026-10-10-v1 \
+  --out .hswm-local/renderer-comparison-run \
+  --base-url "$HSWM_APPROVED_MODEL_BASE_URL" --model "$HSWM_APPROVED_MODEL_ID"
+```
+
+The `legacy` request remains byte-equivalent to the old bridge rendering. The
+`ordered` request preserves semantic text, disposition, uncertainty, exception
+references, ordinal roles, prior evidence, and every field value, while keeping
+case IDs and evaluator labels out of model input. Families 0/2 run legacy first
+and 1/3 ordered first; this is family-level counterbalancing, not a randomized
+per-case order claim. Receipts retain Inspect log paths/hashes, request/response
+hashes, validity, errors, usage, latency, paired discordances, and incomplete
+attempt accounting.
+
+**Observed 2026-10-12.** DGX run `renderer-e1-20261012T052306Z` completed all
+64 attempts from 05:30:39.912282 to 05:31:15.364946 UTC (wrapper interval
+05:30:34–05:31:15). With `qwen3-4b-real`, temperature 0, seed 0, max tokens 32,
+non-thinking, and strict E1 JSON, both arms were 64/64 valid. Legacy was 17/32
+and ordered was 14/32 environmental-correct: 11 both correct, 6 legacy-only,
+3 ordered-only, and 12 both wrong. Family counts were legacy `[4,4,6,3]` and
+ordered `[3,3,4,4]`; reported total tokens were 8,962 and 8,264, and summed
+request latencies were 14,179.568450 ms and 14,415.994393 ms respectively.
+The predeclared decision is `REVISE_LOCAL_EXECUTION`: do not adopt the ordered
+renderer from this development screen. The next token/mode experiment is
+`NOT_RUN`. Private inputs, raw logs, and audit material remain under the
+ignored `.hswm-local/` run directory; receipt archive SHA-256 is
+`3f90fbf1916f166da9d6301662f1dc8dab34fd599d1bfd6b3d8e88c1a2e4c617`.
+
+This result does not change a canonical graph program, its versioned
+interpreter, W learning, or HSWM-wide efficacy. The standard research graph and
+USL/SHACL/SPARQL planning projections live in HSWM_LIKENESS; they express
+provenance and proposed experiments, not a canonical HSWM state write or proof
+of semantic truth.

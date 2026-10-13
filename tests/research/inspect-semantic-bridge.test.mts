@@ -75,3 +75,50 @@ test('all local inputs have lossless ordered presentation and no evaluator field
     assert(!request.messages[1]!.content.includes('target'));
   }
 });
+
+test('budget controls preserve the old default and isolate cap from thinking', () => {
+  const input = localSemanticCases[0]!.input;
+  const execution = { base_url: 'http://127.0.0.1:8001', model: 'fixture-model', max_tokens: 32, timeout_seconds: 5, seed: 0 };
+  const generation = { temperature: 0.6, top_p: 0.95, top_k: 20, min_p: 0, thinking: false };
+  const legacy = buildRequest(input, 'same relation', execution);
+  assert.equal(legacy.temperature, 0); assert(!('top_p' in legacy));
+  const a = buildRequest(input, 'same relation', execution, 'legacy', generation);
+  const b = buildRequest(input, 'same relation', { ...execution, max_tokens: 512 }, 'legacy', generation);
+  const c = buildRequest(input, 'same relation', { ...execution, max_tokens: 512 }, 'legacy', { ...generation, thinking: true });
+  assert.deepEqual(b, { ...a, max_tokens: 512 });
+  assert.deepEqual(c, { ...b, chat_template_kwargs: { enable_thinking: true } });
+  assert.throws(() => validateRequest({ input, relation_text: 'same', execution, generation: { ...generation, top_k: 0 } }));
+  assert.throws(() => validateRequest({ input, relation_text: 'same', execution, generation: { ...generation, thinking: 'true' } }));
+});
+
+test('thinking requires separated reasoning and scores only strict final content', async () => {
+  let message: Record<string, unknown> = { reasoning: 'fixture reasoning ends in an unrelated 0', content: '{"answer":1}' };
+  let finish = 'stop';
+  const server = createServer(async (req, res) => {
+    let body = ''; for await (const chunk of req) body += chunk;
+    const request = JSON.parse(body);
+    assert.equal(request.chat_template_kwargs.enable_thinking, true);
+    assert.equal(request.top_k, 20); assert.equal(request.temperature, 0.6);
+    res.writeHead(200, { 'content-type': 'application/json' });
+    res.end(JSON.stringify({ model: 'fixture-model', choices: [{ finish_reason: finish, message }],
+      usage: { prompt_tokens: 20, completion_tokens: 30, total_tokens: 50 } }));
+  });
+  server.listen(0, '127.0.0.1'); await once(server, 'listening');
+  try {
+    const address = server.address(); assert(address && typeof address === 'object');
+    const request = { input: localSemanticCases[0]!.input, relation_text: 'same relation',
+      execution: { base_url: `http://127.0.0.1:${address.port}`, model: 'fixture-model', max_tokens: 512, timeout_seconds: 5, seed: 0 },
+      generation: { temperature: 0.6, top_p: 0.95, top_k: 20, min_p: 0, thinking: true } };
+    const good = await evaluate(request);
+    assert.equal(good.answer, '1'); assert.equal(good.reasoning_field, 'reasoning'); assert.equal(good.finish_reason, 'stop');
+    message = { content: '{"answer":1}' };
+    assert.equal((await evaluate(request)).error_kind, 'MISSING_REASONING_CHANNEL');
+    message = { reasoning: '{"answer":1}', content: null };
+    const missing = await evaluate(request);
+    assert.equal(missing.valid, false); assert.equal(missing.answer, null); assert.equal(missing.reasoning, '{"answer":1}');
+    finish = 'length'; message = { reasoning: 'unfinished', content: '{"answer":1}' };
+    assert.equal((await evaluate(request)).error_kind, 'INCOMPLETE_OUTPUT');
+    finish = 'stop'; message = { reasoning: 'fixture', content: '{"answer":0,"answer":1}' };
+    assert.equal((await evaluate(request)).error_kind, 'DUPLICATE_KEY');
+  } finally { server.close(); }
+});

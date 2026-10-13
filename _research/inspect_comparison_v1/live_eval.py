@@ -188,6 +188,7 @@ def evaluate_relation(
     execution: Execution,
     bridge_command: Sequence[str] = DEFAULT_BRIDGE,
     renderer: str = "legacy",
+    generation: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Execute one candidate relation through the bridge; targets never enter its stdin."""
     _nonblank(candidate_text, "candidate_text")
@@ -195,6 +196,8 @@ def evaluate_relation(
     if renderer not in ("legacy", "ordered"):
         raise ValueError("renderer must be legacy or ordered")
     payload = {"input": example.input, "relation_text": candidate_text, "execution": execution.as_dict(), "renderer": renderer}
+    if generation is not None:
+        payload["generation"] = generation
     payload_text = json.dumps(payload, separators=(",", ":"), ensure_ascii=False)
     try:
         completed = subprocess.run(
@@ -220,11 +223,11 @@ def dataset_for(examples: Iterable[LiveExample]) -> MemoryDataset:
 
 
 @solver
-def live_relation_solver(relation_text: str, execution: Execution, bridge_command: Sequence[str] = DEFAULT_BRIDGE, renderer: str = "legacy"):
+def live_relation_solver(relation_text: str, execution: Execution, bridge_command: Sequence[str] = DEFAULT_BRIDGE, renderer: str = "legacy", generation: dict[str, Any] | None = None):
     """Use the bridge result as output while retaining malformed model responses as failures."""
     async def solve(state: TaskState, generate: Generate) -> TaskState:
         example = LiveExample(str(state.sample_id), "heldout", dict(state.metadata["live_input"]), state.target.text)
-        result = evaluate_relation(relation_text, example, execution, bridge_command, renderer)
+        result = evaluate_relation(relation_text, example, execution, bridge_command, renderer) if generation is None else evaluate_relation(relation_text, example, execution, bridge_command, renderer, generation)
         state.output.completion = result["answer"] if result["valid"] else INVALID_COMPLETION
         state.output.metadata = {"hswm_bridge": result}
         return state
@@ -239,8 +242,8 @@ def live_exact_answer():
     return score
 
 
-def relation_task(examples: list[LiveExample], relation_text: str, execution: Execution, bridge_command: Sequence[str], name: str, renderer: str = "legacy") -> Task:
-    return Task(dataset=dataset_for(examples), solver=live_relation_solver(relation_text, execution, bridge_command, renderer), scorer=live_exact_answer(), name=name)
+def relation_task(examples: list[LiveExample], relation_text: str, execution: Execution, bridge_command: Sequence[str], name: str, renderer: str = "legacy", generation: dict[str, Any] | None = None) -> Task:
+    return Task(dataset=dataset_for(examples), solver=live_relation_solver(relation_text, execution, bridge_command, renderer, generation), scorer=live_exact_answer(), name=name)
 
 
 def run_live(

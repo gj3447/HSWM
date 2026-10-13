@@ -236,3 +236,83 @@ interpreter, W learning, or HSWM-wide efficacy. The standard research graph and
 USL/SHACL/SPARQL planning projections live in HSWM_LIKENESS; they express
 provenance and proposed experiments, not a canonical HSWM state write or proof
 of semantic truth.
+
+## Token-cap and thinking-mode comparison
+
+`budget_comparison.py` evaluates the same frozen oracle relation and 32
+historical `DEVELOPMENT_EXPOSED` cases with the legacy renderer in three arms:
+A non-thinking/32 tokens, B non-thinking/512, and C thinking/512. All arms use
+`temperature=.6`, `top_p=.95`, `top_k=20`, `min_p=0`, and seed 0. The 512-token
+setting is a diagnostic cap, not a claim about a recommended or sufficient
+thinking budget.
+
+The plan is local only. It fixes 96 maximum requests, including the first
+three compatibility attempts; there are no retries. Those first A/B/C attempts
+are counted. If any is invalid, or C lacks a nonempty separately parsed
+reasoning channel, the runner records `NOT_READY` and leaves the other 93
+requests unattempted. Thinking scores strict E1 JSON only from final
+`content`; reasoning is retained separately and never treated as an answer.
+
+```sh
+_research/inspect_comparison_v1/.venv/bin/python \
+  _research/inspect_comparison_v1/budget_comparison.py plan \
+  .hswm-local/oracle-diagnostic-2026-10-10-v1 \
+  --out .hswm-local/budget-comparison-plan.json
+
+_research/inspect_comparison_v1/.venv/bin/python \
+  _research/inspect_comparison_v1/budget_comparison.py run \
+  .hswm-local/oracle-diagnostic-2026-10-10-v1 \
+  --out .hswm-local/budget-comparison-run \
+  --base-url "$HSWM_APPROVED_MODEL_BASE_URL" --model "$HSWM_APPROVED_MODEL_ID"
+```
+
+Each case rotates A/B/C call order deterministically; all three outputs remain
+in the same evaluator-owned sample metadata. A candidate can proceed only if it
+is valid on all 32 cases, reaches at least 30/32, and reaches at least 7/8 in
+each family, with a strict improvement over A. This is a development screen,
+not a holdout, W-learning result, canonical graph/interpreter revision, or an
+HSWM efficacy claim. A selected arm still requires fresh family-disjoint final
+evaluation.
+
+If an outer timeout interrupts a budget run, recovery is offline and reads only
+the frozen plan plus the retained Inspect `.eval` log. It never calls a model or
+fills unretained attempts with zeros:
+
+```sh
+_research/inspect_comparison_v1/.venv/bin/python \
+  _research/inspect_comparison_v1/budget_comparison.py recover \
+  /private/frozen-plan.json --log /private/raw.eval \
+  --out /private/recovery-summary.json --outer-exit-code 124
+```
+
+Recovery accepts only an incomplete Inspect log, checks retained IDs, declared
+family/target/order, all three arm metadata, final-content validity, and C's
+separate nonempty reasoning channel. Its `PARTIAL_TIMEOUT` summary keeps only
+observed denominators and call bounds; it makes no screen, adoption, holdout, or
+efficacy decision.
+
+## Thinking-cap follow-up
+
+`thinking_budget_followup.py` holds the original 32 cases, oracle relations,
+legacy renderer and sampling fixed, and makes one thinking request per case with
+`max_tokens=1024`, `timeout_seconds=60`, and seed 0. It retains every failure,
+uses the same 30/32, 7/8-per-family, 32/32-valid screen, and requires a fresh
+family-disjoint evaluation before any general efficacy claim. This is a later
+run changing both token and time budgets; the interrupted 512 run supplies only
+26 retained case comparisons.
+
+```sh
+_research/inspect_comparison_v1/.venv/bin/python \
+  _research/inspect_comparison_v1/thinking_budget_followup.py plan \
+  .hswm-local/oracle-diagnostic-2026-10-10-v1 --out /private/followup-plan.json
+_research/inspect_comparison_v1/.venv/bin/python \
+  _research/inspect_comparison_v1/thinking_budget_followup.py run \
+  .hswm-local/oracle-diagnostic-2026-10-10-v1 --out /private/followup-run \
+  --base-url "$HSWM_APPROVED_MODEL_BASE_URL" --model "$HSWM_APPROVED_MODEL_ID"
+```
+
+For the bounded DGX launch, place `timeout --signal=TERM --kill-after=15s 2100s`
+**inside** the existing `hswm-run exec ... --` command, around the experiment
+launcher. The wrapper can then retain the exit code and publish its private
+run archive after a timeout. An outer timeout can interrupt that finalization.
+Code and selected inputs must match the frozen plan before model calls begin.

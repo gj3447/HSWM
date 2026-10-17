@@ -128,7 +128,7 @@ def _validate_plan(plan: object, *, v2: bool = False) -> tuple[dict[str, Any], d
         if shape not in ({"name", "roles", "description"}, {"name", "roles", "description", "grounded"}):
             _reject("meaning shape")
         roles = _list(row["roles"], "meaning roles", _MAX_ROLES)
-        if not 2 <= len(roles) <= _MAX_ROLES:
+        if not 1 <= len(roles) <= _MAX_ROLES:
             _reject("meaning role count")
         seen: set[str] = set()
         for role in roles:

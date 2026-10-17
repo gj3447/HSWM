@@ -2,10 +2,28 @@ import { readFile } from "node:fs/promises"
 import { resolve } from "node:path"
 import { Either } from "effect"
 import { expect,it } from "vitest"
-import { adaptNativeUslV1 } from "../src/native-usl-v1-domain.js"
+import { adaptNativeUslV1, validateNativeUslPlan } from "../src/native-usl-v1-domain.js"
 import { decodeNativeTaskJson } from "../src/native-task-json-domain.js"
 const fixture=async()=>JSON.parse(await readFile(resolve(import.meta.dirname,"../../../../_research/usl_adapter/examples/preview.v1.json"),"utf8"))
 const request=(input:any)=>({plan:input.plan,report:input.report,policy:input.policy,allowed_reads:input.preview.checks.allowed_reads,now:input.preview.checks.now,revision:input.preview.checks.revision})
+const unaryResourceDescriptionPlan = () => ({
+  schema: "usl-semantic-plan/v1", languageVersion: "0.1", namespace: "readonly.resource-description",
+  resources: [{ name: "resource", locator: { kind: "filesystem", host: "fixture", path: "/readonly/resource" } }],
+  meanings: [{ name: "resource_description", roles: [{ name: "resource", kind: "any" }],
+    description: JSON.stringify({ schema: "usl-resource-description/v1", id: "fixture:resource", types: ["urn:fixture:Resource"], metadata: {}, provenance: null }) }],
+  links: [{ name: "resource_description_link", meaning: "resource_description", participants: [{ role: "resource", resource: "resource" }] }], declarationStatus: "DECLARED",
+})
+it("accepts USL unary resource-description declarations while retaining role validation",()=>{
+  const plan=unaryResourceDescriptionPlan()
+  expect(Either.isRight(validateNativeUslPlan(plan))).toBe(true)
+  expect(Either.isRight(validateNativeUslPlan(plan,true))).toBe(true)
+  const noRoles=structuredClone(plan);noRoles.meanings[0]!.roles=[]
+  expect(validateNativeUslPlan(noRoles)).toMatchObject({_tag:"Left",left:{detail:"meaning role count"}})
+  const duplicate=structuredClone(plan);duplicate.meanings[0]!.roles.push({name:"resource",kind:"any"});duplicate.links[0]!.participants.push({role:"resource",resource:"resource"})
+  expect(validateNativeUslPlan(duplicate)).toMatchObject({_tag:"Left",left:{detail:"role"}})
+  const mismatch=structuredClone(plan);mismatch.links[0]!.participants[0]!.role="other"
+  expect(validateNativeUslPlan(mismatch)).toMatchObject({_tag:"Left",left:{detail:"participant role order"}})
+})
 it("projects the pinned v1 fixture to the complete Python golden output",async()=>{const input=await fixture();const result=adaptNativeUslV1(request(input));expect(Either.isRight(result)).toBe(true);if(Either.isRight(result))expect(result.right).toEqual({schema_version:"hswm-usl-observation-projection/v1",status:"READY",plan_digest:"c7c316cb2b7294a4d5e715dece29ca61af15b2efb622e87764adaa4c3257eb18",report_digest:"5127ac150313b662be27fc55c5e99c77db1e5b4dd912bcad0bd9ce0a8b0fd8ed",policy_digest:"9519dd03912ef0df7f44ccc2b50851755c2c76efd45cde937311781223d8fef7",namespace:"hswm.usl.development.example",observations:[{role:"usl",field:"references_resolve",value:true,revision:"authored-observation-r1",expires_at:1788868920,source:"eef9335aab3777410a26b29b52529fa1bcb80e19d8ef6df8b9195f1b84c72752"}],links:[{name:"development",meaning:"documents",participants:[{role:"code",resource:"implementation"},{role:"target",resource:"concept"},{role:"context",resource:"context"}],status:"READY",reasons:[]}],mapping_loss:["reference resolution only","no semantic truth","caller-bound report not attestation","no content extraction/credit/admission"]})})
 it("withholds stale caller observations without treating them as semantic truth",async()=>{const input=await fixture();input.preview.checks.now+=120;const result=adaptNativeUslV1(request(input));expect(Either.isRight(result)).toBe(true);if(Either.isRight(result))expect(result.right).toMatchObject({status:"UNRESOLVED",observations:[]})})
 it("rejects a caller report whose resolved content no longer matches its policy pin",async()=>{const input=await fixture();input.report.resources[0].resolution.contentHash="0".repeat(64);const result=adaptNativeUslV1(request(input));expect(result).toMatchObject({_tag:"Left",left:{detail:"resource pin mismatch: implementation"}})})

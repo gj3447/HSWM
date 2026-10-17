@@ -77,6 +77,58 @@ def fixture() -> tuple[dict, dict, dict]:
     return plan, report, policy
 
 
+def unary_resource_description_fixture() -> tuple[dict, dict, dict]:
+    resource = {"name": "resource", "locator": locator("filesystem", "readonly-resource")}
+    participants = [{"role": "resource", "resource": "resource"}]
+    plan = {
+        "schema": "usl-semantic-plan/v1", "languageVersion": "0.1", "namespace": "readonly.resource-description",
+        "resources": [resource],
+        "meanings": [{"name": "resource_description", "roles": [{"name": "resource", "kind": "any"}],
+                      "description": '{"schema":"usl-resource-description/v1","id":"fixture:resource","types":["urn:fixture:Resource"],"metadata":{},"provenance":null}'}],
+        "links": [{"name": "resource_description_link", "meaning": "resource_description", "participants": participants}],
+        "declarationStatus": "DECLARED",
+    }
+    resolution = resolved(resource["locator"], "resource")
+    report = {
+        "schema": "usl-program-observation/v1", "namespace": plan["namespace"], "status": "RESOLVES",
+        "resources": [{"name": "resource", "status": "RESOLVES", "resolution": resolution, "issue": None}],
+        "groundings": [],
+        "links": [{"name": "resource_description_link", "meaning": "resource_description", "participants": participants,
+                   "resourcesResolve": True, "semanticTruth": "NOT_EVALUATED"}],
+        "semanticTruth": "NOT_EVALUATED",
+    }
+    policy = {
+        "schema_version": "hswm-usl-observation-policy/v1", "namespace": plan["namespace"], "plan_digest": digest(plan),
+        "max_age_seconds": 60, "bindings": [{"link": "resource_description_link", "role": "resource", "field": "resolves"}],
+        "resources": [{"name": "resource", "content_hash": resolution["contentHash"], "resolved_locator": resolution["resolvedLocator"]}],
+    }
+    return plan, report, policy
+
+
+def test_unary_usl_resource_description_projects_readonly_and_rejects_tampering() -> None:
+    plan, report, policy = unary_resource_description_fixture()
+    result = adapt_usl(plan, report, policy, allowed_reads={("resource", "resolves")}, now=NOW, revision="r1")
+    assert result["status"] == "READY"
+    assert result["observations"][0]["value"] is True
+    assert "learning" not in result and "action" not in result and "owner" not in result
+
+    no_roles, valid_report, valid_policy = unary_resource_description_fixture()
+    no_roles["meanings"][0]["roles"] = []
+    with pytest.raises(Reject, match="meaning role count"):
+        adapt_usl(no_roles, valid_report, valid_policy, allowed_reads={("resource", "resolves")}, now=NOW, revision="r1")
+
+    duplicate, valid_report, valid_policy = unary_resource_description_fixture()
+    duplicate["meanings"][0]["roles"].append({"name": "resource", "kind": "any"})
+    duplicate["links"][0]["participants"].append({"role": "resource", "resource": "resource"})
+    with pytest.raises(Reject, match="role"):
+        adapt_usl(duplicate, valid_report, valid_policy, allowed_reads={("resource", "resolves")}, now=NOW, revision="r1")
+
+    mismatch, valid_report, valid_policy = unary_resource_description_fixture()
+    mismatch["links"][0]["participants"][0]["role"] = "other"
+    with pytest.raises(Reject, match="role order"):
+        adapt_usl(mismatch, valid_report, valid_policy, allowed_reads={("resource", "resolves")}, now=NOW, revision="r1")
+
+
 def test_nary_role_order_is_preserved_and_rename_or_type_drift_rejects() -> None:
     plan, report, policy = fixture()
     result = adapt_usl(plan, report, policy, allowed_reads={("implementation", "resolves")}, now=NOW, revision="r1")

@@ -43,6 +43,17 @@
           "Activate context and CLI supplements through their existing task groups",
           "Read detailed comparison contract only for explicit optimization evaluation"
         ]
+      },
+      {
+        "date": "2026-10-17",
+        "reason": "Consumer feedback: HSWM construction requires actual execution, outcome feedback, durable W/model update and subsequent use, not only a profile or binding",
+        "source": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "changes": [
+          "Add the completion criterion to the existing selected Development owner section",
+          "Preserve ordinary direct development, current access requirements and historical evidence",
+          "Distinguish local check-selection adaptation from canonical HSWM and consumer-domain learning",
+          "Select the complete consumer criterion for the existing hswm task; ordinary base lookup does not load it"
+        ]
       }
     ]
   },
@@ -166,6 +177,13 @@
       "id": "task:hswm-optimization-evaluation",
       "type": "Task",
       "when": "Compare CHU optimization candidates, resource budgets, preservation, efficacy or observed bottlenecks; not ordinary lookup or rule editing"
+    },
+    {
+      "id": "owner:consumer-integration-completion",
+      "type": "Source",
+      "path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+      "section": "소비자-hswm-구축통합의-완료-기준/@intro",
+      "content_role": "owner-instruction"
     }
   ],
   "edges": [
@@ -278,6 +296,11 @@
       "from": "task:hswm-optimization-evaluation",
       "type": "REQUIRES",
       "to": "owner:optimization-comparison-contract"
+    },
+    {
+      "from": "task:hswm",
+      "type": "REQUIRES",
+      "to": "owner:consumer-integration-completion"
     }
   ]
 }

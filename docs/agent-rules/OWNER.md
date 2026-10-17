@@ -64,6 +64,13 @@ report when the next authorized step can be carried out.
   adaptive development workflow. Direct npm/uv commands are supported. If used,
   keep state private and label agent judgments `agent(<tool>):...`; a passing
   check is not automatically useful feedback or causal credit.
+- When HSWM construction/integration includes execution and learning, apply the
+  [consumer completion criteria](../operations/HSWM_RESEARCH_WORKFLOW.md#consumer-integration-completion).
+  A profile, binding, or passing structural check is preparation. Completion
+  requires actual execution, outcome-bound feedback, an admitted durable W/model
+  revision, and a subsequent process using that revision, within the declared
+  scope. Report unmet conditions and the last verified stage; do not equate a
+  local check-selection model with canonical HSWM or the consumer's domain model.
 - Use Git and a concise validation note for routine code/docs/environment work.
   Add source-bound KG snapshots and content-addressed research receipts when
   publishing material research results; preserve their predecessors and record

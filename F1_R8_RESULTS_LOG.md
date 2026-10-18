@@ -13,6 +13,28 @@
 > [`HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json)의
 > burden-cap 노드다. 이 규칙은 연구 결과가 아니다.
 
+<a id="local-activation-diagnosis-20261018"></a>
+
+## 2026-10-18 — 규칙 실행을 회복한 뒤 활성화 학습 4/8 → 8/8
+
+기존 0%p 실험의 complement 선택 3회는 모두 모델이 입력 bit를 그대로 반환했다.
+실행할 원문을 입력 끝에 다시 명시하는 전달 형식을 고정한 뒤 새 native 정책을 학습하자,
+동일 형식의 학습 전후 평가가 **4/8 → 8/8 (+50%p)**, 별도 process 재사용이 **2/2**였다.
+HSWM의 LinUCB A/b는 revision 0 → 8로 갱신됐고, 기반 LLM 가중치는 변경하지 않았다.
+[설계·원인·한계·재검사](docs/operations/HSWM_LOCAL_ACTIVATION_DIAGNOSIS_2026-10-18.md),
+[원본 hash lock](_research/local_activation_diagnostics_v1/evidence-lock.json).
+
+별도 32회 표현 비교에서 기존 JSON → readable local은 입력 토큰 63.86%, HTTP 시간 중앙값
+44.52% 감소였으나 정확도는 4/8에 머물렀다. readable dense → local은 토큰이 줄어도
+6/8 → 4/8로 악화돼 같은 품질의 효율 향상 판정에 실패했다. native 준비만 네 쌍에서
+계측하면 내용 읽기는 16 → 11회, 준비 시간 중앙값은 776 → 642ms였다.
+GPU FLOPs·전력은 미측정이며 토큰/논리적 읽기와 동일시하지 않는다.
+
+이번 요청 총 62회·61,295토큰, 원본 응답·native admission·독립 LinUCB 점수/A/b와
+591-quads/4-graphs parse를 재검증했다. 작은 authored Boolean 진단에서 전달 방식을 선택한
+후의 후속 학습 결과다. 자연 과제 일반화·지능 원리 증명·production 기본 CLI 변경은 아니다.
+이전 0%p 원본과 아래 기록은 그대로 보존한다.
+
 <a id="local-activation-20261018"></a>
 
 ## 2026-10-18 — 문맥별 활성화 가중치의 온라인 갱신과 실측
@@ -81,6 +103,7 @@ Qwen 가중치는 갱신하지 않았고, 계산기 없는 초기 기준선은 �
 
 | 날짜 | 결과 | 경계 |
 |---|---|---|
+| 2026-10-18 | `INSTRUMENT_RED`: closure burden의 지정 100-commit 창에서 core 35개(35%), 기준 50% 미달을 재확인했다. | `python3 scripts/check_hswm_closure_burden_cap.py` 결과. 연구 효능 판정이 아닌 작업 비중 보고다. 요청한 국지 활성화 진단·계측 기록을 마무리하고 추가 실험으로 범위를 확대하지 않는다. |
 | 2026-10-13 | DGX budget diagnostic retained 26 cases after a 600s timeout: non-thinking/32 and /512 both **16/26**, identical answers; thinking/512 **11/26**, with 14 length failures and 1 timeout. Follow-up `thinking-1024-20261013T163700Z` completed 32 calls: **27/32 correct/valid**, family scores `[6,8,7,6]`, 5 length failures; **REVISE_LOCAL_EXECUTION**. On the shared 26 cases, thinking/1024 reached **23/26** with ~3.1× tokens and ~60.3× summed request latency versus non-thinking. | [runner and recovery](_research/inspect_comparison_v1/README.md#token-cap-and-thinking-mode-comparison) · [result and graph](../HSWM_LIKENESS/docs/LOCAL_EXECUTOR_EXPERIMENT_2026-10-12.md) · First run has 78 confirmed calls, total 78–96 unknown; unretained cases are not imputed. Later run changes token/time budgets together. Raw request/response audit PASS; development-exposed only, no independent holdout, causal attribution, W learning or HSWM efficacy claim. Private artifacts remain local and in designated run storage. |
 | 2026-10-12 | DGX run `renderer-e1-20261012T052306Z` compared byte-identical historical JSON rendering with an ordered renderer on the same frozen oracle relation for 32 development-exposed cases. All 64 outputs were valid; legacy environmental correctness was **17/32**, ordered **14/32** (paired: 11 both-correct, 6 legacy-only, 3 ordered-only, 12 both-wrong). Predeclared decision: **REVISE_LOCAL_EXECUTION**; ordered renderer is not adopted. | [result](results/HSWM_RENDERER_COMPARISON_2026-10-12.md) · 4-family screen with family-level order counterbalance only. No fresh holdout, causal attribution, W learning, canonical graph/interpreter change, or general HSWM efficacy claim. Independent audit PASS recomputed the finite scores, token totals, latency sums, and family order from 34 inputs, 8 raw Inspect logs, and 64 request/response pairs. Next token/mode experiment NOT_RUN; private raw inputs/logs remain local. |
 | 2026-10-07 | W1의 작성된 불리언 기준식과 이름·순서·값 교환, 입력 완전성, 실험 크기 관련 Lean 정리·보조정리 22개를 fresh compile·정리별 공리 검사했다. 실제 TS 변형 입력 768개 답·중간값 일치, 잘못된 입력 9종 거절, census/sentinel 구성과 전송 예정 요청 2,784건의 유한 구조·bytes 검사 통과. | [연구·전제](docs/research/HSWM_W1_REFERENCE_LEAN_2026-10-07.md) · [검증](docs/research/artifacts/hswm_w1_reference_2026-10-07/verification.v1.json) · [receipt](evidence/hswm_w1_reference_2026-10-07/fbb35c706e95009cce17bbc301f34d7bf63a6d9f3f7547aa1bb58d20e6dcfc0c.json) · 명시적 네 family 해석에 대한 유한 기준식 결과다. NLP 의미·JSON parser·전체 TS refinement·셔플 순서의 Lean 증명·실모델 효능은 아니다. 실제 모델 요청 0, T5–T9·전체 HSWM·metahumotonic·CR/FCL 완료 승격 없음. |

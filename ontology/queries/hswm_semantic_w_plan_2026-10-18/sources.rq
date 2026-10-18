@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?id ?status ?path ?sha256 ?revision ?observation ?limit WHERE {
+ ?source a role:W_PLAN_SOURCE ; p:source_id ?id ; p:status ?status ; p:source_path ?path ;
+   p:source_sha256 ?sha256 ; p:source_revision ?revision ; p:observation ?observation ; p:claim_boundary ?limit .
+} ORDER BY ?id

@@ -1,0 +1,1398 @@
+{
+  "schema_version": "hswm-semantic-w-optimization-plan/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+  "status": "PLANNED_NOT_EXECUTED",
+  "nonclaim": "PLAN_CONFORMANCE_NOT_RUNTIME_INTEGRATION_OR_EFFICACY",
+  "authority_boundary": "SECONDARY_AI work plan; source records and user canon retain their own authority",
+  "source_accessed_on": "2026-10-18",
+  "artifact_bindings": [
+    {
+      "path": "docs/agent-rules/CLI.md",
+      "sha256": "b54de870ae8576b100671437f52eccc747cfdbcf9d67a568413014f9717b169b"
+    },
+    {
+      "path": "docs/canon/USER_PRIMARY_HSWM_SEMANTIC_TOPOLOGY_OPTIMIZATION_2026-10-12.md",
+      "sha256": "fe31bb8919a7365b7846169e18b9dd2b07345479562f07a958afcadc63949f87"
+    },
+    {
+      "path": "docs/operations/HSWM_CONTEXT_POLICY_BRIDGE_2026-10-11.md",
+      "sha256": "19b58e94fc8ec9902379562db0e8f5d328c52036cb84be07ceaee9e73dda57b7"
+    },
+    {
+      "path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+      "sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633"
+    },
+    {
+      "path": "docs/operations/HSWM_LOCAL_ACTIVATION_2026-10-18.md",
+      "sha256": "469aeddcb7e79d347bf90212ad81e8931b777a5afa875eadecdb85d8963ac7e7"
+    },
+    {
+      "path": "docs/operations/HSWM_LOCAL_ACTIVATION_DIAGNOSIS_2026-10-18.md",
+      "sha256": "6b852b6fb97263226a286a7b7e99a24bf763caaf47a6e6328233cffa60c220a4"
+    },
+    {
+      "path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+      "sha256": "a1c9ac6bbdb5b9b490a428a1ced36b5e39534f94fbf8c91632a663febfbce5fc"
+    },
+    {
+      "path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+      "sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa"
+    },
+    {
+      "path": "ontology/queries/hswm_semantic_w_plan_2026-10-18/cli.rq",
+      "sha256": "17aedcdca980203fe84c5fbd3d48a93b16d71593f61cf295d4ef1e6561542d11"
+    },
+    {
+      "path": "ontology/queries/hswm_semantic_w_plan_2026-10-18/next.rq",
+      "sha256": "7912c11f3218048682edd931f90ed63c728233af3a0f65507210e3e002214ad7"
+    },
+    {
+      "path": "ontology/queries/hswm_semantic_w_plan_2026-10-18/roadmap.rq",
+      "sha256": "7be88b09d7094667c4ee54676fbcc180ecdb376a85822f34437033c0841d2428"
+    },
+    {
+      "path": "ontology/queries/hswm_semantic_w_plan_2026-10-18/shapes.ttl",
+      "sha256": "354df419ce3dd18adba73c96c37a5aa34ed510da5858747ef5e9d6df161d3a06"
+    },
+    {
+      "path": "ontology/queries/hswm_semantic_w_plan_2026-10-18/sources.rq",
+      "sha256": "ebeea1e4d3979e860508a3a4bb4ad1afaae46fdcb64466d500f8510c5c64ed44"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-activation",
+      "sha256": "83b429fce18c3e522ac28b29c158c675dc0566fd590854d69a60bf36ecff3ef3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-semantic-finite",
+      "sha256": "d8461a1ddf0ad5db0cea9e74d0da1a06ef7e95bfc88a07bfa153e1c5715096ad"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-workspace",
+      "sha256": "319f0632981cc3489161d85bd7e4344d2895862be9c186e18d5a4e04837bbf79"
+    },
+    {
+      "path": "tests/effect-runtime/semantic-w-plan-graph.test.ts",
+      "sha256": "fc6c88cd865fb2efcce75e81510ba61bb0e8dcd98fb4b1ff3d3d1687ee294e6e"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 25,
+    "anchors": 4,
+    "relations": 95
+  },
+  "anchors": [
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-topology-2026-10-12",
+      "name": "사용자 의미론적 구조 최적화 원문",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-likeness-transfer-2026-10-18-root",
+      "name": "HSWM_LIKENESS 연구 흡수",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-E2",
+      "name": "문맥 선택",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-E4",
+      "name": "결과에 근거한 W 학습",
+      "required_labels": [
+        "Concept"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "결과 기반 W 갱신과 의미 보존 구조 최적화 작업 계획",
+        "description": "결과 기반 W 갱신과 의미 보존 구조 최적화 작업 계획",
+        "standard_graph_role": "W_PLAN_ROOT",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+        "source_sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa",
+        "status": "PLANNED",
+        "execution_status": "NOT_RUN_THIS_PLAN",
+        "new_model_calls": 0,
+        "efficacy_status": "NOT_EVALUATED_THIS_PLAN",
+        "source_revision": "ce027cf93a36fa13cf3801ffe5426318ef692f65",
+        "first_task": "P00"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "의미 보존 분해",
+        "description": "의미 보존 분해",
+        "standard_graph_role": "W_PLAN_PRINCIPLE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+        "source_sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa",
+        "principle_id": "R1",
+        "status": "AI_APPLICATION_PRINCIPLE"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R2",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "의미 기여에 따른 중복 정리",
+        "description": "의미 기여에 따른 중복 정리",
+        "standard_graph_role": "W_PLAN_PRINCIPLE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+        "source_sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa",
+        "principle_id": "R2",
+        "status": "AI_APPLICATION_PRINCIPLE"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R3",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "다른 과제를 보존하는 국소 학습",
+        "description": "다른 과제를 보존하는 국소 학습",
+        "standard_graph_role": "W_PLAN_PRINCIPLE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+        "source_sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa",
+        "principle_id": "R3",
+        "status": "AI_APPLICATION_PRINCIPLE"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R4",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "실제 결과에 근거한 W 갱신",
+        "description": "실제 결과에 근거한 W 갱신",
+        "standard_graph_role": "W_PLAN_PRINCIPLE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+        "source_sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa",
+        "principle_id": "R4",
+        "status": "AI_APPLICATION_PRINCIPLE"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "국지 활성화 학습",
+        "description": "국지 활성화 학습",
+        "standard_graph_role": "W_PLAN_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_LOCAL_ACTIVATION_2026-10-18.md",
+        "source_sha256": "469aeddcb7e79d347bf90212ad81e8931b777a5afa875eadecdb85d8963ac7e7",
+        "source_id": "S1",
+        "status": "EXISTING_IMPLEMENTATION_REPORTED_NO_GAIN",
+        "source_revision": "465a88c06799d78f6597f9b38cf8ddb21a282d54",
+        "observation": "정책 revision 0→8 및 별도 process 사용 기록; 실제 holdout 4/8→4/8. 이 계획에서 재실행하지 않음."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S2",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "유한 의미 진단",
+        "description": "유한 의미 진단",
+        "standard_graph_role": "W_PLAN_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "source_id": "S2",
+        "status": "EXISTING_FINITE_DIAGNOSTIC",
+        "source_revision": "465a88c06799d78f6597f9b38cf8ddb21a282d54",
+        "observation": "clause 제거·해석 변화·분해 접합 검사. 자연어 추상화·자동 구조 채택은 미구현."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S3",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "외부 W 평가의 정책 연결",
+        "description": "외부 W 평가의 정책 연결",
+        "standard_graph_role": "W_PLAN_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_CONTEXT_POLICY_BRIDGE_2026-10-11.md",
+        "source_sha256": "19b58e94fc8ec9902379562db0e8f5d328c52036cb84be07ceaee9e73dda57b7",
+        "source_id": "S3",
+        "status": "EXISTING_SCOPED_POLICY_BRIDGE",
+        "source_revision": "465a88c06799d78f6597f9b38cf8ddb21a282d54",
+        "observation": "고정 무작위 logging 가정의 외부 W 평가. 온라인 LinUCB stream과 호환된다고 가정하지 않음."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S4",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "소비자 통합 완료 기준",
+        "description": "소비자 통합 완료 기준",
+        "standard_graph_role": "W_PLAN_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "a1c9ac6bbdb5b9b490a428a1ced36b5e39534f94fbf8c91632a663febfbce5fc",
+        "source_id": "S4",
+        "status": "EXISTING_OWNER_COMPLETION_CONTRACT",
+        "source_revision": "465a88c06799d78f6597f9b38cf8ddb21a282d54",
+        "observation": "실행·결과 피드백·admitted durable revision·다음 process 사용을 구별하며 효능은 별도 평가."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S5",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "사용자의 의미론적 구조 최적화 방향",
+        "description": "사용자의 의미론적 구조 최적화 방향",
+        "standard_graph_role": "W_PLAN_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/canon/USER_PRIMARY_HSWM_SEMANTIC_TOPOLOGY_OPTIMIZATION_2026-10-12.md",
+        "source_sha256": "fe31bb8919a7365b7846169e18b9dd2b07345479562f07a958afcadc63949f87",
+        "source_id": "S5",
+        "status": "EXISTING_USER_SOURCE_WITH_AI_METADATA",
+        "source_revision": "465a88c06799d78f6597f9b38cf8ddb21a282d54",
+        "observation": "원문은 기존 canon 문서에서 읽음. 이 source 노드의 제목·요약·계획 연결은 AI 작성."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-workspace",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "src/hswm/effect-runtime/bin/hswm-workspace",
+        "description": "src/hswm/effect-runtime/bin/hswm-workspace",
+        "standard_graph_role": "W_PLAN_CLI",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "src/hswm/effect-runtime/bin/hswm-workspace",
+        "source_sha256": "319f0632981cc3489161d85bd7e4344d2895862be9c186e18d5a4e04837bbf79",
+        "cli_id": "workspace",
+        "command": "src/hswm/effect-runtime/bin/hswm-workspace",
+        "help": "src/hswm/effect-runtime/bin/hswm-workspace --help",
+        "status": "EXISTING_CLI"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-usage-workspace",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "workspace 소유 사용법",
+        "description": "workspace 소유 사용법",
+        "standard_graph_role": "W_PLAN_USAGE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/agent-rules/CLI.md",
+        "source_sha256": "b54de870ae8576b100671437f52eccc747cfdbcf9d67a568413014f9717b169b",
+        "source_fragment": "Workspace usage",
+        "status": "EXISTING_USAGE"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-activation",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "src/hswm/effect-runtime/bin/hswm-activation",
+        "description": "src/hswm/effect-runtime/bin/hswm-activation",
+        "standard_graph_role": "W_PLAN_CLI",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "src/hswm/effect-runtime/bin/hswm-activation",
+        "source_sha256": "83b429fce18c3e522ac28b29c158c675dc0566fd590854d69a60bf36ecff3ef3",
+        "cli_id": "activation",
+        "command": "src/hswm/effect-runtime/bin/hswm-activation",
+        "help": "src/hswm/effect-runtime/bin/hswm-activation --help",
+        "status": "EXISTING_CLI"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-usage-activation",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "activation 소유 사용법",
+        "description": "activation 소유 사용법",
+        "standard_graph_role": "W_PLAN_USAGE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_LOCAL_ACTIVATION_2026-10-18.md",
+        "source_sha256": "469aeddcb7e79d347bf90212ad81e8931b777a5afa875eadecdb85d8963ac7e7",
+        "source_fragment": "사용",
+        "status": "EXISTING_USAGE"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-finite",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "src/hswm/effect-runtime/bin/hswm-semantic-finite",
+        "description": "src/hswm/effect-runtime/bin/hswm-semantic-finite",
+        "standard_graph_role": "W_PLAN_CLI",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "src/hswm/effect-runtime/bin/hswm-semantic-finite",
+        "source_sha256": "d8461a1ddf0ad5db0cea9e74d0da1a06ef7e95bfc88a07bfa153e1c5715096ad",
+        "cli_id": "finite",
+        "command": "src/hswm/effect-runtime/bin/hswm-semantic-finite",
+        "help": "src/hswm/effect-runtime/bin/hswm-semantic-finite --help",
+        "status": "EXISTING_CLI"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-usage-finite",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "finite 소유 사용법",
+        "description": "finite 소유 사용법",
+        "standard_graph_role": "W_PLAN_USAGE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "source_fragment": "실행과 E2↔E4 연결",
+        "status": "EXISTING_USAGE"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P00",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "범위·예산·평가 고정",
+        "description": "범위·예산·평가 고정",
+        "standard_graph_role": "W_PLAN_TASK",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+        "source_sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa",
+        "task_id": "P00",
+        "task_order": 0,
+        "status": "PLANNED",
+        "responsible_role": "HSWM maintainer within the declared owner scope",
+        "target_path": "_research/local_activation_v1/",
+        "inputs": "대상 과제·source revision·owner·후보·필수 예외",
+        "outputs": "기존 실행기가 읽는 고정 실험 입력",
+        "acceptance": "개발/train/holdout·평가자·보상·비용·호출/시간 상한·반복·성공 허용치를 결과 전에 고정; 미정 값은 실행 준비 완료로 표시하지 않음."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P01",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "실행 전달과 선택 규칙의 충실도",
+        "description": "선택 규칙의 실행 충실도",
+        "standard_graph_role": "W_PLAN_TASK",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+        "source_sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa",
+        "task_id": "P01",
+        "task_order": 1,
+        "status": "PLANNED",
+        "responsible_role": "HSWM maintainer within the declared owner scope",
+        "target_path": "_research/local_activation_diagnostics_v1/",
+        "inputs": "고정 규칙·개발 입력·후속 연구의 execution-tail adapter",
+        "outputs": "canonical assembly와 실제 wire의 결속·수정하지 않은 응답·실패 분류",
+        "acceptance": "새 대상 유한 영역에서 필수·예외·각 후보 규칙 실행 위반 0; 성공한 연구용 전달과 기본 CLI 차이를 해소·검증. 미달 시 개선 비교 중단."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P02",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "대상 과제의 결과→W 루프 연결",
+        "description": "대상 과제의 결과→W 루프 연결",
+        "standard_graph_role": "W_PLAN_TASK",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+        "source_sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa",
+        "task_id": "P02",
+        "task_order": 2,
+        "status": "PLANNED",
+        "responsible_role": "HSWM maintainer within the declared owner scope",
+        "target_path": "src/hswm/effect-runtime/src/semantic-context-activation-runtime.ts",
+        "inputs": "정확한 trace·실제 응답·출처 있는 reward",
+        "outputs": "owner가 채택한 활성화 정책 successor",
+        "acceptance": "실행·피드백·전후 A/b·key 결속; 미실행 후보 보상 생성 없음; 중복/stale 거부; 정당한 no-op은 갱신 완료로 세지 않음. canonical assembly와 실제 wire를 결속하며 수치 동점의 재현성 확인."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P03",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "의미·예외·다른 과제 보존 검사",
+        "description": "의미·예외·다른 과제 보존 검사",
+        "standard_graph_role": "W_PLAN_TASK",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+        "source_sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa",
+        "task_id": "P03",
+        "task_order": 3,
+        "status": "PLANNED",
+        "responsible_role": "HSWM maintainer within the declared owner scope",
+        "target_path": "src/hswm/effect-runtime/src/semantic-context-finite-runtime.ts",
+        "inputs": "변경 전후 전체 역할·예외·유한 해석·다른 과제 회귀집합",
+        "outputs": "전체 후보 bytes와 read-set에 결속된 의미 진단",
+        "acceptance": "parity 분해 손실·중복 동시 제거·예외 누락·과제 훼손 검출. 추상화 근거 부족이나 범위 초과는 UNKNOWN. 개별 clause 검사를 전체 후보 보존으로 확대하지 않음."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P04",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "성과·비용에 근거한 구조 후보 생성",
+        "description": "성과·비용에 근거한 구조 후보 생성",
+        "standard_graph_role": "W_PLAN_TASK",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+        "source_sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa",
+        "task_id": "P04",
+        "task_order": 4,
+        "status": "PLANNED",
+        "responsible_role": "HSWM maintainer within the declared owner scope",
+        "target_path": "src/hswm/effect-runtime/src/",
+        "inputs": "train 결과·의미 진단·전체 문맥 비용",
+        "outputs": "유지/강약/분할·허브/병합·퇴역의 bounded 후보",
+        "acceptance": "각 후보에 의미 기여·비용·영향·근거 결속; 필수/희귀 예외 보존; 후보 상한 준수; holdout 비사용; 조합 효용을 개별 연결의 인과 기여로 전용하지 않음."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P05",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "owner 채택과 변경된 scope의 W 재결속",
+        "description": "owner 채택과 변경된 scope의 W 재결속",
+        "standard_graph_role": "W_PLAN_TASK",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+        "source_sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa",
+        "task_id": "P05",
+        "task_order": 5,
+        "status": "PLANNED",
+        "responsible_role": "HSWM maintainer within the declared owner scope",
+        "target_path": "src/hswm/effect-runtime/src/",
+        "inputs": "검토한 후보·owner·source/read-set·예상 revision",
+        "outputs": "admitted 구조 revision과 새 scope의 정책",
+        "acceptance": "stale/owner/역할/예산 불일치 거부; 구조 변경 뒤 이전 정책 거부; 첫 구현은 새 scope 통계 초기화·재학습; 검증 없는 A/b 복사 및 원문 물리 삭제 없음."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P06",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "별도 프로세스 재사용·중복 방지·복원",
+        "description": "별도 프로세스 재사용·중복 방지·복원",
+        "standard_graph_role": "W_PLAN_TASK",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+        "source_sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa",
+        "task_id": "P06",
+        "task_order": 6,
+        "status": "PLANNED",
+        "responsible_role": "HSWM maintainer within the declared owner scope",
+        "target_path": "tests/effect-runtime/",
+        "inputs": "채택된 구조와 정책·원 실행 피드백",
+        "outputs": "후속 실제 실행과 append-only 복원 확인",
+        "acceptance": "별도 process가 새 key/content를 읽고 실제 실행; 재전달 feedback의 중복 갱신 없음; 복원도 새 revision; 과거 원문·실패·관측 보존."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P07",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "동일 예산의 독립 holdout 비교",
+        "description": "동일 예산의 독립 holdout 비교",
+        "standard_graph_role": "W_PLAN_TASK",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "PLANNED_WORK_OR_SOURCE_REPORTED_EVIDENCE_NOT_NEW_LEARNING_EFFICACY",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+        "source_sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa",
+        "task_id": "P07",
+        "task_order": 7,
+        "status": "PLANNED",
+        "responsible_role": "HSWM maintainer within the declared owner scope",
+        "target_path": "_research/local_activation_v1/",
+        "inputs": "동결 B0/B1/B2/B3와 미사용 holdout",
+        "outputs": "성능·비용·보존 결과와 불확실성",
+        "acceptance": "W/구조 2×2 비교; train·후보 생성·검증·추론 비용 분리; 같은 총예산 상한; 사전 성공/비열등 기준 적용; 개선 없음과 통합 성공을 별도로 기록."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S6",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "후속 실행 진단과 제한된 학습 개선",
+        "description": "후속 연구용 전달 adapter의 실행·학습·국지 준비량 관측",
+        "standard_graph_role": "W_PLAN_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_REPORTED_SMALL_AUTHORED_BOOLEAN_SINGLE_SEED; not default CLI integration, topology learning, general efficacy or GPU reduction; live build drift disclosed",
+        "projection_nonclaim": "LOCAL_READ_ONLY_PLAN_NOT_CANONICAL_ADMISSION",
+        "source_path": "docs/operations/HSWM_LOCAL_ACTIVATION_DIAGNOSIS_2026-10-18.md",
+        "source_sha256": "6b852b6fb97263226a286a7b7e99a24bf763caaf47a6e6328233cffa60c220a4",
+        "source_id": "S6",
+        "status": "EXISTING_RESEARCH_ADAPTER_REPORTED_BOUNDED_GAIN",
+        "source_revision": "ce027cf93a36fa13cf3801ffe5426318ef692f65",
+        "observation": "연구용 execution-tail에서 규칙 진단 4/4, authored Boolean 학습 4/8→8/8, 별도 process 2/2 보고. 기존 실패 유지; 이 계획에서 재실행하지 않음."
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R1",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R2",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R3",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R4",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S1",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S2",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S3",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S4",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S5",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-workspace",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-workspace",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-usage-workspace",
+      "type": "REFERENCES",
+      "scope": "OWNED_USAGE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-activation",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-activation",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-usage-activation",
+      "type": "REFERENCES",
+      "scope": "OWNED_USAGE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-finite",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-finite",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-usage-finite",
+      "type": "REFERENCES",
+      "scope": "OWNED_USAGE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P00",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P00",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R1",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P00",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R2",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P00",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R3",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P00",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R4",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P00",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S1",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P00",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S3",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P00",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S4",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P00",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S5",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P00",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-workspace",
+      "type": "REFERENCES",
+      "scope": "USES_CLI",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P00",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-activation",
+      "type": "REFERENCES",
+      "scope": "USES_CLI",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P01",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P01",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P00",
+      "type": "REFERENCES",
+      "scope": "PREREQUISITE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P01",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R4",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P01",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S1",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P01",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-activation",
+      "type": "REFERENCES",
+      "scope": "USES_CLI",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P02",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P02",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P01",
+      "type": "REFERENCES",
+      "scope": "PREREQUISITE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P02",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R4",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P02",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S1",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P02",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S3",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P02",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S4",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P02",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-activation",
+      "type": "REFERENCES",
+      "scope": "USES_CLI",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P03",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P03",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P00",
+      "type": "REFERENCES",
+      "scope": "PREREQUISITE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P03",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R1",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P03",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R2",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P03",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R3",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P03",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S2",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P03",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S5",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P03",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-finite",
+      "type": "REFERENCES",
+      "scope": "USES_CLI",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P04",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P04",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P02",
+      "type": "REFERENCES",
+      "scope": "PREREQUISITE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P04",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P03",
+      "type": "REFERENCES",
+      "scope": "PREREQUISITE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P04",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R1",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P04",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R2",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P04",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R3",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P04",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R4",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P04",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S1",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P04",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S2",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P04",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S5",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P04",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-activation",
+      "type": "REFERENCES",
+      "scope": "USES_CLI",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P04",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-finite",
+      "type": "REFERENCES",
+      "scope": "USES_CLI",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P05",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P05",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P04",
+      "type": "REFERENCES",
+      "scope": "PREREQUISITE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P05",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R1",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P05",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R3",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P05",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R4",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P05",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S1",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P05",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S2",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P05",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S4",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P05",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-activation",
+      "type": "REFERENCES",
+      "scope": "USES_CLI",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P05",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-finite",
+      "type": "REFERENCES",
+      "scope": "USES_CLI",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P06",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P06",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P05",
+      "type": "REFERENCES",
+      "scope": "PREREQUISITE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P06",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R3",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P06",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R4",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P06",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S1",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P06",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S4",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P06",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-activation",
+      "type": "REFERENCES",
+      "scope": "USES_CLI",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P07",
+      "type": "HAS_CONCEPT",
+      "scope": "PLAN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P07",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P06",
+      "type": "REFERENCES",
+      "scope": "PREREQUISITE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P07",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R1",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P07",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R2",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P07",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R3",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P07",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-R4",
+      "type": "REFERENCES",
+      "scope": "APPLIES_PRINCIPLE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P07",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S1",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P07",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S3",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P07",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S4",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P07",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-activation",
+      "type": "REFERENCES",
+      "scope": "USES_CLI",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P07",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-cli-finite",
+      "type": "REFERENCES",
+      "scope": "USES_CLI",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:AbstractNode:hswm-semantic-topology-2026-10-12",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:AbstractNode:hswm-likeness-transfer-2026-10-18-root",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-E2",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-E4",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P01",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S6",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P02",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S6",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P06",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S6",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-P07",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S6",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-semantic-w-plan-2026-10-18-S6",
+      "type": "HAS_SOURCE",
+      "scope": "BASIS",
+      "authority_class": "SECONDARY_AI",
+      "status": "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE"
+    }
+  ]
+}

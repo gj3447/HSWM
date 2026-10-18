@@ -1,0 +1,120 @@
+@prefix kb: <https://hswm.invalid/kg-bundle-rdf/v1/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix plan: <https://hswm.invalid/semantic-w-plan/2026-10-18/> .
+
+plan:BoundAiRecord a sh:NodeShape ;
+ sh:targetClass role:W_PLAN_ROOT, role:W_PLAN_TASK, role:W_PLAN_PRINCIPLE, role:W_PLAN_SOURCE, role:W_PLAN_CLI, role:W_PLAN_USAGE ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_path ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+plan:Root a sh:NodeShape ; sh:targetClass role:W_PLAN_ROOT ;
+ sh:property [ sh:path p:status ; sh:hasValue "PLANNED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:execution_status ; sh:hasValue "NOT_RUN_THIS_PLAN" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:new_model_calls ; sh:hasValue 0 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:efficacy_status ; sh:hasValue "NOT_EVALUATED_THIS_PLAN" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:first_task ; sh:hasValue "P00" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:class role:W_PLAN_SOURCE ; sh:minCount 6 ; sh:maxCount 6 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:minCount 15 ; sh:maxCount 15 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ] ; sh:qualifiedMinCount 8 ; sh:qualifiedMaxCount 8 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:W_PLAN_PRINCIPLE ] ; sh:qualifiedMinCount 4 ; sh:qualifiedMaxCount 4 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:W_PLAN_CLI ] ; sh:qualifiedMinCount 3 ; sh:qualifiedMaxCount 3 ] .
+
+plan:Task a sh:NodeShape ; sh:targetClass role:W_PLAN_TASK ;
+ sh:property [ sh:path p:status ; sh:hasValue "PLANNED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:task_id ; sh:in ("P00" "P01" "P02" "P03" "P04" "P05" "P06" "P07") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:task_order ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:maxInclusive 7 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path [ sh:inversePath r:HAS_CONCEPT ] ; sh:class role:W_PLAN_ROOT ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:class role:W_PLAN_SOURCE ; sh:minCount 1 ; sh:maxCount 6 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_PRINCIPLE ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 4 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_CLI ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 3 ] ;
+ sh:property [ sh:path p:inputs ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:outputs ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:acceptance ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:responsible_role ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:target_path ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:or (
+  [ sh:property [ sh:path p:task_id ; sh:hasValue "P00" ] ; sh:property [ sh:path p:task_order ; sh:hasValue 0 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ] ; sh:qualifiedMinCount 0 ; sh:qualifiedMaxCount 0 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:or ( [ sh:class role:W_PLAN_CLI ] [ sh:class role:W_PLAN_PRINCIPLE ] [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_order ; sh:maxExclusive 0 ] ] ) ]
+  ]
+  [ sh:property [ sh:path p:task_id ; sh:hasValue "P01" ] ; sh:property [ sh:path p:task_order ; sh:hasValue 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P00" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:or ( [ sh:class role:W_PLAN_CLI ] [ sh:class role:W_PLAN_PRINCIPLE ] [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_order ; sh:maxExclusive 1 ] ] ) ]
+  ]
+  [ sh:property [ sh:path p:task_id ; sh:hasValue "P02" ] ; sh:property [ sh:path p:task_order ; sh:hasValue 2 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P01" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:or ( [ sh:class role:W_PLAN_CLI ] [ sh:class role:W_PLAN_PRINCIPLE ] [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_order ; sh:maxExclusive 2 ] ] ) ]
+  ]
+  [ sh:property [ sh:path p:task_id ; sh:hasValue "P03" ] ; sh:property [ sh:path p:task_order ; sh:hasValue 3 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P00" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:or ( [ sh:class role:W_PLAN_CLI ] [ sh:class role:W_PLAN_PRINCIPLE ] [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_order ; sh:maxExclusive 3 ] ] ) ]
+  ]
+  [ sh:property [ sh:path p:task_id ; sh:hasValue "P04" ] ; sh:property [ sh:path p:task_order ; sh:hasValue 4 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ] ; sh:qualifiedMinCount 2 ; sh:qualifiedMaxCount 2 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P02" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P03" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:or ( [ sh:class role:W_PLAN_CLI ] [ sh:class role:W_PLAN_PRINCIPLE ] [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_order ; sh:maxExclusive 4 ] ] ) ]
+  ]
+  [ sh:property [ sh:path p:task_id ; sh:hasValue "P05" ] ; sh:property [ sh:path p:task_order ; sh:hasValue 5 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P04" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:or ( [ sh:class role:W_PLAN_CLI ] [ sh:class role:W_PLAN_PRINCIPLE ] [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_order ; sh:maxExclusive 5 ] ] ) ]
+  ]
+  [ sh:property [ sh:path p:task_id ; sh:hasValue "P06" ] ; sh:property [ sh:path p:task_order ; sh:hasValue 6 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P05" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:or ( [ sh:class role:W_PLAN_CLI ] [ sh:class role:W_PLAN_PRINCIPLE ] [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_order ; sh:maxExclusive 6 ] ] ) ]
+  ]
+  [ sh:property [ sh:path p:task_id ; sh:hasValue "P07" ] ; sh:property [ sh:path p:task_order ; sh:hasValue 7 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P06" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:or ( [ sh:class role:W_PLAN_CLI ] [ sh:class role:W_PLAN_PRINCIPLE ] [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_order ; sh:maxExclusive 7 ] ] ) ]
+  ]
+ ) .
+plan:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P00" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+plan:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P01" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+plan:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P02" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+plan:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P03" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+plan:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P04" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+plan:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P05" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+plan:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P06" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+plan:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:W_PLAN_TASK ; sh:property [ sh:path p:task_id ; sh:hasValue "P07" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+
+plan:Source a sh:NodeShape ; sh:targetClass role:W_PLAN_SOURCE ;
+ sh:property [ sh:path p:source_id ; sh:in ("S1" "S2" "S3" "S4" "S5" "S6") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:observation ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:status ; sh:in ("EXISTING_IMPLEMENTATION_REPORTED_NO_GAIN" "EXISTING_FINITE_DIAGNOSTIC" "EXISTING_SCOPED_POLICY_BRIDGE" "EXISTING_OWNER_COMPLETION_CONTRACT" "EXISTING_USER_SOURCE_WITH_AI_METADATA" "EXISTING_RESEARCH_ADAPTER_REPORTED_BOUNDED_GAIN") ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+plan:Principle a sh:NodeShape ; sh:targetClass role:W_PLAN_PRINCIPLE ;
+ sh:property [ sh:path p:principle_id ; sh:in ("R1" "R2" "R3" "R4") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:status ; sh:hasValue "AI_APPLICATION_PRINCIPLE" ; sh:maxCount 1 ] .
+
+plan:Cli a sh:NodeShape ; sh:targetClass role:W_PLAN_CLI ;
+ sh:property [ sh:path p:command ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:help ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:class role:W_PLAN_USAGE ; sh:minCount 1 ; sh:maxCount 1 ] .
+plan:Usage a sh:NodeShape ; sh:targetClass role:W_PLAN_USAGE ;
+ sh:property [ sh:path p:source_fragment ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+# Reified edge scope is part of the contract; plain REFERENCES alone is not a dependency.
+plan:Edge a sh:NodeShape ; sh:targetClass kb:Relation ;
+ sh:property [ sh:path kb:authorityClass ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path kb:status ; sh:hasValue "PLANNED_DEPENDENCY_OR_SOURCE_REFERENCE" ; sh:maxCount 1 ] ;
+ sh:or (
+ [ sh:property [ sh:path kb:relationType ; sh:hasValue "HAS_CONCEPT" ] ; sh:property [ sh:path kb:scope ; sh:hasValue "PLAN_MEMBER" ] ; sh:property [ sh:path kb:from ; sh:or ( [ sh:class role:W_PLAN_ROOT ] ) ] ; sh:property [ sh:path kb:to ; sh:or ( [ sh:class role:W_PLAN_TASK ] [ sh:class role:W_PLAN_PRINCIPLE ] [ sh:class role:W_PLAN_CLI ] ) ] ]
+ [ sh:property [ sh:path kb:relationType ; sh:hasValue "HAS_SOURCE" ] ; sh:property [ sh:path kb:scope ; sh:hasValue "BASIS" ] ; sh:property [ sh:path kb:from ; sh:or ( [ sh:class role:W_PLAN_ROOT ] [ sh:class role:W_PLAN_TASK ] ) ] ; sh:property [ sh:path kb:to ; sh:or ( [ sh:class role:W_PLAN_SOURCE ] ) ] ]
+ [ sh:property [ sh:path kb:relationType ; sh:hasValue "REFERENCES" ] ; sh:property [ sh:path kb:scope ; sh:hasValue "PREREQUISITE" ] ; sh:property [ sh:path kb:from ; sh:or ( [ sh:class role:W_PLAN_TASK ] ) ] ; sh:property [ sh:path kb:to ; sh:or ( [ sh:class role:W_PLAN_TASK ] ) ] ]
+ [ sh:property [ sh:path kb:relationType ; sh:hasValue "REFERENCES" ] ; sh:property [ sh:path kb:scope ; sh:hasValue "APPLIES_PRINCIPLE" ] ; sh:property [ sh:path kb:from ; sh:or ( [ sh:class role:W_PLAN_TASK ] ) ] ; sh:property [ sh:path kb:to ; sh:or ( [ sh:class role:W_PLAN_PRINCIPLE ] ) ] ]
+ [ sh:property [ sh:path kb:relationType ; sh:hasValue "REFERENCES" ] ; sh:property [ sh:path kb:scope ; sh:hasValue "USES_CLI" ] ; sh:property [ sh:path kb:from ; sh:or ( [ sh:class role:W_PLAN_TASK ] ) ] ; sh:property [ sh:path kb:to ; sh:or ( [ sh:class role:W_PLAN_CLI ] ) ] ]
+ [ sh:property [ sh:path kb:relationType ; sh:hasValue "REFERENCES" ] ; sh:property [ sh:path kb:scope ; sh:hasValue "OWNED_USAGE" ] ; sh:property [ sh:path kb:from ; sh:or ( [ sh:class role:W_PLAN_CLI ] ) ] ; sh:property [ sh:path kb:to ; sh:or ( [ sh:class role:W_PLAN_USAGE ] ) ] ]
+ [ sh:property [ sh:path kb:relationType ; sh:hasValue "REFERENCES" ] ; sh:property [ sh:path kb:scope ; sh:hasValue "EXISTING_ANCHOR" ] ; sh:property [ sh:path kb:from ; sh:or ( [ sh:class role:W_PLAN_ROOT ] ) ] ; sh:property [ sh:path kb:to ; sh:or ( [ sh:class kb:Anchor ] ) ] ]
+ ) .

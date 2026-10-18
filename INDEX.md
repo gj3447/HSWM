@@ -4,6 +4,10 @@
 필요한 검사 → Git 기록을 기본으로 한다. RDF·SHACL·SPARQL·PROV 기반 작업과 주제별
 참조를 안내하며, 아래 날짜별 기록은 당시 출처와 재현 정보를 보존한다.
 
+2026-10-18 [결과 기반 W 갱신과 의미 보존 구조 최적화 계획](docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md)은
+기존 활성화 학습과 유한 의미 진단을 8개 작업의 입력·산출물·선행조건·완료 기준으로 연결한다.
+`semantic-w-plan`에서 다음 작업과 출처를 조회한다. 초기 개선 없음과 후속 Boolean 과제의 제한된 개선을 함께 보존하며, 작업 상태는 PLANNED다.
+
 2026-10-18 [HSWM_LIKENESS 연구 흡수](docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md)는
 유한 의미·예외·접합 연구를 native 의미 변경 검사에 연결한다. `hswm-context`의 `finite-review`와
 `likeness-transfer` 작업공간에서 규칙 중복·해석 변경·분해 손실을 검사하고 출처·남은 학습 조건을 조회한다.

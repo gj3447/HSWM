@@ -1133,6 +1133,36 @@
       "shapes": [
         "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
       ]
+    },
+    {
+      "id": "semantic-w-plan",
+      "title": "결과 기반 W 갱신과 의미 보존 구조 최적화 계획",
+      "lane": "ENGINEERING",
+      "reading": "All eight tasks PLANNED; existing activation loop, initial no gain and later bounded Boolean gain retained as source reports; no new model execution.",
+      "bundle": "ontology/development/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.v1.json",
+      "document": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+      "queries": [
+        {
+          "id": "roadmap",
+          "path": "ontology/queries/hswm_semantic_w_plan_2026-10-18/roadmap.rq"
+        },
+        {
+          "id": "next",
+          "path": "ontology/queries/hswm_semantic_w_plan_2026-10-18/next.rq"
+        },
+        {
+          "id": "sources",
+          "path": "ontology/queries/hswm_semantic_w_plan_2026-10-18/sources.rq"
+        },
+        {
+          "id": "cli",
+          "path": "ontology/queries/hswm_semantic_w_plan_2026-10-18/cli.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+        "ontology/queries/hswm_semantic_w_plan_2026-10-18/shapes.ttl"
+      ]
     }
   ],
   "workflows": [

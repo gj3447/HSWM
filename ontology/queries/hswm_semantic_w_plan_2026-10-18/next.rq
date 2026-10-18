@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?id ?name ?inputs ?outputs ?acceptance WHERE {
+ ?task a role:W_PLAN_TASK ; p:task_id ?id ; p:name ?name ; p:status "PLANNED" ;
+   p:inputs ?inputs ; p:outputs ?outputs ; p:acceptance ?acceptance .
+ FILTER NOT EXISTS { ?task r:REFERENCES ?prior . ?prior a role:W_PLAN_TASK ; p:status ?priorStatus . FILTER (?priorStatus != "COMPLETED") }
+} ORDER BY ?id

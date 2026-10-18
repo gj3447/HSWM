@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?id ?order ?name ?status ?inputs ?outputs ?acceptance ?responsible ?target ?prerequisite WHERE {
+ ?task a role:W_PLAN_TASK ; p:task_id ?id ; p:task_order ?order ; p:name ?name ; p:status ?status ;
+   p:inputs ?inputs ; p:outputs ?outputs ; p:acceptance ?acceptance ; p:responsible_role ?responsible ; p:target_path ?target .
+ OPTIONAL { ?task r:REFERENCES ?prior . ?prior a role:W_PLAN_TASK ; p:task_id ?prerequisite . }
+} ORDER BY ?order ?prerequisite

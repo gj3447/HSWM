@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?id ?command ?help ?guide ?fragment WHERE {
+ ?cli a role:W_PLAN_CLI ; p:cli_id ?id ; p:command ?command ; p:help ?help ; r:REFERENCES ?usage .
+ ?usage a role:W_PLAN_USAGE ; p:source_path ?guide ; p:source_fragment ?fragment .
+} ORDER BY ?id

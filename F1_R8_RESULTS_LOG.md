@@ -13,6 +13,28 @@
 > [`HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json)의
 > burden-cap 노드다. 이 규칙은 연구 결과가 아니다.
 
+<a id="local-activation-20261018"></a>
+
+## 2026-10-18 — 문맥별 활성화 가중치의 온라인 갱신과 실측
+
+[사용자 국지 활성화 방향](docs/canon/USER_PRIMARY_HSWM_LOCAL_ACTIVATION_INTELLIGENCE_2026-10-18.md)에 따라
+HSWM native `semantic_context_policy`에 disjoint LinUCB의 A/b를 저장하고, 문맥별 규칙 묶음 선택,
+실행 trace에 결속된 보상 갱신, owner admission, 별도 OS process 재사용을 구현했다.
+규칙 본문과 필수 역할·예외는 보존한다. [구현·한계·재검사](docs/operations/HSWM_LOCAL_ACTIVATION_2026-10-18.md),
+[원본 hash lock](_research/local_activation_v1/evidence-lock.json).
+
+**실제 Qwen3-4B authored Boolean holdout은 4/8 → 4/8, 개선 0%p다.**
+policy revision 0 → 8, 별도 process의 revision 8 예측은 1/2였다. complement를 선택한
+3회 모두 모델이 반전 대신 입력 bit를 반환했다. 선택·학습 경로가 작동했다는 증거와
+실제 정확도 개선을 구분한다. 표현·모델·추론 설정의 독립 원인 분해는 미실행이다.
+기반 LLM 가중치는 바꾸지 않았으며, full neural MoE·전체 지능 원리 증명·자연 과제 일반화는 주장하지 않는다.
+
+완료 비교 26회·43,296토큰, 학습 전 형식 실패 3회를 포함해 총 29회·50,265토큰이다.
+실패 원본을 보존했고 완료 비교에서는 동일 구조화 JSON 전송 설정을 고정했다.
+원본 응답과 A/b 재계산, 완전한 선택 문맥·역할 대조, durable RDF 재검증과
+591-quads/4-graphs N-Quads parse를 통과했다. 관련 검사 8개, 타입·Effect 검사와 build 통과.
+이전 지속학습의 +46.875%p와 합산하거나 동일 실험으로 해석하지 않는다.
+
 <a id="scoped-continual-20261018"></a>
 
 ## 2026-10-18 — 지속학습 개선은 무엇에서 나왔나

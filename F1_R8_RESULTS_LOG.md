@@ -13,6 +13,50 @@
 > [`HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json)의
 > burden-cap 노드다. 이 규칙은 연구 결과가 아니다.
 
+<a id="scoped-continual-20261018"></a>
+
+## 2026-10-18 — 지속학습 개선은 무엇에서 나왔나
+
+사용자의 개선 이유 설명·HSWM 기록 요청에 따른 **AI 측정 해석**이다. 정본 정의나 전체 효능
+판정을 바꾸지 않는다. 실험은 HSWM_LIKENESS의 평가기로 HSWM native 의미 관계를 격리 저장소에
+학습·저장·재사용한 것이다. [실험 설계·전체 결과](../HSWM_LIKENESS/docs/CONTINUOUS_LEARNING_V3.md)와
+[원본 evidence lock](../HSWM_LIKENESS/tools/continuous-learning-v3/evidence-lock.json)에 연결한다.
+
+개선 경로는 **학습 관측에서 규칙 검색 → 현재 과제의 수정안 생성 → 기존 규칙 보존·native 저장
+→ 저장 규칙을 계산기로 실행 → 실제 모델 응답 평가**다.
+
+| 구성 | 실제로 한 일 | 확인한 범위 |
+|---|---|---|
+| 규칙 검색 | train 관측만으로 제한된 Boolean 문법의 식 7,212개를 검색하고, 실제 모델이 일치 후보를 patch로 반환 | 두 과제의 train 32개에서 문법 내 일치 함수가 하나였다. 모델이 도움 없이 규칙을 발견했다는 증거는 아니다. |
+| 과제별 보존 | controller별 식을 나누고 해당 controller만 수정한다. 어댑터가 다른 규칙·기본값·예외 참조를 보존하고 native owner가 후보를 저장한다 | revision 0 → 1 → 2. 첫 과제는 두 번째 과제 학습 뒤에도 16/16. 이 merge 보존은 구현의 제약이다. |
+| 계산기 보조 실행 | 저장된 식과 현재 입력만으로 AND/OR/NOT을 계산하고 모델에 제공한다. 모델의 최종 응답을 사후 교정하지 않는다 | 같은 최종 상태에서 보조 실행 32/32, 계산기 없는 모델 20/32(seed 17)·18/32(seed 29). |
+
+**서로 다른 비교를 합치지 않는다.**
+
+- 학습 전후 비교: **두 조건 모두 계산기를 사용**했다. 두 seed 모두 초기 17/32 → 1회차 후
+  26/32 → 2회차 후 32/32, 총 +46.875%p다. 계산기를 마지막에만 추가해서 얻은 수치가 아니다.
+  동일한 보조 실행 조건에서 학습으로 바뀐 그래프 상태의 효과를 관찰했다.
+- 수정하지 않는 통제: 각 회차 부모의 규칙을 유지하고 관측만 추가한 상태는 17/32·26/32다.
+  최종 후보 32/32는 2회차 통제보다 6/32(+18.75%p) 높다. 2회차 통제는 첫 규칙을 이미 가진다.
+- 실행 보조 비교: 최종 상태의 계산기 없는 20/32·18/32와 보조 실행 32/32의 차이는 각각
+  +37.5/+43.75%p다. 계산 결과와 그 사용 지시를 포함한 실행 조건의 유한 비교이며,
+  이 차이를 학습 전후 +46.875%p에 더하지 않는다.
+
+검색·과제별 merge·표현 방식·학습 관측 수를 하나씩 제거한 비교는 하지 않았다. 따라서 각 요소의
+독립 기여율과 상호작용, 10월 15일 실패 대비 어떤 변경이 몇 %를 만들었는지는 미확정이다.
+과거와 과제·분할도 달라 직접 비교할 수 없다. 두 seed는 같은 두 작성 과제의 반복이다.
+Qwen 가중치는 갱신하지 않았고, 계산기 없는 초기 기준선은 미측정이다. 자연어 연구 과제,
+장기 지속학습, 전체 HSWM·CR/FCL 효능으로 확대하지 않는다. Hyperon과의 실측 비교도 미실행이다.
+
+측정 당시 82회·114,019토큰, 별도 프로세스의 최종 상태 재사용은 두 seed 모두 8/8이었다.
+원본 응답 대조·RDF/PROV·SHACL·SPARQL 검증은 통과했다. 원본은 형제 저장소의 ignored
+`.local/continuous-learning-2026-10-18/`에 있으며 공유 KG 게시나 운영 모델 반영을 뜻하지 않는다.
+재검사는 HSWM_LIKENESS에서 `node tools/continuous-learning-v3/check.mjs .local/continuous-learning-2026-10-18/experiment`.
+원본 부재는 `NOT_HYDRATED`, 구현 판본 차이는 drift로 처리하며 과거 pin을 현재 코드에 맞춰 바꾸지 않는다.
+다음 검증은 기존 P1 실제 연구 질문에서 원문·판정 기준을 고정하고 직접 읽기와 비교하는 것이다.
+
+## 측정 이력
+
 | 날짜 | 결과 | 경계 |
 |---|---|---|
 | 2026-10-13 | DGX budget diagnostic retained 26 cases after a 600s timeout: non-thinking/32 and /512 both **16/26**, identical answers; thinking/512 **11/26**, with 14 length failures and 1 timeout. Follow-up `thinking-1024-20261013T163700Z` completed 32 calls: **27/32 correct/valid**, family scores `[6,8,7,6]`, 5 length failures; **REVISE_LOCAL_EXECUTION**. On the shared 26 cases, thinking/1024 reached **23/26** with ~3.1× tokens and ~60.3× summed request latency versus non-thinking. | [runner and recovery](_research/inspect_comparison_v1/README.md#token-cap-and-thinking-mode-comparison) · [result and graph](../HSWM_LIKENESS/docs/LOCAL_EXECUTOR_EXPERIMENT_2026-10-12.md) · First run has 78 confirmed calls, total 78–96 unknown; unretained cases are not imputed. Later run changes token/time budgets together. Raw request/response audit PASS; development-exposed only, no independent holdout, causal attribution, W learning or HSWM efficacy claim. Private artifacts remain local and in designated run storage. |

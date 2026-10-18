@@ -32,7 +32,7 @@ const schemaBinding = unwrap(decodeCanonicalAtomV2SchemaContent(schemaBytes))
 export const fileLayer = (root: string) => makeCanonicalAtomV2DurableRuntimeFileLayer(root, "context-journal", schemaBytes, [{
   authorizationRef: "fixture-auth", schemaVersion: schema.schemaVersion, schemaContentSha256: schemaBinding.binding.content.sha256, scopes: ["fixture"]
 }])
-export const seedContext = Effect.gen(function* () {
+const seedContextWithSemantics = (semanticTexts: Readonly<Record<string, string>>) => Effect.gen(function* () {
   const runtime = yield* CanonicalAtomV2DurableRuntime
   const writes: CanonicalAtomV2[] = []
   for (const name of ["mandatory", "door", "companion", "calendar"]) {
@@ -42,7 +42,7 @@ export const seedContext = Effect.gen(function* () {
       participants.push({ _tag: "CanonicalAtomV2", contractVersion: HSWM_CANONICAL_ATOM_V2_CONTRACT_VERSION, key: key(`${name}:${role}`), kind: "semantic_participant", responsibilityOwner: "owner:context-test", content,
         provenance: { mode: "BOOTSTRAP", evidenceSha256: "a".repeat(64), sourceRef: null }, lifecycle: "ADMITTED", references: [] })
     }
-    const payload = { semanticText: name === "door" ? "Allow only with valid key; deny broken key." : `${name} relation`, disposition: "predict", uncertainty: "unknown", exceptionRefs: [`${name}:exception`], trace: null, outcome: null }
+    const payload = { semanticText: semanticTexts[name] ?? (name === "door" ? "Allow only with valid key; deny broken key." : `${name} relation`), disposition: "predict", uncertainty: "unknown", exceptionRefs: [`${name}:exception`], trace: null, outcome: null }
     const content = yield* runtime.stageContent("application/vnd.hswm.llm-semantic-relation-v1+json", new TextEncoder().encode(JSON.stringify(payload)))
     const relation: CanonicalAtomV2 = { _tag: "CanonicalAtomV2", contractVersion: HSWM_CANONICAL_ATOM_V2_CONTRACT_VERSION, key: key(`relation:${name}`), kind: "semantic_relation", responsibilityOwner: "owner:context-test", content,
       provenance: { mode: "BOOTSTRAP", evidenceSha256: "a".repeat(64), sourceRef: null }, lifecycle: "ADMITTED",
@@ -55,9 +55,10 @@ export const seedContext = Effect.gen(function* () {
   }, writes.map(atom => ({ key: atom.key, payload: atom.content, envelope: unwrap(describeCanonicalAtomV2Envelope(atom)) }))))
   return runtime
 })
-export const withContextFixture = <A, E, R>(use: (runtime: CanonicalAtomV2DurableRuntime["Type"], root: string) => Effect.Effect<A, E, R>) =>
+export const seedContext = seedContextWithSemantics({})
+export const withContextFixture = <A, E, R>(use: (runtime: CanonicalAtomV2DurableRuntime["Type"], root: string) => Effect.Effect<A, E, R>, semanticTexts: Readonly<Record<string, string>> = {}) =>
   Effect.acquireUseRelease(Effect.sync(() => mkdtempSync(join(tmpdir(), "hswm-context-"))), root =>
-    seedContext.pipe(Effect.flatMap(runtime => use(runtime, root)), Effect.provide(fileLayer(root))),
+    seedContextWithSemantics(semanticTexts).pipe(Effect.flatMap(runtime => use(runtime, root)), Effect.provide(fileLayer(root))),
   root => Effect.sync(() => rmSync(root, { recursive: true, force: true })))
 
 export const decisionFor = (plan: ContextPlan, choice = "door") => {

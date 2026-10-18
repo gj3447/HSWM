@@ -1,0 +1,538 @@
+{
+  "schema_version": "hswm-likeness-research-transfer/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-likeness-transfer-2026-10-18-root",
+  "status": "LOCAL_IMPLEMENTATION_AND_RESEARCH_TRANSFER",
+  "nonclaim": "NOT_AUTOMATIC_W_UPDATE_NOT_TOPOLOGY_MUTATION_NOT_MEASURED_EFFICACY",
+  "source_accessed_on": "2026-10-18",
+  "artifact_bindings": [
+    {
+      "path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+      "sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633"
+    },
+    {
+      "path": "ontology/queries/hswm_likeness_transfer_2026-10-18/transfers.rq",
+      "sha256": "dc68ebdbfcf57e25438287fbf7ed43ef97c937fa73496dcee28a4a37332e2698"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-context-finite-domain.ts",
+      "sha256": "d3e293ce08ebb50582716d9e36a5c961e97fbe74ccfe5d06ca019cae7ddea94f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-context-finite-runtime.ts",
+      "sha256": "03d25afa2afe6ef4f7c8c5e82263cc940369ad29b96b9c612bd594dfacd0caf6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-context-finite-process.ts",
+      "sha256": "1550adff3cf2496d7cd514d9a4a9f3eb1315aa6adc142d1d73c5a5f31943440a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-context-process.ts",
+      "sha256": "bdcf1a53b1759e143cda9b242d3d206f8f8d26ae0eb6b8834a0947c76b1cc55f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-semantic-finite",
+      "sha256": "d8461a1ddf0ad5db0cea9e74d0da1a06ef7e95bfc88a07bfa153e1c5715096ad"
+    },
+    {
+      "path": "tests/effect-runtime/semantic-context-finite.test.ts",
+      "sha256": "a502d05c113b0c1dddee6bd180c55db32f38cc3a62eea5f29420da9cb7204c95"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 14,
+    "anchors": 3,
+    "relations": 21
+  },
+  "anchors": [
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-topology-2026-10-12",
+      "name": "사용자 의미론적 연결·구조 최적화 원문",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-E2",
+      "name": "필요한 문맥을 고르는 능력",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-core-learning-2026-10-10-E4",
+      "name": "결과에 근거한 W 학습",
+      "required_labels": [
+        "Concept"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-likeness-transfer-2026-10-18-root",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM_LIKENESS 연구 흡수",
+        "description": "HSWM_LIKENESS 연구 흡수",
+        "standard_graph_role": "TRANSFER_BUNDLE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "FINITE_DIAGNOSTIC_AND_RESEARCH_MAPPING_NOT_AUTOMATIC_W_OR_TOPOLOGY_EFFICACY",
+        "projection_nonclaim": "LOCAL_SOURCE_BOUND_VIEW_NOT_CANONICAL_STATE_WRITE",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "status": "IMPLEMENTED_FINITE_DIAGNOSTIC_AND_SCOPED_RESEARCH_MAPPING"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-cli",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "유한 의미 검사 CLI",
+        "description": "유한 의미 검사 CLI",
+        "standard_graph_role": "TRANSFER_CLI",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "FINITE_DIAGNOSTIC_AND_RESEARCH_MAPPING_NOT_AUTOMATIC_W_OR_TOPOLOGY_EFFICACY",
+        "projection_nonclaim": "LOCAL_SOURCE_BOUND_VIEW_NOT_CANONICAL_STATE_WRITE",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "command": "src/hswm/effect-runtime/bin/hswm-semantic-finite",
+        "help": "src/hswm/effect-runtime/bin/hswm-semantic-finite --help",
+        "store_action": "hswm-context JSON action finite-review"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-usage",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "입력·출력·한도·출처 사용법",
+        "description": "입력·출력·한도·출처 사용법",
+        "standard_graph_role": "TRANSFER_USAGE",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "FINITE_DIAGNOSTIC_AND_RESEARCH_MAPPING_NOT_AUTOMATIC_W_OR_TOPOLOGY_EFFICACY",
+        "projection_nonclaim": "LOCAL_SOURCE_BOUND_VIEW_NOT_CANONICAL_STATE_WRITE",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-semantics",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "규칙 중복·예외·변경 해석 검사",
+        "description": "규칙 중복·예외·변경 해석 검사",
+        "standard_graph_role": "RESEARCH_TRANSFER",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "FINITE_DIAGNOSTIC_AND_RESEARCH_MAPPING_NOT_AUTOMATIC_W_OR_TOPOLOGY_EFFICACY",
+        "projection_nonclaim": "LOCAL_SOURCE_BOUND_VIEW_NOT_CANONICAL_STATE_WRITE",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "transfer_id": "semantics",
+        "status": "IMPLEMENTED_FINITE_DIAGNOSTIC",
+        "application_condition": "동일 변수·도메인·정확한 역할 판본; 자연어 자동 정렬 아님",
+        "implementation_path": "src/hswm/effect-runtime/src/semantic-context-finite-domain.ts"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-semantics-source-0",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "docs/CHU_SEMANTICS_2026-10-16.md",
+        "description": "docs/CHU_SEMANTICS_2026-10-16.md",
+        "standard_graph_role": "TRANSFER_ORIGIN",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "FINITE_DIAGNOSTIC_AND_RESEARCH_MAPPING_NOT_AUTOMATIC_W_OR_TOPOLOGY_EFFICACY",
+        "projection_nonclaim": "LOCAL_SOURCE_BOUND_VIEW_NOT_CANONICAL_STATE_WRITE",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "upstream_repository": "HSWM_LIKENESS",
+        "upstream_path": "docs/CHU_SEMANTICS_2026-10-16.md",
+        "upstream_sha256": "d48e2bac96b92539d361383ac8a05f76bbf17aa25f3ee277957fadedfcecadf7",
+        "upstream_bytes": 14000,
+        "upstream_tracked": false,
+        "upstream_observed_head": "6ec3ee6327b59a7bbad9120396e71d92a085b2a9",
+        "source_fragment": "출처 고정과 표준 그래프",
+        "status": "OBSERVED_WORKTREE_BYTES_NOT_REPRODUCTION"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-join",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "허브·노드 분해의 조합 의미 보존 검사",
+        "description": "허브·노드 분해의 조합 의미 보존 검사",
+        "standard_graph_role": "RESEARCH_TRANSFER",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "FINITE_DIAGNOSTIC_AND_RESEARCH_MAPPING_NOT_AUTOMATIC_W_OR_TOPOLOGY_EFFICACY",
+        "projection_nonclaim": "LOCAL_SOURCE_BOUND_VIEW_NOT_CANONICAL_STATE_WRITE",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "transfer_id": "join",
+        "status": "IMPLEMENTED_FINITE_DIAGNOSTIC",
+        "application_condition": "완전 열거 4096배정; 유한 모형 무손실은 노드 삭제 권한 아님",
+        "implementation_path": "src/hswm/effect-runtime/src/semantic-context-finite-domain.ts"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-join-source-0",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "docs/CHU_JOIN_TREE_2026-10-16.md",
+        "description": "docs/CHU_JOIN_TREE_2026-10-16.md",
+        "standard_graph_role": "TRANSFER_ORIGIN",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "FINITE_DIAGNOSTIC_AND_RESEARCH_MAPPING_NOT_AUTOMATIC_W_OR_TOPOLOGY_EFFICACY",
+        "projection_nonclaim": "LOCAL_SOURCE_BOUND_VIEW_NOT_CANONICAL_STATE_WRITE",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "upstream_repository": "HSWM_LIKENESS",
+        "upstream_path": "docs/CHU_JOIN_TREE_2026-10-16.md",
+        "upstream_sha256": "8c008fafb942a4085b7f777685a2b1534e9550292a3776e3c698461ae5e0a0df",
+        "upstream_bytes": 10674,
+        "upstream_tracked": false,
+        "upstream_observed_head": "6ec3ee6327b59a7bbad9120396e71d92a085b2a9",
+        "source_fragment": "출처 고정과 표준 그래프",
+        "status": "OBSERVED_WORKTREE_BYTES_NOT_REPRODUCTION"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-topology",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "구조 신호와 실제 의미 충돌 구분",
+        "description": "구조 신호와 실제 의미 충돌 구분",
+        "standard_graph_role": "RESEARCH_TRANSFER",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "FINITE_DIAGNOSTIC_AND_RESEARCH_MAPPING_NOT_AUTOMATIC_W_OR_TOPOLOGY_EFFICACY",
+        "projection_nonclaim": "LOCAL_SOURCE_BOUND_VIEW_NOT_CANONICAL_STATE_WRITE",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "transfer_id": "topology",
+        "status": "RESEARCH_CONSTRAINT_MAPPED",
+        "application_condition": "nerve Betti, sheaf H1, 현재 δx=b 해 존재를 구분; W 보상으로 직결하지 않음",
+        "implementation_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-topology-source-0",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "docs/CHU_TOPOLOGY_RESOLUTION_2026-10-11.md",
+        "description": "docs/CHU_TOPOLOGY_RESOLUTION_2026-10-11.md",
+        "standard_graph_role": "TRANSFER_ORIGIN",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "FINITE_DIAGNOSTIC_AND_RESEARCH_MAPPING_NOT_AUTOMATIC_W_OR_TOPOLOGY_EFFICACY",
+        "projection_nonclaim": "LOCAL_SOURCE_BOUND_VIEW_NOT_CANONICAL_STATE_WRITE",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "upstream_repository": "HSWM_LIKENESS",
+        "upstream_path": "docs/CHU_TOPOLOGY_RESOLUTION_2026-10-11.md",
+        "upstream_sha256": "7721011e95aacac373e2db7d2adb9f388eb998b80ccf49c9b1a1507c2956c4a8",
+        "upstream_bytes": 13637,
+        "upstream_tracked": true,
+        "upstream_observed_head": "6ec3ee6327b59a7bbad9120396e71d92a085b2a9",
+        "source_fragment": "출처 고정과 표준 그래프",
+        "status": "OBSERVED_WORKTREE_BYTES_NOT_REPRODUCTION"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-continual",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "과제별 변경 범위와 예외 보존",
+        "description": "과제별 변경 범위와 예외 보존",
+        "standard_graph_role": "RESEARCH_TRANSFER",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "FINITE_DIAGNOSTIC_AND_RESEARCH_MAPPING_NOT_AUTOMATIC_W_OR_TOPOLOGY_EFFICACY",
+        "projection_nonclaim": "LOCAL_SOURCE_BOUND_VIEW_NOT_CANONICAL_STATE_WRITE",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "transfer_id": "continual",
+        "status": "EXISTING_RESEARCH_MAPPED",
+        "application_condition": "두 authored Boolean 과제와 계산기 보조 결과; 새 IR과 자동 호환 아님",
+        "implementation_path": "F1_R8_RESULTS_LOG.md"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-continual-source-0",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "docs/CONTINUOUS_LEARNING_V3.md",
+        "description": "docs/CONTINUOUS_LEARNING_V3.md",
+        "standard_graph_role": "TRANSFER_ORIGIN",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "FINITE_DIAGNOSTIC_AND_RESEARCH_MAPPING_NOT_AUTOMATIC_W_OR_TOPOLOGY_EFFICACY",
+        "projection_nonclaim": "LOCAL_SOURCE_BOUND_VIEW_NOT_CANONICAL_STATE_WRITE",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "upstream_repository": "HSWM_LIKENESS",
+        "upstream_path": "docs/CONTINUOUS_LEARNING_V3.md",
+        "upstream_sha256": "10cbe4fda3061698224bb2a58fb84d360f94f95b06ceaa4f23e8d2605261bea4",
+        "upstream_bytes": 9444,
+        "upstream_tracked": false,
+        "upstream_observed_head": "6ec3ee6327b59a7bbad9120396e71d92a085b2a9",
+        "source_fragment": "출처 고정과 표준 그래프",
+        "status": "OBSERVED_WORKTREE_BYTES_NOT_REPRODUCTION"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-w",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "E2 선택에서 실제 결과·E4 정책 학습으로 연결",
+        "description": "E2 선택에서 실제 결과·E4 정책 학습으로 연결",
+        "standard_graph_role": "RESEARCH_TRANSFER",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "FINITE_DIAGNOSTIC_AND_RESEARCH_MAPPING_NOT_AUTOMATIC_W_OR_TOPOLOGY_EFFICACY",
+        "projection_nonclaim": "LOCAL_SOURCE_BOUND_VIEW_NOT_CANONICAL_STATE_WRITE",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "transfer_id": "w",
+        "status": "EXISTING_BRIDGE_MAPPED",
+        "application_condition": "독립 평가·holdout·support·owner 채택; UNKNOWN/no-op을 W 갱신으로 세지 않음",
+        "implementation_path": "docs/operations/HSWM_CONTEXT_POLICY_BRIDGE_2026-10-11.md"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-w-source-0",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "docs/W_LEARNING.md",
+        "description": "docs/W_LEARNING.md",
+        "standard_graph_role": "TRANSFER_ORIGIN",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "FINITE_DIAGNOSTIC_AND_RESEARCH_MAPPING_NOT_AUTOMATIC_W_OR_TOPOLOGY_EFFICACY",
+        "projection_nonclaim": "LOCAL_SOURCE_BOUND_VIEW_NOT_CANONICAL_STATE_WRITE",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "upstream_repository": "HSWM_LIKENESS",
+        "upstream_path": "docs/W_LEARNING.md",
+        "upstream_sha256": "4de0202cab125b67d639e81b669c872e081bc082d4ee87808e2027d620c18042",
+        "upstream_bytes": 30287,
+        "upstream_tracked": true,
+        "upstream_observed_head": "6ec3ee6327b59a7bbad9120396e71d92a085b2a9",
+        "source_fragment": "출처 고정과 표준 그래프",
+        "status": "OBSERVED_WORKTREE_BYTES_NOT_REPRODUCTION"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-w-source-1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "docs/OUTCOME_LOOP.md",
+        "description": "docs/OUTCOME_LOOP.md",
+        "standard_graph_role": "TRANSFER_ORIGIN",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "FINITE_DIAGNOSTIC_AND_RESEARCH_MAPPING_NOT_AUTOMATIC_W_OR_TOPOLOGY_EFFICACY",
+        "projection_nonclaim": "LOCAL_SOURCE_BOUND_VIEW_NOT_CANONICAL_STATE_WRITE",
+        "source_path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+        "source_sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "upstream_repository": "HSWM_LIKENESS",
+        "upstream_path": "docs/OUTCOME_LOOP.md",
+        "upstream_sha256": "086eec178ba18ba0c61ee32975a275ce9f3439df19f3e91dcbe047d6a31d9573",
+        "upstream_bytes": 11546,
+        "upstream_tracked": false,
+        "upstream_observed_head": "6ec3ee6327b59a7bbad9120396e71d92a085b2a9",
+        "source_fragment": "출처 고정과 표준 그래프",
+        "status": "OBSERVED_WORKTREE_BYTES_NOT_REPRODUCTION"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-cli",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-usage",
+      "type": "REFERENCES",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-likeness-transfer-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-cli",
+      "type": "HAS_CONCEPT",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-likeness-transfer-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-semantics",
+      "type": "HAS_CONCEPT",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-semantics",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-cli",
+      "type": "REFERENCES",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-semantics",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-semantics-source-0",
+      "type": "HAS_SOURCE",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-likeness-transfer-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-join",
+      "type": "HAS_CONCEPT",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-join",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-cli",
+      "type": "REFERENCES",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-join",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-join-source-0",
+      "type": "HAS_SOURCE",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-likeness-transfer-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-topology",
+      "type": "HAS_CONCEPT",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-topology",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-cli",
+      "type": "REFERENCES",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-topology",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-topology-source-0",
+      "type": "HAS_SOURCE",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-likeness-transfer-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-continual",
+      "type": "HAS_CONCEPT",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-continual",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-cli",
+      "type": "REFERENCES",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-continual",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-continual-source-0",
+      "type": "HAS_SOURCE",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-likeness-transfer-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-w",
+      "type": "HAS_CONCEPT",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-w",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-cli",
+      "type": "REFERENCES",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-w",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-w-source-0",
+      "type": "HAS_SOURCE",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-w",
+      "to_uid": "sym:Concept:hswm-likeness-transfer-2026-10-18-w-source-1",
+      "type": "HAS_SOURCE",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-likeness-transfer-2026-10-18-root",
+      "to_uid": "sym:AbstractNode:hswm-semantic-topology-2026-10-12",
+      "type": "REFERENCES",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-likeness-transfer-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-E2",
+      "type": "REFERENCES",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-likeness-transfer-2026-10-18-root",
+      "to_uid": "sym:Concept:hswm-core-learning-2026-10-10-E4",
+      "type": "REFERENCES",
+      "scope": "RESEARCH_TRANSFER",
+      "authority_class": "SECONDARY_AI",
+      "status": "IMPLEMENTATION_OR_RESEARCH_CORRESPONDENCE_NOT_AUTHORITY"
+    }
+  ]
+}

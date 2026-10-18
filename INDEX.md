@@ -4,6 +4,10 @@
 필요한 검사 → Git 기록을 기본으로 한다. RDF·SHACL·SPARQL·PROV 기반 작업과 주제별
 참조를 안내하며, 아래 날짜별 기록은 당시 출처와 재현 정보를 보존한다.
 
+2026-10-18 [HSWM_LIKENESS 연구 흡수](docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md)는
+유한 의미·예외·접합 연구를 native 의미 변경 검사에 연결한다. `hswm-context`의 `finite-review`와
+`likeness-transfer` 작업공간에서 규칙 중복·해석 변경·분해 손실을 검사하고 출처·남은 학습 조건을 조회한다.
+
 2026-10-18 [국지 활성화는 지능의 기본 작동 원리](docs/canon/USER_PRIMARY_HSWM_LOCAL_ACTIVATION_INTELLIGENCE_2026-10-18.md)라는
 사용자 방향을 원문과 AI 해석으로 구분해 기록했다. 상황별 규칙·관계 활성화와 그 선택의 학습을
 HSWM의 중심으로 두며, 앞선 고정 controller 분기 실험으로 입증하지 못한 범위를 명시한다.

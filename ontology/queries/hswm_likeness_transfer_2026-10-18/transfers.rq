@@ -1,0 +1,11 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?id ?description ?status ?condition ?implementation ?origin ?sha256 ?tracked ?command ?guide WHERE {
+ ?transfer a role:RESEARCH_TRANSFER ; p:transfer_id ?id ; p:description ?description ;
+   p:status ?status ; p:application_condition ?condition ; p:implementation_path ?implementation ;
+   r:HAS_SOURCE ?source ; r:REFERENCES ?cli .
+ ?source a role:TRANSFER_ORIGIN ; p:upstream_path ?origin ; p:upstream_sha256 ?sha256 ; p:upstream_tracked ?tracked .
+ ?cli a role:TRANSFER_CLI ; p:command ?command ; r:REFERENCES ?usage .
+ ?usage a role:TRANSFER_USAGE ; p:source_path ?guide .
+} ORDER BY ?id ?origin

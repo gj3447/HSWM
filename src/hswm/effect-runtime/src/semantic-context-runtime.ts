@@ -1,12 +1,14 @@
 /** Effect shell: choose against a pinned graph, read exact roles, execute once, retain evidence. */
 import { randomUUID } from "node:crypto"
-import { Effect, Either, Schema } from "effect"
-import { AdaptiveHttpClient, executeAdaptiveCell, type AdaptiveHttpClientShape } from "./adaptive-executor.js"
+import { Effect, Either, Ref, Schema } from "effect"
+import { AdaptiveHttpClient, AdaptiveExecutorError, executeAdaptiveCell, type AdaptiveHttpClientShape } from "./adaptive-executor.js"
+import type { CanonicalAtomV2Content } from "./canonical-atom-v2-schema.js"
 import { parseJson } from "./adaptive-domain.js"
 import { type CanonicalAtomV2DurableRuntime } from "./canonical-atom-v2-durable-runtime.js"
 import { readLlmSemanticFrame, type SemanticReadFrame } from "./canonical-atom-v2-llm-semantic-runtime.js"
 import { decodeLifecycleCell } from "./semantic-lifecycle-domain.js"
 import { buildContextPlan, selectContext, contextError, contextHash, contextByteLength, contextJson, type ContextPlan } from "./semantic-context-domain.js"
+import { renderContextPrompt } from "./semantic-context-presentation-domain.js"
 
 type Runtime = CanonicalAtomV2DurableRuntime["Type"]
 const encode = (value: unknown) => new TextEncoder().encode(contextJson(value))
@@ -55,15 +57,29 @@ const PredictionSchema = Schema.Struct({
   uncertainty: Schema.String.pipe(Schema.minLength(1), Schema.maxLength(8192))
 })
 /** This call stages immutable evidence only. It has no canonical submit or W-update path. */
-export const executeSelectedSemanticContext = <S extends BoundSelection>(runtime: Runtime, plan: ContextPlan, selection: S, rawCell: unknown, http: AdaptiveHttpClientShape) => Effect.gen(function* () {
+export const executeSelectedSemanticContext = <S extends BoundSelection>(runtime: Runtime, plan: ContextPlan, selection: S, rawCell: unknown, http: AdaptiveHttpClientShape, presentation: "canonical_json" | "execution_tail" = "canonical_json") => Effect.gen(function* () {
   const cell = yield* decodeLifecycleCell(rawCell)
   const prepared = yield* assembleSelectedSemanticContext(runtime, plan, selection)
   if (prepared.assembly === null) return { ...prepared, trace: null }
   const assembly = prepared.assembly
+  const prompt = yield* renderContextPrompt(assembly, presentation)
+  const promptBytes = new TextEncoder().encode(prompt).byteLength
+  if (promptBytes > plan.spec.maximumContextBytes) return yield* Effect.fail(contextError("CONTEXT_BUDGET_EXCEEDED", "Complete presented prompt exceeds the budget; no truncation"))
   const executionId = yield* Effect.sync(randomUUID)
-  const requestContent = yield* runtime.stageContent("application/vnd.hswm.semantic-context-request-v1+json", encode({ executionId, assembly }))
+  // Existing v1 evidence is unchanged; new presentation bytes have an explicit v2 contract.
+  const requestContent = yield* runtime.stageContent(presentation === "canonical_json" ? "application/vnd.hswm.semantic-context-request-v1+json" : "application/vnd.hswm.semantic-context-request-v2+json",
+    encode(presentation === "canonical_json" ? { executionId, assembly } : { executionId, assembly, presentation, prompt, promptBytes }))
+  const observedWire = yield* Ref.make<{ readonly request: CanonicalAtomV2Content; readonly response: CanonicalAtomV2Content } | null>(null)
+  const observedHttp: AdaptiveHttpClientShape = presentation === "canonical_json" ? http : { postJson: request => Effect.gen(function* () {
+    // Observe exact bodies at the injected transport boundary; never persist headers or credentials.
+    const sent = yield* runtime.stageContent("application/vnd.hswm.context-wire-request-v1+json", request.body)
+    const received = yield* http.postJson(request)
+    const response = yield* runtime.stageContent("application/vnd.hswm.context-wire-response-v1+json", received)
+    yield* Ref.set(observedWire, { request: sent, response })
+    return received
+  }).pipe(Effect.mapError(() => new AdaptiveExecutorError({ code: "HTTP_FAILED", detail: "Transport or exact wire evidence failed; no automatic retry" }))) }
   yield* checkSemanticContextPlan(runtime, plan)
-  const response = yield* executeAdaptiveCell({ kind: "llm", cell_id: "semantic-context", ...cell }, { prompt: contextJson(assembly.payload) }, process.cwd(), 120_000).pipe(Effect.provideService(AdaptiveHttpClient, http))
+  const response = yield* executeAdaptiveCell({ kind: "llm", cell_id: "semantic-context", ...cell }, { prompt }, process.cwd(), 120_000).pipe(Effect.provideService(AdaptiveHttpClient, observedHttp))
   if (response.status !== "SUCCEEDED") return yield* Effect.fail(contextError("CONTEXT_EXECUTION_FAILED", "LLM transport did not complete; no retry or outcome fabricated"))
   yield* checkSemanticContextPlan(runtime, plan)
   const decoded = yield* parseJson(response.output).pipe(Either.mapLeft(() => contextError("PREDICTION_INVALID", "Expected strict prediction JSON")))
@@ -74,6 +90,7 @@ export const executeSelectedSemanticContext = <S extends BoundSelection>(runtime
     planSha256: plan.planSha256, selectionSha256: contextHash(prepared.selection), assemblySha256: assembly.assemblySha256,
     requestContent, responseContent, prediction: prediction.prediction, uncertainty: prediction.uncertainty,
     backendConfigurationSha256: contextHash(cell), observedStatus: "PREDICTION_ONLY" as const,
+    ...(presentation === "execution_tail" ? { transport: yield* Ref.get(observedWire) } : {}),
     modelUsage: "UNREPORTED_BY_THIS_ADAPTER" as const, canonicalWrite: false as const
   }
   const traceContent = yield* runtime.stageContent("application/vnd.hswm.semantic-context-trace-v1+json", encode(trace))

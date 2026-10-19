@@ -70,6 +70,10 @@ const evaluate = (program: FiniteProgram, row: readonly string[]): readonly bool
   return program.clauses.map(c => computed[c.expression] === true)
 }
 const allowed = (program: FiniteProgram, rows: readonly (readonly string[])[]) => rows.filter(row => evaluate(program, row).every(Boolean))
+/** Shared finite evaluator; callers must decode the explicit program before comparison. */
+export const decodeFiniteProgram = parse
+export const finiteProgramAccepts = (program: FiniteProgram, row: readonly string[]) =>
+  row.length === program.variables.length && program.variables.every((v, i) => v.values.includes(row[i] ?? "")) && evaluate(program, row).every(Boolean)
 const record = (program: FiniteProgram, row: readonly string[] | undefined) => row === undefined ? null : Object.fromEntries(program.variables.map((v, i) => [v.id, row[i]]))
 const bind = (frame: SemanticReadFrame, program: FiniteProgram) => Either.gen(function* () {
   if (program.variables.some(v => frame.roles[v.roleOrdinal] === undefined)) return yield* fail("ROLE_MISSING", "Every variable must resolve to one exact frame role occurrence")

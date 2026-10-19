@@ -11,6 +11,9 @@ import { PosixFileSystem } from "./effect-posix-filesystem.js"
 import { ContextSpecSchema, contextJson } from "./semantic-context-domain.js"
 import { prepareSemanticContext } from "./semantic-context-runtime.js"
 import { ActivationConfigSchema } from "./semantic-context-activation-domain.js"
+import { ContextPresentationSchema } from "./semantic-context-presentation-domain.js"
+import { CanonicalAtomV2KeySchema } from "./canonical-atom-v2-schema.js"
+import { TopologyChangeSchema, proposeContextRetirements, prepareContextTopologyChange, readContextTopology } from "./semantic-context-topology-runtime.js"
 import { ActivationDecisionSchema, ActivationFeedbackSchema, prepareActivationInitialization, prepareActivationLearning, selectContextActivation, assembleContextActivation, executeContextActivation } from "./semantic-context-activation-runtime.js"
 
 const base = { contract: Schema.Literal("hswm-context-activation-cli/v1"), durableRoot: Schema.String.pipe(Schema.pattern(/^\//)),
@@ -21,7 +24,10 @@ const Request = Schema.Union(
   Schema.Struct({ ...pinned, action: Schema.Literal("initialize"), config: ActivationConfigSchema, target: Schema.Unknown }),
   Schema.Struct({ ...pinned, action: Schema.Literal("learn"), feedback: ActivationFeedbackSchema, target: Schema.Unknown }),
   Schema.Struct({ ...pinned, action: Schema.Literal("select", "assemble"), decision: ActivationDecisionSchema }),
-  Schema.Struct({ ...pinned, action: Schema.Literal("execute"), decision: ActivationDecisionSchema, cell: Schema.Unknown })
+  Schema.Struct({ ...pinned, action: Schema.Literal("topology-propose"), basis: Schema.Unknown, maximumCandidates: Schema.Number }),
+  Schema.Struct({ ...pinned, action: Schema.Literal("topology-change"), change: TopologyChangeSchema }),
+  Schema.Struct({ ...base, action: Schema.Literal("topology-read"), topologyKey: CanonicalAtomV2KeySchema }),
+  Schema.Struct({ ...pinned, action: Schema.Literal("execute"), decision: ActivationDecisionSchema, cell: Schema.Unknown, presentation: Schema.optional(ContextPresentationSchema) })
 )
 export const contextActivationProcess = (raw: unknown) => Effect.gen(function* () {
   const request = yield* Schema.decodeUnknownEither(Request)(raw, { onExcessProperty: "error" }).pipe(Either.mapLeft(() => refuse("Invalid activation request; see --help")))
@@ -30,6 +36,7 @@ export const contextActivationProcess = (raw: unknown) => Effect.gen(function* (
   const schemaBytes = yield* canonicalJsonBytes(yield* decodeCanonicalJsonBytes(new TextEncoder().encode(contextJson(request.schema))))
   return yield* Effect.gen(function* () {
     const runtime = yield* CanonicalAtomV2DurableRuntime
+    if (request.action === "topology-read") return yield* readContextTopology(runtime, request.topologyKey, request.spec.event)
     const plan = yield* prepareSemanticContext(runtime, request.spec)
     if (request.action === "prepare") return plan
     if (request.expectedPlanSha256 !== plan.planSha256) return yield* Effect.fail(refuse("Stale activation plan"))
@@ -38,7 +45,9 @@ export const contextActivationProcess = (raw: unknown) => Effect.gen(function* (
       case "learn": return yield* prepareActivationLearning(runtime, plan, request.feedback, request.target)
       case "select": return yield* selectContextActivation(runtime, plan, request.decision)
       case "assemble": return yield* assembleContextActivation(runtime, plan, request.decision)
-      case "execute": return yield* executeContextActivation(runtime, plan, request.decision, request.cell, NativeAdaptiveHttpClient)
+      case "topology-propose": return yield* proposeContextRetirements(runtime, plan, request.basis, request.maximumCandidates)
+      case "topology-change": return yield* prepareContextTopologyChange(runtime, plan, request.change)
+      case "execute": return yield* executeContextActivation(runtime, plan, request.decision, request.cell, NativeAdaptiveHttpClient, request.presentation)
     }
   }).pipe(Effect.provide(makeCanonicalAtomV2DurableRuntimeFileLayer(request.durableRoot, request.journalLineageId, schemaBytes)))
 })
@@ -53,14 +62,18 @@ prepare -> plan. Other actions require its exact expectedPlanSha256.
 initialize + config {encoderRevision,featureNames,alpha} + target -> initial policy proposal.
 select / assemble + decision {policyKey,features:{encoderRevision,eventSha256,values},mode:EXPLORE|EXPLOIT} -> contextual selection / complete selected and mandatory frames.
 execute + decision + cell {base_url,model,max_tokens} -> one explicit model call and stored trace.
+Optional presentation: canonical_json (default) | execution_tail. Complete frames and repeated rule text count against maximumContextBytes; exact presented prompt is retained and checked during learning.
 learn + feedback {traceContent,reward,observed,source} + target -> outcome-bound successor proposal.
+topology-propose + basis {policyKey,feedbackContent,partition:TRAIN,minimumObservations} + maximumCandidates (1..8) -> bounded whole-bundle finite retirement candidates.
+topology-change + change {operation:RETIRE|RESTORE,afterSpec,policyKey,basis,priorTopologyKey,topologyTarget,activationTarget} -> atomic scope and reset-W proposal. RESTORE uses basis:null and exact predecessor scope.
+topology-read + topologyKey -> stored scope and latest policy for spec.event; no expectedPlanSha256 needed.
 target: {key:{schemaVersion,lineageId,atomUid,revisionId},owner,authorizationRef,scope,decidedAt}.
 All admission uses the existing owner writer; this CLI never submits a proposal.
 Requires schema-admitted semantic_context_policy with candidate-root and supersedes references.
 LinUCB ridge=1, deterministic top-1 bundle; mandatory roles remain active. Scores are not probabilities.
 Features are caller encoded and versioned; rewards are caller attributed, not authenticated ground truth.
-No neural weight training, automatic rule retirement, or claim of general intelligence.
-Exit 0 success, 2 refusal, 3 defect. Guide: docs/operations/HSWM_LOCAL_ACTIVATION_2026-10-18.md
+No neural weight training or global deletion. Local retirement requires exact finite meaning and complete role coverage; free prose is UNKNOWN. No general intelligence claim.
+Exit 0 success, 2 refusal, 3 defect. Guides: docs/operations/HSWM_LOCAL_ACTIVATION_2026-10-18.md and docs/operations/HSWM_SEMANTIC_W_LOOP_2026-10-19.md
 `
 if (import.meta.main) {
   if (process.argv.length === 3 && process.argv[2] === "--help") process.stdout.write(help)

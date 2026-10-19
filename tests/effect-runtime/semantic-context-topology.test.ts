@@ -80,7 +80,7 @@ it.each(mutations)("refuses %s instead of treating unknown semantics as preserva
   expect(Either.isLeft(reviewContextRetirement(spec, afterSpec, change(yield* frames(runtime))))).toBe(true)
 }))))
 
-it("binds presented execution to numeric learning, atomically retires incidence, reopens in another process and restores", () => run(fixture((runtime, root) => Effect.gen(function* () {
+it.each(["execution_tail", "finite_table_tail"] as const)("binds %s execution to learning, atomic retirement, reopen and restore", presentation => run(fixture((runtime, root) => Effect.gen(function* () {
   const original = (yield* runtime.snapshot).canonical.atoms
   let plan = yield* prepareSemanticContext(runtime, spec)
   yield* runtime.submit((yield* prepareActivationInitialization(runtime, plan, config, target("policy:w"))).candidate)
@@ -91,11 +91,11 @@ it("binds presented execution to numeric learning, atomically retires incidence,
     calls.push(body.messages[0].content)
     return new TextEncoder().encode(JSON.stringify({ choices: [{ message: { content: JSON.stringify({ prediction: "1", uncertainty: "SCRIPTED_TEST_NOT_REAL_MODEL" }) } }] }))
   }) }
-  const execution = yield* executeContextActivation(runtime, plan, decision(plan, 0), { base_url: "https://fixture.invalid/v1", model: "SCRIPTED", max_tokens: 32 }, http, "execution_tail")
+  const execution = yield* executeContextActivation(runtime, plan, decision(plan, 0), { base_url: "https://fixture.invalid/v1", model: "SCRIPTED", max_tokens: 32 }, http, presentation)
   if (!execution.trace) return yield* Effect.fail("missing trace")
   expect(calls).toHaveLength(1)
-  expect(calls[0]).toContain("EXECUTE NOW")
-  expect(calls[0]).toContain(program("a"))
+  expect(calls[0]).toContain(presentation === "execution_tail" ? "EXECUTE NOW" : "BEGIN ALLOWED ROWS")
+  expect(calls[0]).toContain(presentation === "execution_tail" ? program("a") : 'Columns, in order: ["x","e"]')
   const feedback = { traceContent: execution.trace.traceContent, reward: Number(execution.trace.prediction === "1"), observed: "exact observed fixture result", source: "SCRIPTED_FIXTURE_EVALUATOR" }
   const trace = JSON.parse(new TextDecoder().decode(yield* runtime.readContent(execution.trace.traceContent)))
   const presented = JSON.parse(new TextDecoder().decode(yield* runtime.readContent(trace.requestContent)))
@@ -107,7 +107,7 @@ it("binds presented execution to numeric learning, atomically retires incidence,
   expect(Either.isLeft(yield* Effect.either(prepareActivationLearning(runtime, plan, { ...feedback, traceContent: forgedWireTrace }, target("policy:w", 1))))).toBe(true)
   const bounded = yield* prepareSemanticContext(runtime, { ...spec, maximumContextBytes: execution.assembly?.contextBytes })
   expect(Either.isLeft(yield* Effect.either(executeSelectedSemanticContext(runtime, bounded, { planSha256: bounded.planSha256, status: "SELECTED", candidateId: "a" },
-    { base_url: "https://fixture.invalid/v1", model: "SCRIPTED", max_tokens: 32 }, http, "execution_tail")))).toBe(true)
+    { base_url: "https://fixture.invalid/v1", model: "SCRIPTED", max_tokens: 32 }, http, presentation)))).toBe(true)
   expect(calls).toHaveLength(1)
   const learned = yield* prepareActivationLearning(runtime, plan, feedback, target("policy:w", 1))
   expect(learned.policy.arms[0]?.a).toEqual([[2]])
@@ -152,10 +152,10 @@ import { contextHash } from './dist/semantic-context-domain.js';
 const input=JSON.parse(process.argv[1]);
 const result=await Effect.runPromise(Effect.gen(function*(){const r=yield* CanonicalAtomV2DurableRuntime; const opened=yield* readContextTopology(r,input.key,'child event');
 const executed=yield* executeContextActivation(r,opened.plan,{policyKey:opened.policyKey,features:{encoderRevision:'fixture/v1',eventSha256:contextHash('child event'),values:[1]},mode:'EXPLOIT'},
-{base_url:'https://fixture.invalid/v1',model:'SCRIPTED',max_tokens:32},{postJson:()=>Effect.succeed(new TextEncoder().encode(JSON.stringify({choices:[{message:{content:JSON.stringify({prediction:'1',uncertainty:'SCRIPTED_CHILD'})}}]})))},'execution_tail');
+{base_url:'https://fixture.invalid/v1',model:'SCRIPTED',max_tokens:32},{postJson:()=>Effect.succeed(new TextEncoder().encode(JSON.stringify({choices:[{message:{content:JSON.stringify({prediction:'1',uncertainty:'SCRIPTED_CHILD'})}}]})))},input.presentation);
 return {revision:opened.policyKey.revisionId,roots:executed.assembly.payload.frames.map(f=>f.relation.key.atomUid),prediction:executed.trace.prediction};
 }).pipe(Effect.provide(makeCanonicalAtomV2DurableRuntimeFileLayer(input.root,'loop-test',new TextEncoder().encode(JSON.stringify(input.schema)))),Effect.provide(NodePosixServicesLive))); console.log(JSON.stringify(result));`
-  const child = yield* Effect.try(() => JSON.parse(execFileSync(process.execPath, ["--input-type=module", "-e", script, JSON.stringify({ root, schema, key: key("policy:topology") })], { cwd, encoding: "utf8", timeout: 60000, maxBuffer: 1048576 })))
+  const child = yield* Effect.try(() => JSON.parse(execFileSync(process.execPath, ["--input-type=module", "-e", script, JSON.stringify({ root, schema, key: key("policy:topology"), presentation })], { cwd, encoding: "utf8", timeout: 60000, maxBuffer: 1048576 })))
   expect(child).toEqual({ revision: 2, roots: ["rule:mandatory", "rule:a"], prediction: "1" })
   const restoreBefore = yield* prepareSemanticContext(runtime, afterSpec)
   const restore = yield* prepareContextTopologyChange(runtime, restoreBefore, { operation: "RESTORE", afterSpec: spec, policyKey: key("policy:w", 2), basis: null, priorTopologyKey: key("policy:topology"),

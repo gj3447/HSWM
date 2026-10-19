@@ -8,7 +8,7 @@ import { type CanonicalAtomV2DurableRuntime } from "./canonical-atom-v2-durable-
 import { readLlmSemanticFrame, type SemanticReadFrame } from "./canonical-atom-v2-llm-semantic-runtime.js"
 import { decodeLifecycleCell } from "./semantic-lifecycle-domain.js"
 import { buildContextPlan, selectContext, contextError, contextHash, contextByteLength, contextJson, type ContextPlan } from "./semantic-context-domain.js"
-import { renderContextPrompt } from "./semantic-context-presentation-domain.js"
+import { renderContextPrompt, type ContextPresentation } from "./semantic-context-presentation-domain.js"
 
 type Runtime = CanonicalAtomV2DurableRuntime["Type"]
 const encode = (value: unknown) => new TextEncoder().encode(contextJson(value))
@@ -57,7 +57,7 @@ const PredictionSchema = Schema.Struct({
   uncertainty: Schema.String.pipe(Schema.minLength(1), Schema.maxLength(8192))
 })
 /** This call stages immutable evidence only. It has no canonical submit or W-update path. */
-export const executeSelectedSemanticContext = <S extends BoundSelection>(runtime: Runtime, plan: ContextPlan, selection: S, rawCell: unknown, http: AdaptiveHttpClientShape, presentation: "canonical_json" | "execution_tail" = "canonical_json") => Effect.gen(function* () {
+export const executeSelectedSemanticContext = <S extends BoundSelection>(runtime: Runtime, plan: ContextPlan, selection: S, rawCell: unknown, http: AdaptiveHttpClientShape, presentation: ContextPresentation = "canonical_json") => Effect.gen(function* () {
   const cell = yield* decodeLifecycleCell(rawCell)
   const prepared = yield* assembleSelectedSemanticContext(runtime, plan, selection)
   if (prepared.assembly === null) return { ...prepared, trace: null }
@@ -90,7 +90,7 @@ export const executeSelectedSemanticContext = <S extends BoundSelection>(runtime
     planSha256: plan.planSha256, selectionSha256: contextHash(prepared.selection), assemblySha256: assembly.assemblySha256,
     requestContent, responseContent, prediction: prediction.prediction, uncertainty: prediction.uncertainty,
     backendConfigurationSha256: contextHash(cell), observedStatus: "PREDICTION_ONLY" as const,
-    ...(presentation === "execution_tail" ? { transport: yield* Ref.get(observedWire) } : {}),
+    ...(presentation !== "canonical_json" ? { transport: yield* Ref.get(observedWire) } : {}),
     modelUsage: "UNREPORTED_BY_THIS_ADAPTER" as const, canonicalWrite: false as const
   }
   const traceContent = yield* runtime.stageContent("application/vnd.hswm.semantic-context-trace-v1+json", encode(trace))

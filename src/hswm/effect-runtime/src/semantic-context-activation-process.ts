@@ -62,7 +62,7 @@ prepare -> plan. Other actions require its exact expectedPlanSha256.
 initialize + config {encoderRevision,featureNames,alpha} + target -> initial policy proposal.
 select / assemble + decision {policyKey,features:{encoderRevision,eventSha256,values},mode:EXPLORE|EXPLOIT} -> contextual selection / complete selected and mandatory frames.
 execute + decision + cell {base_url,model,max_tokens} -> one explicit model call and stored trace.
-Optional presentation: canonical_json (default) | execution_tail. Complete frames and repeated rule text count against maximumContextBytes; exact presented prompt is retained and checked during learning.
+Optional presentation: canonical_json (default) | execution_tail | finite_table_tail. Complete frames and the full presentation count against maximumContextBytes; exact presented prompt and observed wire are checked during learning. finite_table_tail compiles the complete allowed rows of explicit finite programs, independently of the event; unknown or oversized programs are refused.
 learn + feedback {traceContent,reward,observed,source} + target -> outcome-bound successor proposal.
 topology-propose + basis {policyKey,feedbackContent,partition:TRAIN,minimumObservations} + maximumCandidates (1..8) -> bounded whole-bundle finite retirement candidates.
 topology-change + change {operation:RETIRE|RESTORE,afterSpec,policyKey,basis,priorTopologyKey,topologyTarget,activationTarget} -> atomic scope and reset-W proposal. RESTORE uses basis:null and exact predecessor scope.

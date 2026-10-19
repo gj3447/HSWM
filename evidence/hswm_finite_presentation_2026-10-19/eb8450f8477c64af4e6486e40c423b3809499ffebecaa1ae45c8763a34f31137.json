@@ -1,0 +1,298 @@
+{
+  "schema_version": "hswm-research-receipt/v1",
+  "date": "2026-10-19",
+  "actor": "agent(codex)",
+  "authority_class": "SECONDARY_AI",
+  "status": "P01_FAILED_FINITE_TABLE_14_OF_16",
+  "experiment": "experiment-v3",
+  "artifactManifest": {
+    "path": "evidence-manifest.json",
+    "sha256": "2c4c066291420d2b720cb64746d90df5b02f961aee226e0a9e591dc2f2b45987",
+    "bytes": 90044
+  },
+  "sources": [
+    {
+      "path": "docs/operations/HSWM_FINITE_PRESENTATION_2026-10-19.md",
+      "sha256": "2923bd6f892d1f472eaf214316cc4c6719a65ae9d197108ef1420dcfd5a27a23"
+    },
+    {
+      "path": "_research/finite_presentation_v1/run.mjs",
+      "sha256": "cc0e6b65615c9f41c4efaa4e0d90364278f64d11d1cb2d89cee9f47e54b5e80b"
+    },
+    {
+      "path": "_research/finite_presentation_v1/check.mjs",
+      "sha256": "92a037eb1a40434fe6449aa00d6ef9ba412cbe40050610cb920560a3bdcf25db"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-context-finite-presentation-domain.ts",
+      "sha256": "f3586d030778100d0be3897c3cf99855c2a83141f26a9d14e9a353fd08be76aa"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-context-presentation-domain.ts",
+      "sha256": "e6f24b53f6f28062a037cce1b5ccfc3d081425640f348ddfa8439632952528ac"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-context-runtime.ts",
+      "sha256": "02786d751d2c70837ef7c0147dac5dca30eb3a1a534fe37a93a04f4f0f8da88a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-context-activation-runtime.ts",
+      "sha256": "bd06271b22a9bfa66f19abd1996b8ba8e712e61f2133d84a7f69e7e6cf9e8c6f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-context-activation-process.ts",
+      "sha256": "ca13caf6f8825b78f2ea0c34a32381d4484d93934096ecfa40ef98d9f9e21aad"
+    },
+    {
+      "path": "tests/effect-runtime/semantic-context-finite-presentation.test.ts",
+      "sha256": "612a048c90c248b5ec6ac2e8c06772fab2f3b76ddffc3d8e73f99647e36d719c"
+    },
+    {
+      "path": "tests/effect-runtime/semantic-context-topology.test.ts",
+      "sha256": "b6f7e6cbc7efae2edaa58d8db03086651f6bc5e87f572babe84f9579b04aea20"
+    }
+  ],
+  "observations": {
+    "status": "EVIDENCE_VERIFIED",
+    "gate": "P01_FAILED",
+    "actualProviderCalls": 32,
+    "groups": {
+      "execution_tail": {
+        "total": 16,
+        "correct": 12,
+        "exceptionViolations": 0,
+        "promptBytes": 234848,
+        "tokens": 74325,
+        "httpMs": 20185.977645000003
+      },
+      "finite_table_tail": {
+        "total": 16,
+        "correct": 14,
+        "exceptionViolations": 0,
+        "promptBytes": 203168,
+        "tokens": 63425,
+        "httpMs": 22304.752578000007
+      }
+    },
+    "wholeAssignmentsChecked": 960,
+    "failures": [
+      {
+        "call": 9,
+        "presentation": "execution_tail",
+        "case": "table-dev-0-complement-0-0",
+        "expected": "1",
+        "actual": "0"
+      },
+      {
+        "call": 13,
+        "presentation": "execution_tail",
+        "case": "table-dev-0-complement-1-0",
+        "expected": "0",
+        "actual": "1"
+      },
+      {
+        "call": 14,
+        "presentation": "finite_table_tail",
+        "case": "table-dev-0-complement-1-0",
+        "expected": "0",
+        "actual": "1"
+      },
+      {
+        "call": 25,
+        "presentation": "execution_tail",
+        "case": "table-dev-1-complement-0-0",
+        "expected": "1",
+        "actual": "0"
+      },
+      {
+        "call": 29,
+        "presentation": "execution_tail",
+        "case": "table-dev-1-complement-1-0",
+        "expected": "0",
+        "actual": "1"
+      },
+      {
+        "call": 30,
+        "presentation": "finite_table_tail",
+        "case": "table-dev-1-complement-1-0",
+        "expected": "0",
+        "actual": "1"
+      }
+    ],
+    "learningUpdates": 0,
+    "topologyUpdates": 0,
+    "claim": "Development-exposed authored finite census; assisted table execution, not independent holdout or W efficacy"
+  },
+  "graph": {
+    "@context": {
+      "prov": "http://www.w3.org/ns/prov#",
+      "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+    },
+    "@graph": [
+      {
+        "@id": "urn:sha256:2c4c066291420d2b720cb64746d90df5b02f961aee226e0a9e591dc2f2b45987",
+        "@type": "prov:Entity",
+        "rdfs:label": "private original evidence manifest"
+      },
+      {
+        "@id": "urn:sha256:f2fa37ad09e021d8d4f594d87477a37e61abe55ba8901ed88358651ea21d6189",
+        "@type": "prov:Entity",
+        "rdfs:label": "frozen paired development protocol"
+      },
+      {
+        "@id": "urn:sha256:24cc9da7af197081cb2cba7f1acf9603928bd840a81a61f91fa2a3ae6961dacb",
+        "@type": "prov:Entity",
+        "rdfs:label": "previous P01 failure; preserved unchanged"
+      },
+      {
+        "@id": "urn:sha256:2923bd6f892d1f472eaf214316cc4c6719a65ae9d197108ef1420dcfd5a27a23",
+        "@type": "prov:Entity",
+        "rdfs:label": "docs/operations/HSWM_FINITE_PRESENTATION_2026-10-19.md"
+      },
+      {
+        "@id": "urn:sha256:cc0e6b65615c9f41c4efaa4e0d90364278f64d11d1cb2d89cee9f47e54b5e80b",
+        "@type": "prov:Entity",
+        "rdfs:label": "_research/finite_presentation_v1/run.mjs"
+      },
+      {
+        "@id": "urn:sha256:92a037eb1a40434fe6449aa00d6ef9ba412cbe40050610cb920560a3bdcf25db",
+        "@type": "prov:Entity",
+        "rdfs:label": "_research/finite_presentation_v1/check.mjs"
+      },
+      {
+        "@id": "urn:sha256:f3586d030778100d0be3897c3cf99855c2a83141f26a9d14e9a353fd08be76aa",
+        "@type": "prov:Entity",
+        "rdfs:label": "src/hswm/effect-runtime/src/semantic-context-finite-presentation-domain.ts"
+      },
+      {
+        "@id": "urn:sha256:e6f24b53f6f28062a037cce1b5ccfc3d081425640f348ddfa8439632952528ac",
+        "@type": "prov:Entity",
+        "rdfs:label": "src/hswm/effect-runtime/src/semantic-context-presentation-domain.ts"
+      },
+      {
+        "@id": "urn:sha256:02786d751d2c70837ef7c0147dac5dca30eb3a1a534fe37a93a04f4f0f8da88a",
+        "@type": "prov:Entity",
+        "rdfs:label": "src/hswm/effect-runtime/src/semantic-context-runtime.ts"
+      },
+      {
+        "@id": "urn:sha256:bd06271b22a9bfa66f19abd1996b8ba8e712e61f2133d84a7f69e7e6cf9e8c6f",
+        "@type": "prov:Entity",
+        "rdfs:label": "src/hswm/effect-runtime/src/semantic-context-activation-runtime.ts"
+      },
+      {
+        "@id": "urn:sha256:ca13caf6f8825b78f2ea0c34a32381d4484d93934096ecfa40ef98d9f9e21aad",
+        "@type": "prov:Entity",
+        "rdfs:label": "src/hswm/effect-runtime/src/semantic-context-activation-process.ts"
+      },
+      {
+        "@id": "urn:sha256:612a048c90c248b5ec6ac2e8c06772fab2f3b76ddffc3d8e73f99647e36d719c",
+        "@type": "prov:Entity",
+        "rdfs:label": "tests/effect-runtime/semantic-context-finite-presentation.test.ts"
+      },
+      {
+        "@id": "urn:sha256:b6f7e6cbc7efae2edaa58d8db03086651f6bc5e87f572babe84f9579b04aea20",
+        "@type": "prov:Entity",
+        "rdfs:label": "tests/effect-runtime/semantic-context-topology.test.ts"
+      },
+      {
+        "@id": "urn:hswm:finite-presentation:2026-10-19:measurement:audit",
+        "@type": "prov:Activity",
+        "prov:used": [
+          {
+            "@id": "urn:sha256:2c4c066291420d2b720cb64746d90df5b02f961aee226e0a9e591dc2f2b45987"
+          },
+          {
+            "@id": "urn:sha256:f2fa37ad09e021d8d4f594d87477a37e61abe55ba8901ed88358651ea21d6189"
+          },
+          {
+            "@id": "urn:sha256:24cc9da7af197081cb2cba7f1acf9603928bd840a81a61f91fa2a3ae6961dacb"
+          },
+          {
+            "@id": "urn:sha256:2923bd6f892d1f472eaf214316cc4c6719a65ae9d197108ef1420dcfd5a27a23"
+          },
+          {
+            "@id": "urn:sha256:cc0e6b65615c9f41c4efaa4e0d90364278f64d11d1cb2d89cee9f47e54b5e80b"
+          },
+          {
+            "@id": "urn:sha256:92a037eb1a40434fe6449aa00d6ef9ba412cbe40050610cb920560a3bdcf25db"
+          },
+          {
+            "@id": "urn:sha256:f3586d030778100d0be3897c3cf99855c2a83141f26a9d14e9a353fd08be76aa"
+          },
+          {
+            "@id": "urn:sha256:e6f24b53f6f28062a037cce1b5ccfc3d081425640f348ddfa8439632952528ac"
+          },
+          {
+            "@id": "urn:sha256:02786d751d2c70837ef7c0147dac5dca30eb3a1a534fe37a93a04f4f0f8da88a"
+          },
+          {
+            "@id": "urn:sha256:bd06271b22a9bfa66f19abd1996b8ba8e712e61f2133d84a7f69e7e6cf9e8c6f"
+          },
+          {
+            "@id": "urn:sha256:ca13caf6f8825b78f2ea0c34a32381d4484d93934096ecfa40ef98d9f9e21aad"
+          },
+          {
+            "@id": "urn:sha256:612a048c90c248b5ec6ac2e8c06772fab2f3b76ddffc3d8e73f99647e36d719c"
+          },
+          {
+            "@id": "urn:sha256:b6f7e6cbc7efae2edaa58d8db03086651f6bc5e87f572babe84f9579b04aea20"
+          }
+        ],
+        "rdfs:label": "agent(codex) independent original-output calculation; not independent source authentication"
+      },
+      {
+        "@id": "urn:hswm:finite-presentation:2026-10-19:measurement:result",
+        "@type": "prov:Entity",
+        "prov:wasGeneratedBy": [
+          {
+            "@id": "urn:hswm:finite-presentation:2026-10-19:measurement:audit"
+          }
+        ],
+        "prov:wasDerivedFrom": [
+          {
+            "@id": "urn:sha256:2c4c066291420d2b720cb64746d90df5b02f961aee226e0a9e591dc2f2b45987"
+          },
+          {
+            "@id": "urn:sha256:f2fa37ad09e021d8d4f594d87477a37e61abe55ba8901ed88358651ea21d6189"
+          },
+          {
+            "@id": "urn:sha256:24cc9da7af197081cb2cba7f1acf9603928bd840a81a61f91fa2a3ae6961dacb"
+          },
+          {
+            "@id": "urn:sha256:2923bd6f892d1f472eaf214316cc4c6719a65ae9d197108ef1420dcfd5a27a23"
+          },
+          {
+            "@id": "urn:sha256:cc0e6b65615c9f41c4efaa4e0d90364278f64d11d1cb2d89cee9f47e54b5e80b"
+          },
+          {
+            "@id": "urn:sha256:92a037eb1a40434fe6449aa00d6ef9ba412cbe40050610cb920560a3bdcf25db"
+          },
+          {
+            "@id": "urn:sha256:f3586d030778100d0be3897c3cf99855c2a83141f26a9d14e9a353fd08be76aa"
+          },
+          {
+            "@id": "urn:sha256:e6f24b53f6f28062a037cce1b5ccfc3d081425640f348ddfa8439632952528ac"
+          },
+          {
+            "@id": "urn:sha256:02786d751d2c70837ef7c0147dac5dca30eb3a1a534fe37a93a04f4f0f8da88a"
+          },
+          {
+            "@id": "urn:sha256:bd06271b22a9bfa66f19abd1996b8ba8e712e61f2133d84a7f69e7e6cf9e8c6f"
+          },
+          {
+            "@id": "urn:sha256:ca13caf6f8825b78f2ea0c34a32381d4484d93934096ecfa40ef98d9f9e21aad"
+          },
+          {
+            "@id": "urn:sha256:612a048c90c248b5ec6ac2e8c06772fab2f3b76ddffc3d8e73f99647e36d719c"
+          },
+          {
+            "@id": "urn:sha256:b6f7e6cbc7efae2edaa58d8db03086651f6bc5e87f572babe84f9579b04aea20"
+          }
+        ],
+        "prov:value": "{\"status\":\"EVIDENCE_VERIFIED\",\"gate\":\"P01_FAILED\",\"actualProviderCalls\":32,\"groups\":{\"execution_tail\":{\"total\":16,\"correct\":12,\"exceptionViolations\":0,\"promptBytes\":234848,\"tokens\":74325,\"httpMs\":20185.977645000003},\"finite_table_tail\":{\"total\":16,\"correct\":14,\"exceptionViolations\":0,\"promptBytes\":203168,\"tokens\":63425,\"httpMs\":22304.752578000007}},\"wholeAssignmentsChecked\":960,\"failures\":[{\"call\":9,\"presentation\":\"execution_tail\",\"case\":\"table-dev-0-complement-0-0\",\"expected\":\"1\",\"actual\":\"0\"},{\"call\":13,\"presentation\":\"execution_tail\",\"case\":\"table-dev-0-complement-1-0\",\"expected\":\"0\",\"actual\":\"1\"},{\"call\":14,\"presentation\":\"finite_table_tail\",\"case\":\"table-dev-0-complement-1-0\",\"expected\":\"0\",\"actual\":\"1\"},{\"call\":25,\"presentation\":\"execution_tail\",\"case\":\"table-dev-1-complement-0-0\",\"expected\":\"1\",\"actual\":\"0\"},{\"call\":29,\"presentation\":\"execution_tail\",\"case\":\"table-dev-1-complement-1-0\",\"expected\":\"0\",\"actual\":\"1\"},{\"call\":30,\"presentation\":\"finite_table_tail\",\"case\":\"table-dev-1-complement-1-0\",\"expected\":\"0\",\"actual\":\"1\"}],\"learningUpdates\":0,\"topologyUpdates\":0,\"claim\":\"Development-exposed authored finite census; assisted table execution, not independent holdout or W efficacy\"}"
+      }
+    ]
+  },
+  "claim_ceiling": "DEVELOPMENT_EXPOSED_ASSISTED_FINITE_CENSUS_NOT_HOLDOUT_NOT_W_EFFICACY",
+  "reproduce": "node _research/finite_presentation_v1/check.mjs .hswm-local/finite-presentation-2026-10-19 evidence/hswm_finite_presentation_2026-10-19/*.json"
+}

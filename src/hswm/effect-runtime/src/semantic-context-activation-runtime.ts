@@ -8,7 +8,7 @@ import { CanonicalAtomV2ContentSchema, CanonicalAtomV2KeySchema, canonicalAtomV2
 import { contextError, contextHash, contextJson, type ContextPlan } from "./semantic-context-domain.js"
 import { assembleSelectedSemanticContext, checkSemanticContextPlan, executeSelectedSemanticContext } from "./semantic-context-runtime.js"
 import { ACTIVATION_MEDIA, ActivationFeaturesSchema, ActivationModeSchema, activationScopeHash, chooseActivation, decodeActivationPolicy, initializeActivation, updateActivation, type ActivationPolicy } from "./semantic-context-activation-domain.js"
-import { renderContextPrompt, ContextPresentationSchema } from "./semantic-context-presentation-domain.js"
+import { renderContextPrompt, ContextPresentationSchema, type ContextPresentation } from "./semantic-context-presentation-domain.js"
 
 type Runtime = CanonicalAtomV2DurableRuntime["Type"]
 const encode = (x: unknown) => new TextEncoder().encode(contextJson(x))
@@ -44,7 +44,7 @@ export const selectContextActivation = (runtime: Runtime, plan: ContextPlan, raw
 })
 export const assembleContextActivation = (runtime: Runtime, plan: ContextPlan, raw: unknown) => selectContextActivation(runtime, plan, raw).pipe(
   Effect.flatMap(selection => assembleSelectedSemanticContext(runtime, plan, selection)))
-export const executeContextActivation = (runtime: Runtime, plan: ContextPlan, raw: unknown, cell: unknown, http: AdaptiveHttpClientShape, presentation: "canonical_json" | "execution_tail" = "canonical_json") => selectContextActivation(runtime, plan, raw).pipe(
+export const executeContextActivation = (runtime: Runtime, plan: ContextPlan, raw: unknown, cell: unknown, http: AdaptiveHttpClientShape, presentation: ContextPresentation = "canonical_json") => selectContextActivation(runtime, plan, raw).pipe(
   Effect.flatMap(selection => executeSelectedSemanticContext(runtime, plan, selection, cell, http, presentation)))
 
 const prepareWrite = (runtime: Runtime, plan: ContextPlan, policy: ActivationPolicy, rawTarget: unknown, priorKey: CanonicalAtomV2Key | null, priorPlan: ContextPlan = plan) => Effect.gen(function* () {

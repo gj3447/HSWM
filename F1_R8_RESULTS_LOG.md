@@ -13,6 +13,22 @@
 > [`HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json)의
 > burden-cap 노드다. 이 규칙은 연구 결과가 아니다.
 
+<a id="finite-presentation-20261019"></a>
+
+## 2026-10-19 — 전체 유한 조합 표로 14/16, P01 기준 미달
+
+같은 16개 개발 event를 기존 표현과 event 독립적인 전체 허용 조합 표로 번갈아 실행했다.
+실모델 32회에서 기존 12/16, 새 표현 14/16이며 예외 위반은 양쪽 0/8이다. 새 표현도
+complement/bit=1/invalid=0에서 두 번 모두 실패해 사전 기준 16/16을 충족하지 못했다.
+총 137,750 tokens, W 갱신·구조 변경·holdout 실행 0회다. 원문·역할·전체 표·실제 wire·응답을
+독립 대조했으며 authored 개발 census의 보조 표현 결과로 한정한다.
+[구현·비교·실패 보존·재검사](docs/operations/HSWM_FINITE_PRESENTATION_2026-10-19.md),
+[source-bound receipt](evidence/hswm_finite_presentation_2026-10-19/).
+
+| 운영 보고 | 관측 | 조치 |
+|---|---|---|
+| INSTRUMENT_RED | 지정된 첫 100 커밋의 core share 35%, 기준 50% 미달 | 이번 우선 P01 범위로 한정; 추가 W·구조 실험으로 확대하지 않음 |
+
 <a id="semantic-w-loop-20261019"></a>
 
 ## 2026-10-19 — 구조·W 루프의 새 유한 표현에서 P01 실패

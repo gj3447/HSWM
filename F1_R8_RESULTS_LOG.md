@@ -13,6 +13,21 @@
 > [`HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json)의
 > burden-cap 노드다. 이 규칙은 연구 결과가 아니다.
 
+<a id="semantic-w-loop-20261019"></a>
+
+## 2026-10-19 — 구조·W 루프의 새 유한 표현에서 P01 실패
+
+동결한 실모델 실행은 개발 입력 다섯 번째에서 complement/bit=0/invalid=0의 정답 `1` 대신
+`0`을 반환해 **P01_FAILED**로 중단했다. 실제 5회·25,524 tokens이며 W 학습·B0–B3 비교·구조 채택은
+미실행이다. 정확한 원문·역할·prompt/wire·응답을 대조했고 유한 제약을 독립 계산해 유일 출력 `1`을
+확인했다. 초기 W revision 0·관측 수 0을 유지한다. 4/5는 중단된 개발 prefix이며 효능 추정치가 아니다.
+
+별도 HSWM_LIKENESS 교차 실행은 실제 `w context-policy`, 원문 20개와 합성 64 train·320 holdout으로
+owner 정책 채택·새 프로세스 재사용·복원을 통과했다. 실제 모델 호출 0인 연결 검증이다.
+온라인 LinUCB 자료를 고정 무작위 IPS 평가기에 직접 연결한 것으로 해석하지 않는다.
+[결과·연결 범위·다음 P01 작업](docs/operations/HSWM_SEMANTIC_W_LOOP_2026-10-19.md#실제-실행과-hswm_likeness-연결-확인),
+[source-bound receipt](evidence/hswm_semantic_w_loop_2026-10-19/).
+
 <a id="local-activation-diagnosis-20261018"></a>
 
 ## 2026-10-18 — 규칙 실행을 회복한 뒤 활성화 학습 4/8 → 8/8
@@ -103,6 +118,7 @@ Qwen 가중치는 갱신하지 않았고, 계산기 없는 초기 기준선은 �
 
 | 날짜 | 결과 | 경계 |
 |---|---|---|
+| 2026-10-19 | `INSTRUMENT_RED`: 지정 100-commit 창의 core 35개(35%), 기준 50% 미달을 재확인했다. | 기존 closure-burden 검사 결과. 요청한 P01 실패·likeness 연결 검증 기록을 마무리하며 추가 실험으로 범위를 확대하지 않는다. |
 | 2026-10-18 | `INSTRUMENT_RED`: closure burden의 지정 100-commit 창에서 core 35개(35%), 기준 50% 미달을 재확인했다. | `python3 scripts/check_hswm_closure_burden_cap.py` 결과. 연구 효능 판정이 아닌 작업 비중 보고다. 요청한 국지 활성화 진단·계측 기록을 마무리하고 추가 실험으로 범위를 확대하지 않는다. |
 | 2026-10-13 | DGX budget diagnostic retained 26 cases after a 600s timeout: non-thinking/32 and /512 both **16/26**, identical answers; thinking/512 **11/26**, with 14 length failures and 1 timeout. Follow-up `thinking-1024-20261013T163700Z` completed 32 calls: **27/32 correct/valid**, family scores `[6,8,7,6]`, 5 length failures; **REVISE_LOCAL_EXECUTION**. On the shared 26 cases, thinking/1024 reached **23/26** with ~3.1× tokens and ~60.3× summed request latency versus non-thinking. | [runner and recovery](_research/inspect_comparison_v1/README.md#token-cap-and-thinking-mode-comparison) · [result and graph](../HSWM_LIKENESS/docs/LOCAL_EXECUTOR_EXPERIMENT_2026-10-12.md) · First run has 78 confirmed calls, total 78–96 unknown; unretained cases are not imputed. Later run changes token/time budgets together. Raw request/response audit PASS; development-exposed only, no independent holdout, causal attribution, W learning or HSWM efficacy claim. Private artifacts remain local and in designated run storage. |
 | 2026-10-12 | DGX run `renderer-e1-20261012T052306Z` compared byte-identical historical JSON rendering with an ordered renderer on the same frozen oracle relation for 32 development-exposed cases. All 64 outputs were valid; legacy environmental correctness was **17/32**, ordered **14/32** (paired: 11 both-correct, 6 legacy-only, 3 ordered-only, 12 both-wrong). Predeclared decision: **REVISE_LOCAL_EXECUTION**; ordered renderer is not adopted. | [result](results/HSWM_RENDERER_COMPARISON_2026-10-12.md) · 4-family screen with family-level order counterbalance only. No fresh holdout, causal attribution, W learning, canonical graph/interpreter change, or general HSWM efficacy claim. Independent audit PASS recomputed the finite scores, token totals, latency sums, and family order from 34 inputs, 8 raw Inspect logs, and 64 request/response pairs. Next token/mode experiment NOT_RUN; private raw inputs/logs remain local. |

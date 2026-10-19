@@ -1,0 +1,150 @@
+{
+  "schema_version": "hswm-research-receipt/v1",
+  "date": "2026-10-19",
+  "actor": "agent(codex)",
+  "authority_class": "SECONDARY_AI",
+  "status": "P01_FAILED_AND_SEPARATE_SYNTHETIC_BRIDGE_VERIFIED",
+  "artifactManifest": {
+    "path": "evidence-manifest.json",
+    "sha256": "473e611c81924c0ced155a70aa1c45650f89840730dde9c4e5c2ce655afd4b61",
+    "bytes": 33484
+  },
+  "sources": [
+    {
+      "path": "_research/semantic_w_loop_v1/run.mjs",
+      "sha256": "23c286eb70ffc828b34ae70ab9b016e95755c8251eb6a95b30d450435640575c"
+    },
+    {
+      "path": "_research/semantic_w_loop_v1/check.mjs",
+      "sha256": "8ed85acc7ee108ac504ad8698c4dd418d2e94d5668ce93e2c054a9a070e243af"
+    },
+    {
+      "path": "docs/operations/HSWM_SEMANTIC_W_LOOP_2026-10-19.md",
+      "sha256": "bc463b757f50c2c1375419bbf1e11aa98435585c292ef5486a408a69d2d185d9"
+    },
+    {
+      "path": "../HSWM_LIKENESS/tools/context-policy/verify.mjs",
+      "sha256": "578a9040f15d340463f6d36a112b82057715a69dfcb37f6f82be1d19285047c1"
+    },
+    {
+      "path": "../HSWM_LIKENESS/src/w-context-policy.ts",
+      "sha256": "652e64203acd7e92bc54a80dff996656cd0eee526bb85dec898b76f6954f6de1"
+    },
+    {
+      "path": "../HSWM_LIKENESS/src/w-learning.ts",
+      "sha256": "54e2275c95ec7d71495819cb97f247e8221da042f0dd1aaec81f25e465eee289"
+    },
+    {
+      "path": "../HSWM_LIKENESS/src/w-services.ts",
+      "sha256": "7a56ba6badf115187ed15ff76d38256d50a36538856376e589a032e15cecb115"
+    },
+    {
+      "path": "../HSWM_LIKENESS/dist/w-context-policy.js",
+      "sha256": "102a049634b9aec68b1ce7f846f00964b557c5d81716366422b8dd88d3b1a4b5"
+    },
+    {
+      "path": "../HSWM_LIKENESS/dist/w-learning.js",
+      "sha256": "938e98d21a67d38c3c51be2902dc7ff948ba00fd05908d764da1bc26c6c37842"
+    },
+    {
+      "path": "../HSWM_LIKENESS/dist/cli.js",
+      "sha256": "1fe487c7c44d77c1849e40afc11afb936cb980227c722e3dd0c4bb1bc32e8fb5"
+    }
+  ],
+  "observations": {
+    "status": "P01_FAILED",
+    "actualProviderCalls": 5,
+    "developmentCorrect": 4,
+    "providerTokens": 25524,
+    "policyRevision": 0,
+    "learningUpdates": 0,
+    "holdoutExecutions": 0,
+    "topologyUpdates": 0,
+    "bridge": "SYNTHETIC_CLI_OWNER_REOPEN_RESTORE_PASS"
+  },
+  "graph": {
+    "@context": {
+      "prov": "http://www.w3.org/ns/prov#",
+      "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+    },
+    "@graph": [
+      {
+        "@id": "urn:sha256:9fcd7a129cfce8c1cc4b8b99535801c0c9ef6dc055d38e691c95612a4844bab7",
+        "@type": [
+          "prov:Entity",
+          "prov:Plan"
+        ],
+        "rdfs:label": "Frozen finite protocol; model backend; no cohort retry"
+      },
+      {
+        "@id": "urn:sha256:473e611c81924c0ced155a70aa1c45650f89840730dde9c4e5c2ce655afd4b61",
+        "@type": "prov:Entity",
+        "rdfs:label": "Private source-byte inventory; original five traces and separate synthetic bridge"
+      },
+      {
+        "@id": "urn:sha256:0b3d02b74095f0d233f9839ee021327cf460612deb9d03233fcdb9d76400a548",
+        "@type": "prov:Entity",
+        "rdfs:label": "HSWM_LIKENESS actual CLI witness; synthetic observations; provider calls 0"
+      },
+      {
+        "@id": "urn:sha256:43eb4ff41cfdbec6bfc33eccb870bd32d5c64f6edbcf43527a4c74cc47a97336",
+        "@type": "prov:Entity",
+        "prov:wasGeneratedBy": [
+          {
+            "@id": "urn:hswm:semantic-w-loop:2026-10-19:measurement"
+          }
+        ],
+        "rdfs:label": "Original failed complement trace; exact request/response and source descriptors"
+      },
+      {
+        "@id": "urn:hswm:semantic-w-loop:2026-10-19:measurement",
+        "@type": "prov:Activity",
+        "prov:used": [
+          {
+            "@id": "urn:sha256:9fcd7a129cfce8c1cc4b8b99535801c0c9ef6dc055d38e691c95612a4844bab7"
+          }
+        ],
+        "rdfs:label": "Stopped after first P01 semantic execution violation"
+      },
+      {
+        "@id": "urn:hswm:semantic-w-loop:2026-10-19:measurement:audit",
+        "@type": "prov:Activity",
+        "prov:used": [
+          {
+            "@id": "urn:sha256:473e611c81924c0ced155a70aa1c45650f89840730dde9c4e5c2ce655afd4b61"
+          },
+          {
+            "@id": "urn:sha256:0b3d02b74095f0d233f9839ee021327cf460612deb9d03233fcdb9d76400a548"
+          },
+          {
+            "@id": "urn:sha256:43eb4ff41cfdbec6bfc33eccb870bd32d5c64f6edbcf43527a4c74cc47a97336"
+          }
+        ],
+        "rdfs:label": "agent(codex) original-output audit; not independent source authentication"
+      },
+      {
+        "@id": "urn:hswm:semantic-w-loop:2026-10-19:measurement:result",
+        "@type": "prov:Entity",
+        "prov:wasGeneratedBy": [
+          {
+            "@id": "urn:hswm:semantic-w-loop:2026-10-19:measurement:audit"
+          }
+        ],
+        "prov:wasDerivedFrom": [
+          {
+            "@id": "urn:sha256:9fcd7a129cfce8c1cc4b8b99535801c0c9ef6dc055d38e691c95612a4844bab7"
+          },
+          {
+            "@id": "urn:sha256:473e611c81924c0ced155a70aa1c45650f89840730dde9c4e5c2ce655afd4b61"
+          },
+          {
+            "@id": "urn:sha256:0b3d02b74095f0d233f9839ee021327cf460612deb9d03233fcdb9d76400a548"
+          }
+        ],
+        "prov:value": "{\"status\":\"P01_FAILED\",\"actualProviderCalls\":5,\"developmentCorrect\":4,\"providerTokens\":25524,\"policyRevision\":0,\"learningUpdates\":0,\"holdoutExecutions\":0,\"topologyUpdates\":0,\"bridge\":\"SYNTHETIC_CLI_OWNER_REOPEN_RESTORE_PASS\"}"
+      }
+    ]
+  },
+  "claim_ceiling": "STOPPED_DEVELOPMENT_PREFIX_NOT_W_EFFICACY; SYNTHETIC_BRIDGE_NOT_ONLINE_IPS_INTEGRATION",
+  "reproduce": "node _research/semantic_w_loop_v1/check.mjs .hswm-local/semantic-w-loop-2026-10-19 evidence/hswm_semantic_w_loop_2026-10-19/*.json"
+}

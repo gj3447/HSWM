@@ -3,6 +3,9 @@
 2026-10-19 · agent(codex) 구현·검증 기록. [작업 계획](HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md)의 후속이며,
 동결된 계획과 이전 실험 수치를 수정하지 않는다.
 
+**현재: 실모델 P01 실패, 비교 중단. HSWM_LIKENESS의 별도 정책 연결은 현재 코드 재검증 통과.**
+아래의 최초 구현·리허설 기록 뒤에 [실제 실행과 연결 확인](#실제-실행과-hswm_likeness-연결-확인)을 추가했다.
+
 **실행 결과로 학습한 W → 의미 보존 후보 → owner의 구조·W 동시 채택 → 다음 프로세스의 재사용**을
 기존 native runtime에 연결했다. 첫 구조 변환은 **특정 후보 묶음에서 중복 관계의 활성 연결을 퇴역시키는 것**이다.
 원본 관계·역할·과거 revision은 남으며, 전역 노드 삭제·새 허브 생성·자유로운 분할/병합은 이번 구현 범위가 아니다.
@@ -64,14 +67,14 @@ RETIRE에는 실제 학습된 정책의 basis가 필요하다. RESTORE는 `basis
 
 | 계획 | 이번 상태 | 남은 연결 |
 |---|---|---|
-| P00 | 첫 유한 퇴역 실험의 실행기·고정 입력·판정·호출 상한 준비 | 현재 원격 등록 갱신과 fresh reachability |
-| P01 | CLI의 명시적 실행 전달·prompt/wire 결속 구현, 테스트 | 새 유한 규칙의 실모델 실행 충실도 |
-| P02 | 기존 결과 기반 학습 재사용, 새 trace로 학습·중복 거부 검사 | 새 실모델 cohort와 수치 근접 동점 재현성 |
+| P00 | 첫 유한 퇴역 protocol 고정, 후속 승인·등록 갱신·reachability 확인 | 후속 전달 진단은 새 범위를 고정 |
+| P01 | 전달·prompt/wire 결속 구현; 실모델 다섯 번째 개발 입력 실패 | 새 유한 규칙의 실모델 실행 충실도 회복 |
+| P02 | 로컬 학습·중복 거부 검사; 이번 실모델 학습 미실행 | P01 통과 후 새 실모델 cohort와 수치 근접 동점 재현성 |
 | P03 | 전체 유한 묶음·역할·예외 보존 검사 | 임의 자연어 추상화, 새 분해/허브 의미 검증 |
 | P04 | 지원된 묶음의 제한된 중복 연결 퇴역 후보 | 허브 생성·분할·병합 proposer와 조합 기여 평가 |
 | P05 | 구조·reset W 동시 owner 채택 검사 | 실모델 실행과 동일한 연구 저장소에서의 채택 |
 | P06 | 별도 OS 프로세스 실행, 중복 거부, append-only 복원 검사 | 실모델 후속 실행 |
-| P07 | 사전 고정 2×2 비교 실행기 준비 | 실제 cohort와 비용·실패·불확실성 보고 |
+| P07 | 2×2 비교 실행기 준비; 실제 실행은 P01에서 중단 | 충실도 통과 후 별도 비교, 실패 prefix는 보존 |
 
 실험은 기존 Boolean 사례의 새 입력과 명시적 유한 규칙으로 제한한다. 두 번의 별도 저장소 반복이며,
 독립 자연 과제나 통계적 iid 표본으로 세지 않는다. 각 반복은 개발 8회, B0 8회, 학습 8회, B1 8회,
@@ -104,9 +107,9 @@ raw 응답·trace·native 저장소는 private 출력에 남기며, 요청 실�
 `--rehearse`는 동일한 두 cohort를 유한 해석기로 실행하고 `actualProviderCalls:0`과
 `SCRIPTED_REHEARSAL_NOT_MODEL_EVIDENCE`를 출력한다. 이 모드의 높은 정답률은 LLM 학습 결과가 아니다.
 
-기존 등록은 **2026-10-19 00:00 UTC에 만료**됐다. 이번 작업의 새 모델 호출은 **0회**이며,
-원격 경로 상태는 `NOT_READY`다. [OWNER의 USL workspace linking](../agent-rules/OWNER.md#usl-workspace-linking)에 따라
-갱신된 범위 승인과 bounded reachability 전에는 실행하지 않는다. 로컬 구현·일반 테스트는 계속 진행했다.
+최초 구현 시점에는 기존 등록이 **2026-10-19 00:00 UTC에 만료**돼 새 모델 호출 **0회**,
+원격 경로 `NOT_READY`였다. [OWNER의 USL workspace linking](../agent-rules/OWNER.md#usl-workspace-linking)에 따라
+갱신 승인과 bounded reachability 전에는 실행하지 않았다. 이후 사용자 진행 지시로 수행한 실행은 아래에 기록한다.
 
 ## 검증
 
@@ -131,3 +134,77 @@ npm test -- ../../../tests/effect-runtime/semantic-context-topology.test.ts \
 
 공용 호스트에서는 위 작업을 기존 managed scratch 한도 안에서 수행한다.
 형식·로컬 연결 통과를 P00–P07 전체 완료나 실모델 개선으로 표시하지 않는다.
+
+## 실제 실행과 HSWM_LIKENESS 연결 확인
+
+후속 사용자 진행 지시를 앞서 제시한 범위의 갱신 승인으로 기록하고, 한 번의 bounded read-only
+도달성 확인을 통과한 뒤 **동결된 protocol 그대로** 실행했다. 최초 등록 만료 기록은 당시 상태로 남긴다.
+현재 실패는 접근 실패가 아니라 모델의 규칙 실행 충실도 실패다. 원격 서비스 설정은 변경하지 않았다.
+
+### P01: 올바른 규칙을 보냈으나 모델이 반전을 실행하지 않음
+
+2026-10-19 08:47 UTC, 실제 추론 **5회**, 공급자 보고 **25,524 tokens**, HTTP 시간 합계 약 **8.156초**다.
+예정된 첫 개발 8개 중 처음 5개만 실행했다. identity의 두 bit·두 예외 상태 4개는 맞았지만,
+다음 complement/bit=0/invalid=0에서 유일한 허용 출력 `1` 대신 `0`을 반환했다.
+finish reason은 모두 `stop`이며 이 관측에서 토큰 상한 도달로 분류할 근거는 없다.
+
+`check.mjs`는 실행기의 정답 함수를 import하지 않고 저장된 모든 유한 제약을 별도로 계산했다.
+정확한 원문·역할·owner·예외와 canonical frame, 생성 prompt, 실제 HTTP body, 원본 응답,
+trace 및 사후 정답을 대조했다. 실패 입력에는 mandatory와 complement만 전달됐고,
+두 제약을 함께 만족하는 출력은 `1` 하나였다. 잘못된 후보 선택이나 trace 바꿔치기는 발견하지 않았다.
+이 결과만으로 모델 내부의 실패 원인이나 표현 요소별 인과 효과를 특정하지 않는다.
+
+사전 기준 `devViolations=0`에 따라 **P01_FAILED**로 중단했다. 나머지 개발, B0–B3, train,
+재학습·topology 채택·실모델 재시작 실행은 모두 미실행이다. native journal은 state revision 2,
+초기 W는 revision 0, 각 arm의 관측 수 0·A=I·b=0이다. 비교 성능은 null이며 4/5를 전체 실험
+성공률로 쓰지 않는다. 최초 리허설의 revision 17은 scripted 검증이며 이번 실모델 결과와 별개다.
+
+이전 10월 18일의 4/4 전달 진단과 달리 이번에는 정형 AST 제약과 전체 canonical JSON을 전달했다.
+같은 `execution-tail` 명칭이 같은 입력·과제라는 뜻은 아니다. 기존 성공을 이 표현의 충실도로
+대체하지 않는다. 다음 P01 작업은 **제약 전체의 의미를 보존하는 읽기 쉬운 표현을 새 개발 실험으로
+검증**하는 것이다. 이전 실패 입력은 노출된 개발 자료로 남기고, 전달 방식이 검증되기 전에는
+구조 후보를 늘리거나 새 W 개선 비교를 시작하지 않는다. 이번 cohort는 재시작하지 않는다.
+
+### HSWM_LIKENESS는 어디에 연결되는가
+
+| 연결 | 현재 실행 경로 | 이번 확인 |
+|---|---|---|
+| 연구 흡수 | likeness의 유한 의미·역할·예외 보존 연구 → HSWM finite 검사·topology retirement | [기존 흡수 기록](HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md); sibling 계산기를 매번 호출하는 구조는 아님 |
+| 외부 W 평가·정책 전달 | HSWM native binding → 실제 `hswm-likeness w context-policy` → owner admission → 다음 프로세스 | 현재 코드의 합성 교차 실행 PASS |
+| 이번 온라인 W 학습 | HSWM trace/outcome → 자체 LinUCB → owner revision | 로컬 통합 검증 완료, 이번 실모델은 P01에서 중단 |
+
+교차 실행은 exact source **20개**, 합성 **64 train + 320 holdout**을 실제 likeness CLI로 검사·계산했다.
+`calendar` baseline → `door` revision 1 → 별도 프로세스에서 `door` 재읽기 →
+revision 2로 `calendar` 복원을 확인했다. 모의 모델 호출 2회, 실제 provider 호출 0회다.
+따라서 **실행 가능한 연결은 있으며, 이번 온라인 로그가 likeness 평가기로 자동 왕복하는 연결은 없다.**
+현재 LinUCB의 적응형 기록을 likeness v1의 고정 무작위 IPS 입력으로 바꾸어 넣으면 평가 전제가 달라진다.
+향후 직접 평가에는 적격한 고정 집단을 별도로 수집하거나 적응형 추정기 계약이 필요하다.
+
+실제 인터페이스는 [정책 연결 문서](HSWM_CONTEXT_POLICY_BRIDGE_2026-10-11.md)와
+[likeness 소유 사용법](../../../HSWM_LIKENESS/docs/CONTEXT_POLICY_BRIDGE.md)을 따른다.
+첫 교차 실행은 검증 PASS 뒤 NFS로 hardlink를 복사하는 보존 단계에서 실패했다.
+그 실패를 남기고 같은 로컬 검증을 다시 수행해 tar archive로 보존했다. 두 번째는 전체 명령 exit 0이며,
+현재 재검사는 완전하게 보존된 두 번째 자료를 사용한다. 실모델 실패 cohort를 재실행한 것이 아니다.
+
+### 원본과 재검사
+
+private root는 `.hswm-local/semantic-w-loop-2026-10-19/`다. 원본 실행·정책 저장소와 별도 교차 실행
+자료는 이 안에 보존한다. [내용 주소형 receipt](../../evidence/hswm_semantic_w_loop_2026-10-19/)가
+private artifact manifest, source pin, 결과와 PROV-O source-bound graph snapshot을 묶는다.
+reader는 아래 checker이며 원본 없음을 `NOT_HYDRATED`, 바뀐 원본·코드를 drift로 거부한다.
+공유 KG 게시·운영 정책 변경은 하지 않았다. 이 기록은 agent(codex)의 측정 해석이며 정본 승격이 아니다.
+
+원본 155개 대조, 성공 응답 위조·원본 누락 거부, PROV 24 triples의 국소 SHACL 조건과
+SPARQL 결과 조회, provenance 활동 삭제 거부를 확인했다. 이는 해당 결과 연결의 검사이며
+전체 PROV 제약·원격 관측의 진실성 인증이 아니다. 변경 Markdown도 portable 검사에 통과했다.
+
+```bash
+node _research/semantic_w_loop_v1/check.mjs \
+  .hswm-local/semantic-w-loop-2026-10-19 \
+  evidence/hswm_semantic_w_loop_2026-10-19/*.json
+# HSWM_LIKENESS에서, 두 저장소가 build된 상태. archive는 managed artifact에 보존한다.
+proxmox-scratch run likeness-hswm-bridge --timeout 600 --max-bytes 67108864 --memory-bytes 67108864 -- \
+  bash -ec 'retained="$STORAGE_ARTIFACT_DIR"; export STORAGE_ARTIFACT_DIR="$STORAGE_MEMORY_TMPDIR"; \
+  node tools/context-policy/verify.mjs ../HSWM; \
+  tar -cf "$retained/context-policy-witness.tar" -C "$STORAGE_ARTIFACT_DIR" context-policy-witness'
+```

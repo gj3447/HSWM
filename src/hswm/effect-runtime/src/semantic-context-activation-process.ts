@@ -12,6 +12,7 @@ import { ContextSpecSchema, contextJson } from "./semantic-context-domain.js"
 import { prepareSemanticContext } from "./semantic-context-runtime.js"
 import { ActivationConfigSchema } from "./semantic-context-activation-domain.js"
 import { ContextPresentationSchema } from "./semantic-context-presentation-domain.js"
+import { FiniteExecutionGuardSchema } from "./semantic-context-finite-execution-domain.js"
 import { CanonicalAtomV2KeySchema } from "./canonical-atom-v2-schema.js"
 import { TopologyChangeSchema, proposeContextRetirements, prepareContextTopologyChange, readContextTopology } from "./semantic-context-topology-runtime.js"
 import { ActivationDecisionSchema, ActivationFeedbackSchema, prepareActivationInitialization, prepareActivationLearning, selectContextActivation, assembleContextActivation, executeContextActivation } from "./semantic-context-activation-runtime.js"
@@ -27,7 +28,7 @@ const Request = Schema.Union(
   Schema.Struct({ ...pinned, action: Schema.Literal("topology-propose"), basis: Schema.Unknown, maximumCandidates: Schema.Number }),
   Schema.Struct({ ...pinned, action: Schema.Literal("topology-change"), change: TopologyChangeSchema }),
   Schema.Struct({ ...base, action: Schema.Literal("topology-read"), topologyKey: CanonicalAtomV2KeySchema }),
-  Schema.Struct({ ...pinned, action: Schema.Literal("execute"), decision: ActivationDecisionSchema, cell: Schema.Unknown, presentation: Schema.optional(ContextPresentationSchema) })
+  Schema.Struct({ ...pinned, action: Schema.Literal("execute"), decision: ActivationDecisionSchema, cell: Schema.Unknown, presentation: Schema.optional(ContextPresentationSchema), verification: Schema.optional(FiniteExecutionGuardSchema) })
 )
 export const contextActivationProcess = (raw: unknown) => Effect.gen(function* () {
   const request = yield* Schema.decodeUnknownEither(Request)(raw, { onExcessProperty: "error" }).pipe(Either.mapLeft(() => refuse("Invalid activation request; see --help")))
@@ -47,7 +48,7 @@ export const contextActivationProcess = (raw: unknown) => Effect.gen(function* (
       case "assemble": return yield* assembleContextActivation(runtime, plan, request.decision)
       case "topology-propose": return yield* proposeContextRetirements(runtime, plan, request.basis, request.maximumCandidates)
       case "topology-change": return yield* prepareContextTopologyChange(runtime, plan, request.change)
-      case "execute": return yield* executeContextActivation(runtime, plan, request.decision, request.cell, NativeAdaptiveHttpClient, request.presentation)
+      case "execute": return yield* executeContextActivation(runtime, plan, request.decision, request.cell, NativeAdaptiveHttpClient, request.presentation, request.verification)
     }
   }).pipe(Effect.provide(makeCanonicalAtomV2DurableRuntimeFileLayer(request.durableRoot, request.journalLineageId, schemaBytes)))
 })
@@ -64,6 +65,9 @@ select / assemble + decision {policyKey,features:{encoderRevision,eventSha256,va
 execute + decision + cell {base_url,model,max_tokens} -> one explicit model call and stored trace.
 Optional presentation: canonical_json (default) | execution_tail | finite_table_tail. Complete frames and the full presentation count against maximumContextBytes; exact presented prompt and observed wire are checked during learning. finite_table_tail compiles the complete allowed rows of explicit finite programs, independently of the event; unknown or oversized programs are refused.
 learn + feedback {traceContent,reward,observed,source} + target -> outcome-bound successor proposal.
+Optional execute verification: {contract:"hswm-finite-execution-guard/v1",rules:[{relationKey,inputs:[{variable,eventField}],outputVariable:string|null}]}.
+Bind every selected/mandatory frame in order and every finite variable exactly once. Inputs read top-level event fields as scalar text; outputVariable reads prediction. Unknown/missing bindings refuse before HTTP.
+Guarded v3 requests retain exact bindings, prompt/wire and verdict. Violations persist the original trace then exit 2 with its descriptor; no answer correction or retry. Learning rechecks the verdict; violations accept only explicit zero reward. SATISFIED is finite consistency, not independently verified task utility.
 topology-propose + basis {policyKey,feedbackContent,partition:TRAIN,minimumObservations} + maximumCandidates (1..8) -> bounded whole-bundle finite retirement candidates.
 topology-change + change {operation:RETIRE|RESTORE,afterSpec,policyKey,basis,priorTopologyKey,topologyTarget,activationTarget} -> atomic scope and reset-W proposal. RESTORE uses basis:null and exact predecessor scope.
 topology-read + topologyKey -> stored scope and latest policy for spec.event; no expectedPlanSha256 needed.

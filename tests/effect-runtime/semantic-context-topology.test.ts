@@ -15,6 +15,9 @@ import { prepareActivationInitialization, executeContextActivation, prepareActiv
 import { proposeContextRetirements, prepareContextTopologyChange, readContextTopology } from "../../src/hswm/effect-runtime/src/semantic-context-topology-runtime.js"
 import { reviewContextRetirement } from "../../src/hswm/effect-runtime/src/semantic-context-topology-domain.js"
 import { compileCanonicalAtomV2DurableRdfProjection, verifyCanonicalAtomV2DurableRdfProjection } from "../../src/hswm/effect-runtime/src/canonical-atom-v2-durable-rdf-projection.js"
+import { FiniteExecutionViolation } from "../../src/hswm/effect-runtime/src/semantic-context-finite-execution-domain.js"
+import { contextActivationProcess } from "../../src/hswm/effect-runtime/src/semantic-context-activation-process.js"
+import { runArgvProcessMain } from "../../src/hswm/effect-runtime/src/effect-process-main.js"
 import { schema as sourceSchema, unwrap } from "./semantic-context-fixture.js"
 
 const schema: HSWMCanonicalSchemaV2 = { ...sourceSchema, kinds: [...sourceSchema.kinds, { kind: "semantic_context_policy", form: "RELATION", revisionPolicy: "LINEAR", allowedOwners: ["owner:context-test"], minimumArity: 1,
@@ -58,6 +61,77 @@ const fixture = <A, E, R>(body: (runtime: CanonicalAtomV2DurableRuntime["Type"],
 const run = <A, E>(e: Effect.Effect<A, E, import("../../src/hswm/effect-runtime/src/effect-posix-filesystem.js").PosixFileSystem | import("../../src/hswm/effect-runtime/src/effect-bounded-subprocess.js").BoundedSubprocess>) => Effect.runPromise(e.pipe(Effect.provide(NodePosixServicesLive)))
 const afterSpec = { ...spec, candidates: spec.candidates.map(c => c.id === "a" ? { ...c, relationUids: ["rule:a", "rule:mandatory"] } : c) }
 const frames = (runtime: CanonicalAtomV2DurableRuntime["Type"]) => Effect.forEach(["rule:mandatory", "rule:a", "rule:duplicate", "rule:b"], uid => readLlmSemanticFrame(runtime, uid, spec.event))
+
+it.each(["canonical_json", "execution_tail", "finite_table_tail"] as const)("guards %s, preserves failed evidence, rejects positive credit and reopens zero-reward learning", presentation => run(fixture((runtime, root) => Effect.gen(function* () {
+  const guardedSpec = { ...spec, event: '{"exception":0}' }
+  let plan = yield* prepareSemanticContext(runtime, guardedSpec)
+  yield* runtime.submit((yield* prepareActivationInitialization(runtime, plan, config, target("policy:w"))).candidate)
+  plan = yield* prepareSemanticContext(runtime, guardedSpec)
+  const guard = { contract: "hswm-finite-execution-guard/v1", rules: ["mandatory", "a", "duplicate"].map(name => ({
+    relationKey: key(`rule:${name}`), inputs: [{ variable: "e", eventField: "exception" }], outputVariable: "x"
+  })) }
+  const cell = { base_url: "https://fixture.invalid/v1", model: "SCRIPTED", max_tokens: 32 }
+  let calls = 0
+  const http = (prediction: string) => ({ postJson: () => Effect.sync(() => {
+    calls++
+    return new TextEncoder().encode(JSON.stringify({ choices: [{ message: { content: JSON.stringify({ prediction, uncertainty: "SCRIPTED_GUARD_TEST" }) } }] }))
+  }) })
+  const before = yield* runtime.snapshot
+  const invalid = yield* Effect.either(contextActivationProcess({ contract: "hswm-context-activation-cli/v1", action: "execute", durableRoot: root,
+    journalLineageId: "loop-test", schema, spec: guardedSpec, expectedPlanSha256: plan.planSha256, decision: decision(plan, 0), cell, presentation,
+    verification: { ...guard, rules: [] } }))
+  expect(Either.isLeft(invalid)).toBe(true)
+  const missing = yield* Effect.either(executeContextActivation(runtime, plan, decision(plan, 0), cell, http("1"), presentation,
+    { ...guard, rules: guard.rules.slice(1) }))
+  expect(Either.isLeft(missing) && "code" in missing.left && missing.left.code).toBe("FINITE_BINDING_INVALID")
+  expect(calls).toBe(0)
+  const failed = yield* Effect.either(executeContextActivation(runtime, plan, decision(plan, 0), cell, http("0"), presentation, guard))
+  if (Either.isRight(failed) || !(failed.left instanceof FiniteExecutionViolation)) return yield* Effect.fail("Expected explicit constraint failure")
+  const violation = failed.left
+  expect(calls).toBe(1)
+  expect(violation.verification.status).toBe("VIOLATED")
+  expect(violation.verification.prediction).toBe("0")
+  expect(yield* runtime.snapshot).toEqual(before)
+  const trace = JSON.parse(new TextDecoder().decode(yield* runtime.readContent(violation.traceContent)))
+  const request = JSON.parse(new TextDecoder().decode(yield* runtime.readContent(trace.requestContent)))
+  expect(trace.requestContent.mediaType).toBe("application/vnd.hswm.semantic-context-request-v3+json")
+  expect(request.verification).toEqual(guard)
+  expect(request.prompt).toContain("EXPLICIT INPUT/OUTPUT BINDINGS")
+  const bounded = yield* prepareSemanticContext(runtime, { ...guardedSpec, maximumContextBytes: request.promptBytes - 1 })
+  const overBudget = yield* Effect.either(executeSelectedSemanticContext(runtime, bounded,
+    { planSha256: bounded.planSha256, status: "SELECTED", candidateId: "a" }, cell, http("1"), presentation, guard))
+  expect(Either.isLeft(overBudget) && "code" in overBudget.left && overBudget.left.code).toBe("CONTEXT_BUDGET_EXCEEDED")
+  expect(calls).toBe(1)
+  expect(JSON.parse(new TextDecoder().decode(yield* runtime.readContent(trace.responseContent))).prediction).toBe("0")
+  const stderr: string[] = [], stdout: string[] = []
+  const code = yield* Effect.promise(() => runArgvProcessMain({ refusalPrefix: "HSWM_ACTIVATION_REFUSED",
+    program: () => Effect.fail(violation), describeFailure: error => String(error) }, [],
+    { readStdin: () => Effect.succeed(""), writeStdout: x => Effect.sync(() => { stdout.push(x) }), writeStderr: x => Effect.sync(() => { stderr.push(x) }) }))
+  expect(code).toBe(2); expect(stdout).toEqual([]); expect(stderr.join("")).toContain(violation.traceContent.sha256)
+  const feedback = { traceContent: violation.traceContent, reward: 1, observed: "constraint violation", source: "SCRIPTED_GUARD_TEST" }
+  const positive = yield* Effect.either(prepareActivationLearning(runtime, plan, feedback, target("policy:w", 1)))
+  expect(Either.isLeft(positive) && "code" in positive.left && positive.left.code).toBe("FINITE_REWARD_INVALID")
+  const forged = yield* runtime.stageContent(violation.traceContent.mediaType, new TextEncoder().encode(JSON.stringify({ ...trace, verification: { ...trace.verification, status: "SATISFIED" } })))
+  expect(Either.isLeft(yield* Effect.either(prepareActivationLearning(runtime, plan, { ...feedback, traceContent: forged, reward: 0 }, target("policy:w", 1))))).toBe(true)
+  const accepted = yield* executeContextActivation(runtime, plan, decision(plan, 0), cell, http("1"), presentation, guard)
+  if (!accepted.trace) return yield* Effect.fail("Missing successful trace")
+  expect(accepted.trace.verification?.status).toBe("SATISFIED")
+  const success = yield* prepareActivationLearning(runtime, plan, { ...feedback, traceContent: accepted.trace.traceContent }, target("policy:w", 1))
+  expect(success.policy.arms[0]?.b).toEqual([1])
+  // Admit only the failure observation: unsuccessful execution remains useful negative feedback.
+  const zero = yield* prepareActivationLearning(runtime, plan, { ...feedback, reward: 0 }, target("policy:w", 1))
+  expect(zero.policy.arms[0]).toMatchObject({ observations: 1, a: [[2]], b: [0] })
+  yield* runtime.submit(zero.candidate)
+  yield* Effect.gen(function* () {
+    const reopened = yield* CanonicalAtomV2DurableRuntime
+    const fresh = yield* prepareSemanticContext(reopened, guardedSpec)
+    const selected = yield* selectContextActivation(reopened, fresh, decision(fresh, 1))
+    expect(selected.policyKey.revisionId).toBe(1)
+    expect(selected.candidateId).toBe("b")
+    expect(Either.isLeft(yield* Effect.either(prepareActivationLearning(reopened, fresh, { ...feedback, reward: 0 }, target("policy:w", 2))))).toBe(true)
+  }).pipe(Effect.provide(layer(root)))
+  expect(calls).toBe(2)
+}))))
 
 it("checks whole conjunctions: individual redundancy does not justify simultaneous deletion", () => run(fixture(runtime => Effect.gen(function* () {
   const source = yield* frames(runtime)

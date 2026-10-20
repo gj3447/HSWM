@@ -8,7 +8,8 @@ import { CanonicalAtomV2ContentSchema, CanonicalAtomV2KeySchema, canonicalAtomV2
 import { contextError, contextHash, contextJson, type ContextPlan } from "./semantic-context-domain.js"
 import { assembleSelectedSemanticContext, checkSemanticContextPlan, executeSelectedSemanticContext } from "./semantic-context-runtime.js"
 import { ACTIVATION_MEDIA, ActivationFeaturesSchema, ActivationModeSchema, activationScopeHash, chooseActivation, decodeActivationPolicy, initializeActivation, updateActivation, type ActivationPolicy } from "./semantic-context-activation-domain.js"
-import { renderContextPrompt, ContextPresentationSchema, type ContextPresentation } from "./semantic-context-presentation-domain.js"
+import { renderVerifiedContextPrompt, ContextPresentationSchema, type ContextPresentation } from "./semantic-context-presentation-domain.js"
+import { FiniteExecutionGuardSchema, prepareFiniteExecutionGuard, checkFiniteExecution } from "./semantic-context-finite-execution-domain.js"
 
 type Runtime = CanonicalAtomV2DurableRuntime["Type"]
 const encode = (x: unknown) => new TextEncoder().encode(contextJson(x))
@@ -44,8 +45,8 @@ export const selectContextActivation = (runtime: Runtime, plan: ContextPlan, raw
 })
 export const assembleContextActivation = (runtime: Runtime, plan: ContextPlan, raw: unknown) => selectContextActivation(runtime, plan, raw).pipe(
   Effect.flatMap(selection => assembleSelectedSemanticContext(runtime, plan, selection)))
-export const executeContextActivation = (runtime: Runtime, plan: ContextPlan, raw: unknown, cell: unknown, http: AdaptiveHttpClientShape, presentation: ContextPresentation = "canonical_json") => selectContextActivation(runtime, plan, raw).pipe(
-  Effect.flatMap(selection => executeSelectedSemanticContext(runtime, plan, selection, cell, http, presentation)))
+export const executeContextActivation = (runtime: Runtime, plan: ContextPlan, raw: unknown, cell: unknown, http: AdaptiveHttpClientShape, presentation: ContextPresentation = "canonical_json", verification?: unknown) => selectContextActivation(runtime, plan, raw).pipe(
+  Effect.flatMap(selection => executeSelectedSemanticContext(runtime, plan, selection, cell, http, presentation, verification)))
 
 const prepareWrite = (runtime: Runtime, plan: ContextPlan, policy: ActivationPolicy, rawTarget: unknown, priorKey: CanonicalAtomV2Key | null, priorPlan: ContextPlan = plan) => Effect.gen(function* () {
   const target = yield* decode(ActivationTargetSchema, rawTarget)
@@ -95,17 +96,20 @@ export const prepareActivationLearning = (runtime: Runtime, plan: ContextPlan, r
   const trace = yield* Schema.decodeUnknownEither(Schema.Struct({ contract: Schema.Literal("hswm-semantic-context-trace/v1"), executionId: Schema.NonEmptyString,
     planSha256: Schema.String, selectionSha256: Schema.String, assemblySha256: Schema.String, requestContent: CanonicalAtomV2ContentSchema,
     responseContent: CanonicalAtomV2ContentSchema, prediction: Schema.String, uncertainty: Schema.String, observedStatus: Schema.Literal("PREDICTION_ONLY"), canonicalWrite: Schema.Literal(false) }))(traceRaw)
-  const v2 = trace.requestContent.mediaType === "application/vnd.hswm.semantic-context-request-v2+json"
-  const requestRaw = yield* readJson(runtime, trace.requestContent, v2 ? "application/vnd.hswm.semantic-context-request-v2+json" : "application/vnd.hswm.semantic-context-request-v1+json", 1048576)
-  const request = yield* v2 ? decode(Schema.Struct({ executionId: Schema.NonEmptyString, assembly: Schema.Unknown,
+  const v3 = trace.requestContent.mediaType === "application/vnd.hswm.semantic-context-request-v3+json"
+  const v2 = v3 || trace.requestContent.mediaType === "application/vnd.hswm.semantic-context-request-v2+json"
+  const requestRaw = yield* readJson(runtime, trace.requestContent, v3 ? "application/vnd.hswm.semantic-context-request-v3+json" : v2 ? "application/vnd.hswm.semantic-context-request-v2+json" : "application/vnd.hswm.semantic-context-request-v1+json", 1048576)
+  const request = yield* v3 ? decode(Schema.Struct({ executionId: Schema.NonEmptyString, assembly: Schema.Unknown,
+    presentation: ContextPresentationSchema, prompt: Schema.String, promptBytes: Schema.Number, verification: FiniteExecutionGuardSchema }), requestRaw) : v2 ? decode(Schema.Struct({ executionId: Schema.NonEmptyString, assembly: Schema.Unknown,
     presentation: ContextPresentationSchema, prompt: Schema.String, promptBytes: Schema.Number }), requestRaw) :
     decode(Schema.Struct({ executionId: Schema.NonEmptyString, assembly: Schema.Unknown }), requestRaw)
   const assembly = yield* Schema.decodeUnknownEither(Schema.Struct({ selection: Schema.Unknown }))(request.assembly)
   const decision = yield* Schema.decodeUnknownEither(ActivationDecisionSchema)(assembly.selection)
   const prepared = yield* assembleContextActivation(runtime, plan, decision)
+  const guarded = v3 ? yield* Schema.decodeUnknownEither(Schema.Struct({ verification: FiniteExecutionGuardSchema }))(requestRaw) : null
   if (v2) {
     const presented = yield* Schema.decodeUnknownEither(Schema.Struct({ presentation: ContextPresentationSchema, prompt: Schema.String, promptBytes: Schema.Number }))(requestRaw)
-    if (!prepared.assembly || presented.prompt !== (yield* renderContextPrompt(prepared.assembly, presented.presentation)) ||
+    if (!prepared.assembly || presented.prompt !== (yield* renderVerifiedContextPrompt(prepared.assembly, presented.presentation, guarded?.verification)) ||
       presented.promptBytes !== new TextEncoder().encode(presented.prompt).byteLength || presented.promptBytes > plan.spec.maximumContextBytes) return yield* Effect.fail(invalid("Stored presentation does not reproduce the complete bounded prompt"))
     const wire = yield* Schema.decodeUnknownEither(Schema.Struct({ transport: Schema.Struct({ request: CanonicalAtomV2ContentSchema, response: CanonicalAtomV2ContentSchema }) }))(traceRaw)
     const sent = yield* readJson(runtime, wire.transport.request, "application/vnd.hswm.context-wire-request-v1+json", 1048576)
@@ -122,10 +126,16 @@ export const prepareActivationLearning = (runtime: Runtime, plan: ContextPlan, r
   const responseRaw = yield* readJson(runtime, trace.responseContent, "application/vnd.hswm.semantic-context-response-v1+json", 65536)
   const response = yield* decode(Schema.Struct({ prediction: Schema.String, uncertainty: Schema.String }), responseRaw)
   if (response.prediction !== trace.prediction || response.uncertainty !== trace.uncertainty) return yield* Effect.fail(invalid("Trace prediction differs from stored response"))
+  const verification = guarded ? checkFiniteExecution(yield* prepareFiniteExecutionGuard(prepared.assembly.payload, guarded.verification), response.prediction) : null
+  if (verification) {
+    const stored = yield* Schema.decodeUnknownEither(Schema.Struct({ verification: Schema.Unknown }))(traceRaw)
+    if (contextHash(stored.verification) !== contextHash(verification)) return yield* Effect.fail(invalid("Stored finite verdict does not reproduce the source/event/prediction"))
+    if (verification.status === "VIOLATED" && feedback.reward > 0) return yield* Effect.fail(contextError("FINITE_REWARD_INVALID", "A verified constraint violation cannot receive positive reward; retain the failure or submit explicit zero reward"))
+  }
   const { policy } = yield* readActivationPolicy(runtime, plan, decision.policyKey)
   const outcome = { contract: "hswm-context-activation-feedback/v1", ...feedback, executionId: trace.executionId,
     policyKey: decision.policyKey, candidateId: prepared.selection.candidateId, selectionSha256: trace.selectionSha256,
-    status: "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED" }
+    status: "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED", ...(verification ? { verification } : {}) }
   const outcomeContent = yield* runtime.stageContent("application/vnd.hswm.context-activation-feedback-v1+json", encode(outcome))
   const learned = yield* updateActivation(policy, prepared.selection.candidateId, decision.features, feedback.reward, outcomeContent.sha256)
   const proposal = yield* prepareWrite(runtime, plan, learned, target, decision.policyKey)

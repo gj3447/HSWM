@@ -8,7 +8,8 @@ import { type CanonicalAtomV2DurableRuntime } from "./canonical-atom-v2-durable-
 import { readLlmSemanticFrame, type SemanticReadFrame } from "./canonical-atom-v2-llm-semantic-runtime.js"
 import { decodeLifecycleCell } from "./semantic-lifecycle-domain.js"
 import { buildContextPlan, selectContext, contextError, contextHash, contextByteLength, contextJson, type ContextPlan } from "./semantic-context-domain.js"
-import { renderContextPrompt, type ContextPresentation } from "./semantic-context-presentation-domain.js"
+import { renderVerifiedContextPrompt, type ContextPresentation } from "./semantic-context-presentation-domain.js"
+import { prepareFiniteExecutionGuard, checkFiniteExecution, FiniteExecutionViolation } from "./semantic-context-finite-execution-domain.js"
 
 type Runtime = CanonicalAtomV2DurableRuntime["Type"]
 const encode = (value: unknown) => new TextEncoder().encode(contextJson(value))
@@ -57,20 +58,22 @@ const PredictionSchema = Schema.Struct({
   uncertainty: Schema.String.pipe(Schema.minLength(1), Schema.maxLength(8192))
 })
 /** This call stages immutable evidence only. It has no canonical submit or W-update path. */
-export const executeSelectedSemanticContext = <S extends BoundSelection>(runtime: Runtime, plan: ContextPlan, selection: S, rawCell: unknown, http: AdaptiveHttpClientShape, presentation: ContextPresentation = "canonical_json") => Effect.gen(function* () {
+export const executeSelectedSemanticContext = <S extends BoundSelection>(runtime: Runtime, plan: ContextPlan, selection: S, rawCell: unknown, http: AdaptiveHttpClientShape, presentation: ContextPresentation = "canonical_json", verification?: unknown) => Effect.gen(function* () {
   const cell = yield* decodeLifecycleCell(rawCell)
   const prepared = yield* assembleSelectedSemanticContext(runtime, plan, selection)
   if (prepared.assembly === null) return { ...prepared, trace: null }
   const assembly = prepared.assembly
-  const prompt = yield* renderContextPrompt(assembly, presentation)
+  const finite = verification === undefined ? null : yield* prepareFiniteExecutionGuard(assembly.payload, verification)
+  const prompt = yield* renderVerifiedContextPrompt(assembly, presentation, finite?.guard)
   const promptBytes = new TextEncoder().encode(prompt).byteLength
   if (promptBytes > plan.spec.maximumContextBytes) return yield* Effect.fail(contextError("CONTEXT_BUDGET_EXCEEDED", "Complete presented prompt exceeds the budget; no truncation"))
   const executionId = yield* Effect.sync(randomUUID)
-  // Existing v1 evidence is unchanged; new presentation bytes have an explicit v2 contract.
-  const requestContent = yield* runtime.stageContent(presentation === "canonical_json" ? "application/vnd.hswm.semantic-context-request-v1+json" : "application/vnd.hswm.semantic-context-request-v2+json",
-    encode(presentation === "canonical_json" ? { executionId, assembly } : { executionId, assembly, presentation, prompt, promptBytes }))
+  // v3 binds validation semantics; v1/v2 bytes and unguarded behavior remain unchanged.
+  const requestContent = yield* runtime.stageContent(finite ? "application/vnd.hswm.semantic-context-request-v3+json" : presentation === "canonical_json" ? "application/vnd.hswm.semantic-context-request-v1+json" : "application/vnd.hswm.semantic-context-request-v2+json",
+    encode(finite ? { executionId, assembly, presentation, prompt, promptBytes, verification: finite.guard } :
+      presentation === "canonical_json" ? { executionId, assembly } : { executionId, assembly, presentation, prompt, promptBytes }))
   const observedWire = yield* Ref.make<{ readonly request: CanonicalAtomV2Content; readonly response: CanonicalAtomV2Content } | null>(null)
-  const observedHttp: AdaptiveHttpClientShape = presentation === "canonical_json" ? http : { postJson: request => Effect.gen(function* () {
+  const observedHttp: AdaptiveHttpClientShape = presentation === "canonical_json" && !finite ? http : { postJson: request => Effect.gen(function* () {
     // Observe exact bodies at the injected transport boundary; never persist headers or credentials.
     const sent = yield* runtime.stageContent("application/vnd.hswm.context-wire-request-v1+json", request.body)
     const received = yield* http.postJson(request)
@@ -90,10 +93,15 @@ export const executeSelectedSemanticContext = <S extends BoundSelection>(runtime
     planSha256: plan.planSha256, selectionSha256: contextHash(prepared.selection), assemblySha256: assembly.assemblySha256,
     requestContent, responseContent, prediction: prediction.prediction, uncertainty: prediction.uncertainty,
     backendConfigurationSha256: contextHash(cell), observedStatus: "PREDICTION_ONLY" as const,
-    ...(presentation !== "canonical_json" ? { transport: yield* Ref.get(observedWire) } : {}),
+    ...(presentation !== "canonical_json" || finite ? { transport: yield* Ref.get(observedWire) } : {}),
+    ...(finite ? { verification: checkFiniteExecution(finite, prediction.prediction) } : {}),
     modelUsage: "UNREPORTED_BY_THIS_ADAPTER" as const, canonicalWrite: false as const
   }
   const traceContent = yield* runtime.stageContent("application/vnd.hswm.semantic-context-trace-v1+json", encode(trace))
+  if (trace.verification?.status === "VIOLATED") return yield* Effect.fail(new FiniteExecutionViolation({
+    code: "FINITE_EXECUTION_VIOLATION", traceContent, verification: trace.verification,
+    message: `Finite constraints violated; original prediction retained; no retry or repair. traceContent=${contextJson(traceContent)}`
+  }))
   return { ...prepared, trace: { ...trace, traceContent } }
 })
 export const executeSemanticContext = (runtime: Runtime, plan: ContextPlan, rawDecision: unknown, rawCell: unknown, http: AdaptiveHttpClientShape) =>

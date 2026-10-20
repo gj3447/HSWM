@@ -13,6 +13,22 @@
 > [`HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json)의
 > burden-cap 노드다. 이 규칙은 연구 결과가 아니다.
 
+<a id="finite-guard-live-20261020"></a>
+
+## 2026-10-20 — 유한 실행 검사: 오답 4개 차단, 정확도 기준 미달
+
+같은 16개 개발 입력으로 전체 표와 명시적 연결·검사를 추가한 조건을 비교했다.
+실모델 32회에서 기본 14/16, 검사 조건 12/16이며 후자의 오답 4개는 모두 오류로 차단했다.
+예외 위반은 양쪽 0/8, 검사 불일치는 0이다. 차단을 정답으로 세지 않는 사전 16/16 기준에 따라
+**P01_FAILED**다. 총 130,354 tokens, W·구조 갱신 0회이며 원본과 journal을 보존했다.
+원래 의미·역할·전체 표·binding·wire·응답과 960개 할당을 독립 대조했다.
+[조건·결과·한계·재검사](docs/operations/HSWM_FINITE_GUARD_LIVE_2026-10-20.md),
+[source-bound receipt](evidence/hswm_finite_guard_live_2026-10-20/).
+
+| 운영 보고 | 관측 | 조치 |
+|---|---|---|
+| INSTRUMENT_RED | 지정된 첫 100 커밋의 core share 35%, 기준 50% 미달 | 이번 P01 비교로 한정; 추가 W·구조 실험으로 확대하지 않음 |
+
 <a id="finite-presentation-20261019"></a>
 
 ## 2026-10-19 — 전체 유한 조합 표로 14/16, P01 기준 미달

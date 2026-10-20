@@ -1,0 +1,285 @@
+{
+  "schema_version": "hswm-research-receipt/v1",
+  "date": "2026-10-20",
+  "actor": "agent(codex)",
+  "authority_class": "SECONDARY_AI",
+  "status": "P01_FAILED_GUARDED_12_OF_16_FOUR_REJECTED",
+  "experiment": "experiment",
+  "artifactManifest": {
+    "path": "evidence-manifest.json",
+    "sha256": "6a31f63629f611e25d3bb3d9990b184c1004366a3ef25b4e9a8aa789c6a5a6d2",
+    "bytes": 66861
+  },
+  "sources": [
+    {
+      "path": "docs/operations/HSWM_FINITE_GUARD_LIVE_2026-10-20.md",
+      "sha256": "4cc2817ff345241714e9a072370539d189049460d03716ca3d95578dc81f188d"
+    },
+    {
+      "path": "_research/finite_guard_live_v1/run.mjs",
+      "sha256": "ed58e2e5013f071af2a39b859ea1833012e45e6421043fcff0e5b47a754d9c05"
+    },
+    {
+      "path": "_research/finite_guard_live_v1/check.mjs",
+      "sha256": "be950b5ea594191f031576248d33142c6fe402215fe620f3e478f9d623ef45bb"
+    },
+    {
+      "path": "_research/finite_guard_live_v1/check_graph.py",
+      "sha256": "b06b72a5f4283105906ee1e42f0357d19af194352c8f08c19e6e124f135e3181"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-context-finite-execution-domain.ts",
+      "sha256": "0fac82070a62bf98b762419ed47781b24c525da24e6f72d05a601aa7c7bbbd2c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-context-runtime.ts",
+      "sha256": "4bc4b67784dfbacf3170a4531988344e257e7151f76c8d52c1635e3b68a16c70"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-context-presentation-domain.ts",
+      "sha256": "41701b565d4eee7da932d2868c1c098116d30c086f3af682ff6fa2dfc11c229f"
+    },
+    {
+      "path": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md",
+      "sha256": "f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633"
+    },
+    {
+      "path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+      "sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa"
+    },
+    {
+      "path": "evidence/hswm_finite_presentation_2026-10-19/eb8450f8477c64af4e6486e40c423b3809499ffebecaa1ae45c8763a34f31137.json",
+      "sha256": "eb8450f8477c64af4e6486e40c423b3809499ffebecaa1ae45c8763a34f31137"
+    }
+  ],
+  "observations": {
+    "status": "EVIDENCE_VERIFIED",
+    "gate": "P01_FAILED",
+    "actualProviderCalls": 32,
+    "groups": {
+      "plain": {
+        "total": 16,
+        "correct": 14,
+        "returned": 16,
+        "rejected": 0,
+        "unsafeReturned": 2,
+        "exceptionViolations": 0,
+        "guardDisagreements": 0,
+        "promptBytes": 203168,
+        "tokens": 63404,
+        "httpMs": 22259.874497
+      },
+      "guarded": {
+        "total": 16,
+        "correct": 12,
+        "returned": 12,
+        "rejected": 4,
+        "unsafeReturned": 0,
+        "exceptionViolations": 0,
+        "guardDisagreements": 0,
+        "promptBytes": 218904,
+        "tokens": 66950,
+        "httpMs": 22029.623586999995
+      }
+    },
+    "wholeAssignmentsChecked": 960,
+    "failures": [
+      {
+        "call": 10,
+        "treatment": "guarded",
+        "case": "guard-dev-0-complement-0-0",
+        "expected": "1",
+        "actual": "0",
+        "returned": false
+      },
+      {
+        "call": 13,
+        "treatment": "plain",
+        "case": "guard-dev-0-complement-1-0",
+        "expected": "0",
+        "actual": "1",
+        "returned": true
+      },
+      {
+        "call": 14,
+        "treatment": "guarded",
+        "case": "guard-dev-0-complement-1-0",
+        "expected": "0",
+        "actual": "1",
+        "returned": false
+      },
+      {
+        "call": 26,
+        "treatment": "guarded",
+        "case": "guard-dev-1-complement-0-0",
+        "expected": "1",
+        "actual": "0",
+        "returned": false
+      },
+      {
+        "call": 29,
+        "treatment": "plain",
+        "case": "guard-dev-1-complement-1-0",
+        "expected": "0",
+        "actual": "1",
+        "returned": true
+      },
+      {
+        "call": 30,
+        "treatment": "guarded",
+        "case": "guard-dev-1-complement-1-0",
+        "expected": "0",
+        "actual": "1",
+        "returned": false
+      }
+    ],
+    "learningUpdates": 0,
+    "topologyUpdates": 0,
+    "claim": "Development-exposed authored finite census; table plus explicit bindings and checking. Guard rejection is not correct execution; no independent holdout or W efficacy."
+  },
+  "graph": {
+    "@context": {
+      "prov": "http://www.w3.org/ns/prov#",
+      "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+    },
+    "@graph": [
+      {
+        "@id": "urn:sha256:6a31f63629f611e25d3bb3d9990b184c1004366a3ef25b4e9a8aa789c6a5a6d2",
+        "@type": "prov:Entity",
+        "rdfs:label": "private original evidence manifest"
+      },
+      {
+        "@id": "urn:sha256:59d76738ba02f1a2a0a89cf09024adbf28eb851f6ccd9ea08f2e2102db59af8f",
+        "@type": "prov:Entity",
+        "rdfs:label": "frozen paired finite guard development protocol"
+      },
+      {
+        "@id": "urn:sha256:4cc2817ff345241714e9a072370539d189049460d03716ca3d95578dc81f188d",
+        "@type": "prov:Entity",
+        "rdfs:label": "docs/operations/HSWM_FINITE_GUARD_LIVE_2026-10-20.md"
+      },
+      {
+        "@id": "urn:sha256:ed58e2e5013f071af2a39b859ea1833012e45e6421043fcff0e5b47a754d9c05",
+        "@type": "prov:Entity",
+        "rdfs:label": "_research/finite_guard_live_v1/run.mjs"
+      },
+      {
+        "@id": "urn:sha256:be950b5ea594191f031576248d33142c6fe402215fe620f3e478f9d623ef45bb",
+        "@type": "prov:Entity",
+        "rdfs:label": "_research/finite_guard_live_v1/check.mjs"
+      },
+      {
+        "@id": "urn:sha256:b06b72a5f4283105906ee1e42f0357d19af194352c8f08c19e6e124f135e3181",
+        "@type": "prov:Entity",
+        "rdfs:label": "_research/finite_guard_live_v1/check_graph.py"
+      },
+      {
+        "@id": "urn:sha256:0fac82070a62bf98b762419ed47781b24c525da24e6f72d05a601aa7c7bbbd2c",
+        "@type": "prov:Entity",
+        "rdfs:label": "src/hswm/effect-runtime/src/semantic-context-finite-execution-domain.ts"
+      },
+      {
+        "@id": "urn:sha256:4bc4b67784dfbacf3170a4531988344e257e7151f76c8d52c1635e3b68a16c70",
+        "@type": "prov:Entity",
+        "rdfs:label": "src/hswm/effect-runtime/src/semantic-context-runtime.ts"
+      },
+      {
+        "@id": "urn:sha256:41701b565d4eee7da932d2868c1c098116d30c086f3af682ff6fa2dfc11c229f",
+        "@type": "prov:Entity",
+        "rdfs:label": "src/hswm/effect-runtime/src/semantic-context-presentation-domain.ts"
+      },
+      {
+        "@id": "urn:sha256:f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633",
+        "@type": "prov:Entity",
+        "rdfs:label": "docs/operations/HSWM_LIKENESS_RESEARCH_TRANSFER_2026-10-18.md"
+      },
+      {
+        "@id": "urn:sha256:ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa",
+        "@type": "prov:Entity",
+        "rdfs:label": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md"
+      },
+      {
+        "@id": "urn:sha256:eb8450f8477c64af4e6486e40c423b3809499ffebecaa1ae45c8763a34f31137",
+        "@type": "prov:Entity",
+        "rdfs:label": "evidence/hswm_finite_presentation_2026-10-19/eb8450f8477c64af4e6486e40c423b3809499ffebecaa1ae45c8763a34f31137.json"
+      },
+      {
+        "@id": "urn:hswm:agent:codex",
+        "@type": "prov:Agent",
+        "rdfs:label": "agent(codex); SECONDARY_AI interpretation"
+      },
+      {
+        "@id": "urn:hswm:finite-guard-live:2026-10-20:audit",
+        "@type": "prov:Activity",
+        "rdfs:label": "read-only audit of preserved finite guard comparison",
+        "prov:used": [
+          {
+            "@id": "urn:sha256:6a31f63629f611e25d3bb3d9990b184c1004366a3ef25b4e9a8aa789c6a5a6d2"
+          },
+          {
+            "@id": "urn:sha256:59d76738ba02f1a2a0a89cf09024adbf28eb851f6ccd9ea08f2e2102db59af8f"
+          },
+          {
+            "@id": "urn:sha256:4cc2817ff345241714e9a072370539d189049460d03716ca3d95578dc81f188d"
+          },
+          {
+            "@id": "urn:sha256:ed58e2e5013f071af2a39b859ea1833012e45e6421043fcff0e5b47a754d9c05"
+          },
+          {
+            "@id": "urn:sha256:be950b5ea594191f031576248d33142c6fe402215fe620f3e478f9d623ef45bb"
+          },
+          {
+            "@id": "urn:sha256:b06b72a5f4283105906ee1e42f0357d19af194352c8f08c19e6e124f135e3181"
+          },
+          {
+            "@id": "urn:sha256:0fac82070a62bf98b762419ed47781b24c525da24e6f72d05a601aa7c7bbbd2c"
+          },
+          {
+            "@id": "urn:sha256:4bc4b67784dfbacf3170a4531988344e257e7151f76c8d52c1635e3b68a16c70"
+          },
+          {
+            "@id": "urn:sha256:41701b565d4eee7da932d2868c1c098116d30c086f3af682ff6fa2dfc11c229f"
+          },
+          {
+            "@id": "urn:sha256:f39c9f81f44b1a59f5a919fb70173443af0900f5396a8ea83a0cf0beed6a3633"
+          },
+          {
+            "@id": "urn:sha256:ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa"
+          },
+          {
+            "@id": "urn:sha256:eb8450f8477c64af4e6486e40c423b3809499ffebecaa1ae45c8763a34f31137"
+          }
+        ],
+        "prov:wasAssociatedWith": [
+          {
+            "@id": "urn:hswm:agent:codex"
+          }
+        ]
+      },
+      {
+        "@id": "urn:sha256:045a0f663757c77e7b5d57d5916b88dfc38610346da1a41092308d62773f9a3d",
+        "@type": "prov:Entity",
+        "rdfs:label": "P01_FAILED; raw accuracy and guard rejection counted separately",
+        "prov:wasGeneratedBy": [
+          {
+            "@id": "urn:hswm:finite-guard-live:2026-10-20:audit"
+          }
+        ],
+        "prov:wasDerivedFrom": [
+          {
+            "@id": "urn:sha256:6a31f63629f611e25d3bb3d9990b184c1004366a3ef25b4e9a8aa789c6a5a6d2"
+          },
+          {
+            "@id": "urn:sha256:eb8450f8477c64af4e6486e40c423b3809499ffebecaa1ae45c8763a34f31137"
+          }
+        ],
+        "prov:value": "{\"status\":\"EVIDENCE_VERIFIED\",\"gate\":\"P01_FAILED\",\"actualProviderCalls\":32,\"groups\":{\"plain\":{\"total\":16,\"correct\":14,\"returned\":16,\"rejected\":0,\"unsafeReturned\":2,\"exceptionViolations\":0,\"guardDisagreements\":0,\"promptBytes\":203168,\"tokens\":63404,\"httpMs\":22259.874497},\"guarded\":{\"total\":16,\"correct\":12,\"returned\":12,\"rejected\":4,\"unsafeReturned\":0,\"exceptionViolations\":0,\"guardDisagreements\":0,\"promptBytes\":218904,\"tokens\":66950,\"httpMs\":22029.623586999995}},\"wholeAssignmentsChecked\":960,\"failures\":[{\"call\":10,\"treatment\":\"guarded\",\"case\":\"guard-dev-0-complement-0-0\",\"expected\":\"1\",\"actual\":\"0\",\"returned\":false},{\"call\":13,\"treatment\":\"plain\",\"case\":\"guard-dev-0-complement-1-0\",\"expected\":\"0\",\"actual\":\"1\",\"returned\":true},{\"call\":14,\"treatment\":\"guarded\",\"case\":\"guard-dev-0-complement-1-0\",\"expected\":\"0\",\"actual\":\"1\",\"returned\":false},{\"call\":26,\"treatment\":\"guarded\",\"case\":\"guard-dev-1-complement-0-0\",\"expected\":\"1\",\"actual\":\"0\",\"returned\":false},{\"call\":29,\"treatment\":\"plain\",\"case\":\"guard-dev-1-complement-1-0\",\"expected\":\"0\",\"actual\":\"1\",\"returned\":true},{\"call\":30,\"treatment\":\"guarded\",\"case\":\"guard-dev-1-complement-1-0\",\"expected\":\"0\",\"actual\":\"1\",\"returned\":false}],\"learningUpdates\":0,\"topologyUpdates\":0,\"claim\":\"Development-exposed authored finite census; table plus explicit bindings and checking. Guard rejection is not correct execution; no independent holdout or W efficacy.\"}"
+      }
+    ]
+  },
+  "limits": [
+    "Authored development-exposed finite family; not independent holdout",
+    "Raw model accuracy did not improve; no W/topology learning or general efficacy claim",
+    "Private artifacts required; graph projection is not canonical state or human authority"
+  ]
+}

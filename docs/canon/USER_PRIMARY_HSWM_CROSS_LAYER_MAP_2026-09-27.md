@@ -36,6 +36,11 @@ HSPINE의 두 기록은 **AI가 작성한 선행 해석**이다. 오늘 대화�
 별개로 보존한다. HSPINE에 인간 원문이 있었다고 만들거나, 첫 글의 미확인 TED 발언자
 추정을 사실로 채택하지 않는다. HSPINE 프로그램은 이 기록을 전달하는 출처 도구다.
 
+2026-10-20 후속: 사용자 요청으로 출처를 다시 조사했다. 양파 껍질 비유와 층 사이 수학의 닮음은
+Murray Gell-Mann의 "Nature conformable to herself"(*Complexity* 1996)와 TED2007 강연에서 나온다.
+HSPINE의 Smolin 추정은 채택하지 않은 채 보존한다. 출처·정리·한계는
+[겔만 원리의 HSWM 구축](../research/HSWM_GELL_MANN_ONION_CONFORMABILITY_2026-10-20.md)에 있다.
+
 ## 3. 기존 HSWM에서 달라지는 해석
 
 [헌법](HSWM_CONSTITUTION_2026-08-20.md)의 schema-relative 관측·개입·해상도와

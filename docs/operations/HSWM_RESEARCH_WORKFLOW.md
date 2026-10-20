@@ -285,7 +285,7 @@ RDF/SHACL은 타입·방향·필수 역할·출처·판정 경계를 검사하�
 | 정체성·아키텍처 | [헌법](../canon/HSWM_CONSTITUTION_2026-08-20.md), [네 가지 정체성](../canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md), [상태·국소 연산자](../canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md) |
 | 아키텍처·독창성·실험 비교 | [Hyperon 직접 선행 조사](../research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md); 정확한 component·버전·구현 성숙도로 비교하며 backend 채택과 구별 |
 | 프랙탈·다중 규모 합성 | [과학적 연결과 FCL-1..8](../research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md) |
-| 층간 매핑·뇌 모델링·agent의 바깥 역할 | [M = Map 사용자 방향](../canon/USER_PRIMARY_HSWM_CROSS_LAYER_MAP_2026-09-27.md), [매핑의 충분성과 후속 실험](../research/HSWM_CROSS_LAYER_MAP_RESEARCH_2026-09-27.md), [문헌·기존 코드·공학 연결 설계](../research/HSWM_CROSS_LAYER_MAP_ENGINEERING_2026-09-27.md) |
+| 층간 매핑·뇌 모델링·agent의 바깥 역할 | [M = Map 사용자 방향](../canon/USER_PRIMARY_HSWM_CROSS_LAYER_MAP_2026-09-27.md), [매핑의 충분성과 후속 실험](../research/HSWM_CROSS_LAYER_MAP_RESEARCH_2026-09-27.md), [문헌·기존 코드·공학 연결 설계](../research/HSWM_CROSS_LAYER_MAP_ENGINEERING_2026-09-27.md), [겔만 양파껍질·층 닮음 형식화](../research/HSWM_GELL_MANN_ONION_CONFORMABILITY_2026-10-20.md) |
 | 층간 매핑 실행·RDF 조회 | [Cross-layer Map v1 실행 안내](../../_research/cross_layer_map_v1/README.md): 유한 매핑, 명시적 관측 바인딩, 의미 revision, SPARQL/SHACL |
 | 하이퍼그래프의 선택 이유·최소 비용 | [사용자 가설](../canon/USER_PRIMARY_HSWM_MINIMUM_COST_HYPERGRAPH_2026-09-27.md), [주장 판정·최소 예측 상태·비용 비교·표준 그래프 매핑](../research/HSWM_MINIMUM_COST_HYPERGRAPH_HYPOTHESIS_2026-09-27.md) |
 | 의미 상태의 표현 비교·MapSpec RDF 조회 | [실행 안내](../../_research/semantic_map_engineering_v1/README.md): 세 표현의 정확한 왕복, 직렬화 바이트, 명시적인 MapSpec view, 기존 revision 루프 재사용 |

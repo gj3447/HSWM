@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?id ?name ?inputs ?outputs ?acceptance ?next ?axis ?status WHERE {
+ ?stage a role:TOOL_HARNESS_STAGE ; p:stage_id ?id ; p:name ?name ;
+   p:inputs ?inputs ; p:outputs ?outputs ; p:acceptance ?acceptance ;
+   p:assessment_axis ?axis ; p:execution_status ?status ; r:REFERENCES ?successor .
+ ?successor a role:TOOL_HARNESS_STAGE ; p:stage_id ?next .
+} ORDER BY ?id

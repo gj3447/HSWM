@@ -1,6 +1,6 @@
 # HSWM 연구 작업환경
 
-2026-10-17 갱신. 현재 작업 안내는 이 문서와 [AGENTS.md](../../AGENTS.md)를 따른다.
+2026-10-20 갱신. 현재 작업 안내는 이 문서와 [AGENTS.md](../../AGENTS.md)를 따른다.
 기본 흐름은 **관련 자료 확인 → 변경 → 필요한 검사 → Git 기록**이다.
 작업마다 전체 정전 읽기, 개발 episode·feedback, KG snapshot을 만들 필요는 없다.
 날짜가 붙은 이전 환경·도구 문서는 당시 구현과 재현 정보를 확인할 때 사용한다.
@@ -70,6 +70,135 @@ src/hswm/effect-runtime/bin/hswm-workspace validate identity
 긴 연구 문서를 찾을 때는 QMD, 저장된 모델 응답 두 군을 비교할 때는 Inspect AI를 선택해서
 사용할 수 있다. 코드 심볼 탐색은 Serena, 관계 설명의 최적화 비교는 GEPA를 사용할 수 있다.
 설치·검색·평가 명령은 [AI 연구 도구 안내](HSWM_AI_NATIVE_TOOLS.md)에 있다.
+
+<a id="tool-harness"></a>
+## 회사 도구·설명서·개발 방법을 함께 발전시키는 HSWM
+
+2026-10-20 사용자 방향을 HSWM 적용 설계로 정리했다. 이 절의 독자는 회사 도구를
+연결하는 개발자와 해당 작업의 설명서를 선택하는 agent다. 기존 R1~R6, workspace CLI,
+USL과 결과 기반 수정 경로를 재사용한다. 현재 산출물은 **조회·검증 가능한 설계**다.
+회사 전체 도구의 배포·실행 강제·자동 학습이 완료됐다는 판정은 포함하지 않는다.
+새로운 전용 skill이나 MCP 등록은 이 설계의 전제가 아니다.
+
+### 사용자 방향과 해석의 출처
+
+아래 두 문장은 이번 대화의 사용자 원문 발췌다. 생략한 문장이나 뒤의 공학적 설계를
+사용자 직접 발화로 표시하지 않는다.
+
+> skills 와 mcp 에는, 회사 kg 와 db 등의 기본적인 범용 도구들만 등록시키고,
+
+> 규칙, 도구의 개발을 진행한후에 탑다운으로 개발을 진행하는게 아닌, 개발에 진행하면서 잘 안되거나 막히면 규칙, 도구, 표준그래프 엔지니어링에 피드백을 주면서 실제 개발과, 개발 방법(표준 그래프 엔지니어링과 연결된 md 파일 개발 도구)이 둘다 동시에 개발 되면서 작업이 진행됩니다.
+
+사용자는 도구별 MD·CLI를 작업 맥락에 맞게 연결하고, 필요한 그래프만 활성화하며,
+실제 사용에서 토큰·시간 절감 효과를 경험했다고 설명했다. 이 문장은 AI 요약이며,
+그 경험을 회사 전체·모든 작업의 독립 측정 결과로 일반화하지 않는다.
+아래 설계·관계·검증 기준은 `agent(codex) / SECONDARY_AI`의 해석이다.
+
+### 같은 상태의 세계모델·자기모델·실행·학습
+
+[HSWM 상태와 국소 연산자 정의](../canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md)에
+따라 프로그램, 자료, 업무의 현재 상태와 관계를 지속 그래프에서 표현한다. 같은 상태에서
+자신이 사용할 수 있는 도구·지원 버전·권한 범위·실패 경험도 표현한다. LLM에는 현재 전이에
+필요한 의미·역할·조건·예외·근거를 국소 입력으로 전달한다. 이는 고정된 구성요소 분해가 아니다.
+
+세계모델의 질문은 “이 상태에서 이 명령을 실행하면 어떤 결과·오류·비용이 생기는가”다.
+예상 결과와 실제 관측은 별도로 보존한다. 한 실행의 관측을 관계·선택 정책의 수정에
+결속하고, 다음 실행이 그 판본을 읽도록 연결하는 것이 이 사용례의 학습 목표다.
+문서 경로 목록만으로 세계모델의 예측 능력이나 HSWM 학습을 입증하지 않는다.
+
+```mermaid
+flowchart LR
+  A["업무·세계·자기 상태와 조건"] --> B["필요한 규칙·설명서·도구 선택"]
+  B --> C["예상 결과를 명시하고 CLI 실행"]
+  C --> D["실제 결과·오류·비용 관측"]
+  D --> E["근거 검토·수정 또는 보류"]
+  E --> F["영속 판본을 다음 실행에서 사용"]
+  F --> B
+```
+
+| 단계 | 입력·전이 | 남길 근거와 확인할 조건 |
+|---|---|---|
+| S1 범위 설정 | 작업, 대상 상태, owner, 허용 effect, 시간·자원 예산 | 대상 ID·source revision·필수 조건·예외·평가 기준을 결과 전에 고정 |
+| S2 국소 활성화 | 조건에 맞는 규칙, 설명서 절, CLI 사용법 선택 | 선택 UID·판본·이유·누락 정보·입력량. 필수 맥락이 없으면 추가 조회 또는 보류 |
+| S3 예측·실행 | 예상 결과·불확실성, 실제 launcher·버전·인자·입출력 계약 | 실행기가 지정 정책과 조건을 확인하고 실제 명령·입력·실행 ID를 기록 |
+| S4 관측·평가 | 수정하지 않은 출력·오류·exit·timeout·시간·비용 | 예측과 관측을 정확한 실행에 결속. 실행 성공·정답·사용자 유용성·인과 기여를 구분 |
+| S5 수정·채택 | 결과에 근거한 규칙·설명서·도구·관계·선택 정책의 변경 후보 | 기존 owner·revision 계약에서 채택/보류/거부/no-op을 구분. 다른 과제·역할·예외·출처 보존 |
+| S6 다음 사용 | 채택된 상태를 별도 프로세스에서 다시 열어 사용 | 실제 읽은 key·내용·다음 입력을 확인. 중복 피드백 방지·복원·실패 이력을 유지 |
+
+일반 개발의 문서·코드 수정은 기존 Git 작업 흐름을 따른다. 이것과 native HSWM의
+outcome-bound 관계·정책 갱신은 별도로 기록한다. 모든 문서 수정에 학습 실행을 요구하지 않는다.
+실행·학습 통합을 주장하는 범위에는 [소비자 완료 기준](#consumer-integration-completion)을 적용한다.
+
+### 얇은 진입점과 실행 의무
+
+상시 노출에는 회사 KG/DB 접근, 문서 조회, 허용된 실행 같은 범용 진입점을 둔다.
+도구별 적용 조건·예외·소유 설명서·정확한 CLI 연결은 그래프에서 선택한다. 이 구성에서
+MCP는 연결·호출 인터페이스, MD는 사람이 읽을 수 있는 설명, CLI는 실제 실행 표면,
+USL은 원래 자원 ID와 의미·표현을 연결하는 역할을 한다. KG에 규칙과 정책을 저장할 수도
+있으므로 “KG는 수동적이고 표준 그래프만 실행 가능하다”는 구분은 하지 않는다.
+
+**의미 판단과 의무 집행을 분리한다.** LLM은 과제 해석과 선택·수정 후보를 돕는다.
+“이 조건에서는 이 프로그램을 사용한다”는 의무는 조건·예외·도구·사용법·검증을 명시하고,
+해당 실행 경로가 그 계약을 반드시 검사하도록 구현해야 한다. MD의 권고나 그래프
+연결만으로 우회 불가능한 실행 강제가 생기지 않는다. 필수 경로를 거치지 않은 실행,
+오래된 판본, 지원하지 않는 인자, 조건 불일치를 실제 실행 경계에서 검사해야 한다.
+인터넷에서 찾은 CLI도 발견→출처·설치본/버전·사용법 확인→기존 실행 정책에 연결하는
+순서를 따르며, 검색 결과나 그래프 등록 자체를 실행 권한으로 사용하지 않는다.
+
+구체적인 **설계 예제**는 “변경한 ontology의 구조 검사는 등록된 `hswm-workspace validate`
+경로로 수행하고, byte 일치는 `bindings`로 별도 확인한다”다. 해당 명령과 사용법은 이미
+존재한다. 새 그래프의 예제는 도구를 선택하는 계약을 표현하며 전역 실행 강제기는 아니다.
+
+### 컨텍스트·연결 최적화와 평가
+
+모델 입력에 넣지 않은 그래프 본문은 그 호출의 입력 토큰을 차지하지 않는다. 상시
+진입점·라우팅·검색 결과·선택된 규칙·실행 결과·재시도 비용은 남는다. 전체 그래프 JSON을
+매번 주입하면 선택적 활성화의 목적을 잃는다. Skills도 본문을 필요할 때 읽으며 MCP
+도구도 지연 발견할 수 있다. 따라서 파일 형식의 우위가 아니라 **실제 주입량과 작업 결과**를
+비교한다. [Agent Skills 명세](https://agentskills.io/specification#progressive-disclosure),
+[도구 지연 발견](https://www.anthropic.com/engineering/advanced-tool-use).
+
+[R1~R6](../agent-rules/OPTIMIZATION.md)는 활성화, CLI/사용법 결속, 의미 단위 분할,
+선택적 연결, 의미 기여에 따른 재구성을 제공한다. 연결 최적화는 task read-set의 충분성,
+역할·예외·출처·권한·출력·미래 학습 조건을 보존하며 같은 작업·모델·예산에서 비교한다.
+토큰, 탐색·queue·실행 시간, 실패·재시도, 정답·유용성, 기존 과제 유지 여부를 함께 본다.
+노드 수나 입력 바이트가 줄었다는 사실만으로 개선을 판정하지 않는다.
+
+[결과 기반 W·구조 최적화 계획](HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md)으로
+후속 실행을 연결한다. [HSWM_LIKENESS의 기존 평가 대응](../research/HSWM_PROGRAM_AND_HSWM_LIKENESS_2026-09-29.md)에서는
+`source_fidelity`, `multiscale_map`, `role_composition`, `context_activation`,
+`distributed_navigation`, `local_adjustability`, `semantic_disposition`, `evaluability`를
+재사용한다. 작업 방법을 바꾸는 것과 실제 성능 개선을 분리하고 부정 결과도 보존한다.
+
+### 조회 가능한 그래프 계약
+
+기존 `hswm-workspace`가 [tool-harness 번들](../../ontology/development/HSWM_TOOL_HARNESS_2026-10-20.v1.json)을
+읽는다. 새 bundle은 이 설계만 담고 기존 정본·R1~R6·USL·W 계획을 UID anchor로 참조한다.
+`flow`는 여섯 단계와 연결, `activation`은 예제의 여섯 참여 역할,
+`boundaries`는 비용·실행 강제·학습 판정의 경계를 반환한다.
+
+`HAS_CONCEPT`는 설계 root→소속 단계/경계/계약이다. `HAS_SOURCE`는 root→사용자 발췌다.
+`HAS_PARTICIPATION`은 계약→참여 노드이며, 참여 노드의 `REFERENCES`는 정확한 대상 하나를
+가리킨다. `ordinal`과 `participant_role`을 보존해 task/condition/rule/tool/guide/verification을
+단순 이항 연결로 평탄화하지 않는다. `REFERENCES`의 `NEXT_STAGE`, `OWNED_USAGE`,
+`EXISTING_ANCHOR` scope는 각각 설계상의 후속 단계, 소유 사용법, 기존 UID 참조다.
+각 참여 역할·순서는 정확히 하나다. 후속 단계에는 S6→S2 순환이 있으므로 전체 그래프를 DAG로
+제한하지 않는다. 모든 신규 관계는 `SECONDARY_AI / PROPOSED`이며 실행·채택 상태와 구분한다.
+
+```sh
+src/hswm/effect-runtime/bin/hswm-workspace show tool-harness
+src/hswm/effect-runtime/bin/hswm-workspace query tool-harness flow
+src/hswm/effect-runtime/bin/hswm-workspace query tool-harness activation
+src/hswm/effect-runtime/bin/hswm-workspace query tool-harness boundaries
+src/hswm/effect-runtime/bin/hswm-workspace validate tool-harness
+src/hswm/effect-runtime/bin/hswm-workspace bindings tool-harness
+npm --prefix src/hswm/effect-runtime test -- ../../../tests/effect-runtime/tool-harness-graph.test.ts --maxWorkers=1
+```
+
+RDF/SHACL은 타입·방향·필수 역할·출처·판정 경계를 검사하고 SPARQL은 정확한 대상과 내용을
+회수한다. 형제 USL 빌드가 있는 환경의 USL 검사는 같은 원래 UID와 여섯 역할을 국소 탐색으로
+회수하는지 확인한다. 빌드가 없으면 해당 검사는 명시적으로 skip되며 나머지 그래프 검사는 실행한다.
+이 과정은 원격 자원 읽기, 모델 호출, 회사 DB 쓰기나 운영 정책의 채택을 실행하지 않는다.
 
 ## 변경에 맞는 검사와 기록
 

@@ -1,0 +1,12 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?contract ?participant ?ordinal ?target ?name ?source ?enforcement ?command ?guide WHERE {
+ ?binding a role:TOOL_HARNESS_CONTRACT ; p:contract_id ?contract ;
+   p:enforcement_status ?enforcement ; r:HAS_PARTICIPATION ?part .
+ ?part p:participant_role ?participant ; p:ordinal ?ordinal ; r:REFERENCES ?resource .
+ ?resource kb:uid ?target ; p:name ?name ; p:source_path ?source .
+ OPTIONAL { ?resource p:command ?command . }
+ OPTIONAL { ?resource p:source_fragment ?guide . }
+} ORDER BY ?ordinal

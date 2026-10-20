@@ -1,0 +1,6 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?id ?name ?statement ?verification ?authority WHERE {
+ ?boundary a role:TOOL_HARNESS_BOUNDARY ; p:boundary_id ?id ; p:name ?name ;
+   p:statement ?statement ; p:verification ?verification ; p:authority_class ?authority .
+} ORDER BY ?id

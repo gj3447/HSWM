@@ -1,0 +1,957 @@
+{
+  "schema_version": "hswm-tool-harness-design/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+  "status": "REGISTERED_DESIGN_NOT_EXECUTED",
+  "nonclaim": "READ_ONLY_DESIGN_NOT_COMPANY_ROLLOUT_OR_ENFORCEMENT_OR_LEARNING",
+  "authority_boundary": "User excerpts and user-reported experience are distinct from SECONDARY_AI design interpretations.",
+  "source_accessed_on": "2026-10-20",
+  "artifact_bindings": [
+    {
+      "path": "docs/agent-rules/CLI.md",
+      "sha256": "b54de870ae8576b100671437f52eccc747cfdbcf9d67a568413014f9717b169b"
+    },
+    {
+      "path": "docs/agent-rules/OPTIMIZATION.md",
+      "sha256": "c8b7b6d4d215aa5e1b0d2e45e02b15dedd6bff3781d1174d13170e76845b03f3"
+    },
+    {
+      "path": "docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md",
+      "sha256": "af5490bcb3aa7830dbfcf9c806c0e9d0b966d4c3a4e246ef1140f77bd3d8c32a"
+    },
+    {
+      "path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+      "sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d"
+    },
+    {
+      "path": "docs/operations/HSWM_SEMANTIC_W_OPTIMIZATION_PLAN_2026-10-18.md",
+      "sha256": "ecaf99427094243e500cf0e007a0f9ade61a1576542b1aafad0f8674a3e303fa"
+    },
+    {
+      "path": "ontology/queries/hswm_tool_harness_2026-10-20/activation.rq",
+      "sha256": "9710132d91ba6c26960c70ec8592626665a3b5fd844d39f2aad66ab572d039a0"
+    },
+    {
+      "path": "ontology/queries/hswm_tool_harness_2026-10-20/boundaries.rq",
+      "sha256": "1dfafe784d4cbc01f12c024849965cd3ee8dc38b2611ea571663896c210ee28b"
+    },
+    {
+      "path": "ontology/queries/hswm_tool_harness_2026-10-20/flow.rq",
+      "sha256": "05928c673e4eefbcdac4340533858b8963c27c2cbf72cc242de9ff6041adb5e7"
+    },
+    {
+      "path": "ontology/queries/hswm_tool_harness_2026-10-20/shapes.ttl",
+      "sha256": "8d5051d1f234e8047102ee94e6a3154c9e0d468b1ec6696b630ebf41143b4bec"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-workspace",
+      "sha256": "319f0632981cc3489161d85bd7e4344d2895862be9c186e18d5a4e04837bbf79"
+    },
+    {
+      "path": "tests/effect-runtime/tool-harness-graph.test.ts",
+      "sha256": "0d289dad02576feff56f2668cb6940c8d96b72115dcfef7c8061909815dcec35"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 23,
+    "anchors": 11,
+    "relations": 41
+  },
+  "anchors": [
+    {
+      "uid": "sym:Concept:hswm",
+      "name": "HSWM",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:usl",
+      "name": "USL",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-optimization-r1-2026-10-07",
+      "name": "R1",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-optimization-r2-2026-10-07",
+      "name": "R2",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-optimization-r3-2026-10-07",
+      "name": "R3",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-optimization-r4-2026-10-07",
+      "name": "R4",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-optimization-r5-2026-10-07",
+      "name": "R5",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-optimization-r6-2026-10-07",
+      "name": "R6",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "name": "결과 기반 W·구조 최적화 계획",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-optimization-hswm-workspace-2026-10-07",
+      "name": "기존 hswm-workspace CLI",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-optimization-hswm-workspace-usage-2026-10-07",
+      "name": "기존 workspace 사용법",
+      "required_labels": [
+        "Concept"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "회사 도구·설명서·개발 방법의 HSWM 적용 설계",
+        "standard_graph_role": "TOOL_HARNESS_ROOT",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN_NOT_EXECUTED",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "execution_status": "NOT_RUN",
+        "enforcement_status": "NOT_DEPLOYED_BY_THIS_DESIGN",
+        "learning_status": "NOT_RUN",
+        "measured_efficacy": "UNMEASURED",
+        "base_revision": "a915890c792b7d110ebe009c0d22c1adf5068117",
+        "source_revision": "WORKTREE_SOURCE_REVIEW_2026-10-20",
+        "source_fragment": "tool-harness",
+        "evaluation_axes": [
+          "source_fidelity",
+          "multiscale_map",
+          "role_composition",
+          "context_activation",
+          "distributed_navigation",
+          "local_adjustability",
+          "semantic_disposition",
+          "evaluability"
+        ],
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "회사 도구·설명서·개발 방법의 HSWM 적용 설계"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-user",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "사용자 방향 원문 발췌",
+        "standard_graph_role": "TOOL_HARNESS_USER_SOURCE",
+        "authority_class": "USER_PRIMARY",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "USER_EXCERPTS_NOT_COMPLETE_MESSAGE",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "utterance_verbatim": "skills 와 mcp 에는, 회사 kg 와 db 등의 기본적인 범용 도구들만 등록시키고,\n\n규칙, 도구의 개발을 진행한후에 탑다운으로 개발을 진행하는게 아닌, 개발에 진행하면서 잘 안되거나 막히면 규칙, 도구, 표준그래프 엔지니어링에 피드백을 주면서 실제 개발과, 개발 방법(표준 그래프 엔지니어링과 연결된 md 파일 개발 도구)이 둘다 동시에 개발 되면서 작업이 진행됩니다.",
+        "utterance_sha256": "8b30e240e80412669cc3992566e505c1150f3be48bb693c88163870b82ff789e",
+        "observed_date": "2026-10-20",
+        "empirical_scope": "User-reported benefit is not an independently controlled company-wide measurement.",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "사용자 방향 원문 발췌"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-S1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "범위 설정",
+        "standard_graph_role": "TOOL_HARNESS_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "stage_id": "S1",
+        "inputs": "작업·세계/자기 상태·owner·허용 effect·시간/자원 예산",
+        "outputs": "대상·source revision·필수 조건·예외·평가 기준",
+        "acceptance": "결과를 보기 전에 범위를 고정하고 미확정 조건을 명시한다.",
+        "assessment_axis": "multiscale_map",
+        "execution_status": "NOT_RUN",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "범위 설정"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-S2",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "국소 활성화",
+        "standard_graph_role": "TOOL_HARNESS_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "stage_id": "S2",
+        "inputs": "작업 조건과 접근 가능한 규칙·설명서·도구",
+        "outputs": "선택 UID·판본·이유·실제 국소 입력",
+        "acceptance": "필수 맥락·예외를 보존하고 누락 시 추가 조회 또는 보류한다.",
+        "assessment_axis": "context_activation",
+        "execution_status": "NOT_RUN",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "국소 활성화"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-S3",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "예측·실행",
+        "standard_graph_role": "TOOL_HARNESS_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "stage_id": "S3",
+        "inputs": "예상 결과·불확실성·launcher·버전·인자·입출력 계약",
+        "outputs": "실제 명령·입력·실행 ID",
+        "acceptance": "정책을 적용하는 실행 경로에서 조건·도구·인자를 검사한다. 예제 그래프만으로 강제됐다고 판정하지 않는다.",
+        "assessment_axis": "role_composition",
+        "execution_status": "NOT_RUN",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "예측·실행"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-S4",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "관측·평가",
+        "standard_graph_role": "TOOL_HARNESS_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "stage_id": "S4",
+        "inputs": "원 출력·오류·exit·timeout·시간·비용",
+        "outputs": "예측과 정확한 실행에 결속된 관측·평가",
+        "acceptance": "관측과 예측을 분리하고 성공·정답·유용성·인과 기여를 혼합하지 않는다.",
+        "assessment_axis": "evaluability",
+        "execution_status": "NOT_RUN",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "관측·평가"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-S5",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "수정·채택",
+        "standard_graph_role": "TOOL_HARNESS_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "stage_id": "S5",
+        "inputs": "결과와 출처에 결속된 규칙·도구·관계·정책 후보",
+        "outputs": "채택/보류/거부/no-op과 해당 revision",
+        "acceptance": "기존 owner/read-set/revision 경계 및 다른 과제·역할·예외·출처를 보존한다.",
+        "assessment_axis": "local_adjustability",
+        "execution_status": "NOT_RUN",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "수정·채택"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-S6",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "다음 사용",
+        "standard_graph_role": "TOOL_HARNESS_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "stage_id": "S6",
+        "inputs": "채택된 영속 상태와 다음 과제",
+        "outputs": "새 프로세스가 실제 읽은 key·내용·입력",
+        "acceptance": "중복 갱신 방지·복원·다음 사용을 확인하며 행동 차이 또는 효능을 자동 추론하지 않는다.",
+        "assessment_axis": "semantic_disposition",
+        "execution_status": "NOT_RUN",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "다음 사용"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-B1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "컨텍스트 비용",
+        "standard_graph_role": "TOOL_HARNESS_BOUNDARY",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "boundary_id": "B1",
+        "statement": "선택되지 않은 본문은 미주입 시 입력 토큰을 차지하지 않는다. 상시 메타데이터·라우팅·선택 결과·재시도는 비용에 포함한다. Skills/MCP도 지연 로딩할 수 있다.",
+        "verification": "동일 과제·모델·예산에서 실제 전체 입력량·지연·실패·품질을 비교한다.",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "선택되지 않은 본문은 미주입 시 입력 토큰을 차지하지 않는다. 상시 메타데이터·라우팅·선택 결과·재시도는 비용에 포함한다. Skills/MCP도 지연 로딩할 수 있다."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-B2",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "실행 의무",
+        "standard_graph_role": "TOOL_HARNESS_BOUNDARY",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "boundary_id": "B2",
+        "statement": "KG와 표준 그래프는 정책을 담을 수 있다. 의미 이해·MD 권고·그래프 연결만으로 필수 도구 사용이 강제되지는 않는다.",
+        "verification": "모든 해당 실행 경로에서 조건·정책·지정 CLI를 검사하고 우회/오래된 판본/조건 불일치를 거부하는지 별도로 검증한다.",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "KG와 표준 그래프는 정책을 담을 수 있다. 의미 이해·MD 권고·그래프 연결만으로 필수 도구 사용이 강제되지는 않는다."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-B3",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "학습과 효능",
+        "standard_graph_role": "TOOL_HARNESS_BOUNDARY",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "boundary_id": "B3",
+        "statement": "문서·코드 피드백과 native outcome-bound revision은 별개다. 등록·구조 검사·과거 revision 재사용은 개선의 증거가 아니다.",
+        "verification": "실제 실행→근거 피드백→영속 채택/보류→다음 사용 및 독립 효능 비교를 구분하고 부정 결과를 보존한다.",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "문서·코드 피드백과 native outcome-bound revision은 별개다. 등록·구조 검사·과거 revision 재사용은 개선의 증거가 아니다."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-activation",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "작업 조건에 결속된 도구 선택 예제",
+        "standard_graph_role": "TOOL_HARNESS_CONTRACT",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "contract_id": "ontology-validation",
+        "enforcement_status": "EXAMPLE_NOT_RUNTIME_ENFORCED",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "작업 조건에 결속된 도구 선택 예제"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-condition",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "조건: 등록한 ontology 데이터·shape·query 변경",
+        "standard_graph_role": "TOOL_HARNESS_CONDITION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "condition": "HSWM 소유의 선택된 workspace entry에 속한 ontology·shape·query가 바뀐 경우",
+        "exceptions": "읽기만 한 경우나 다른 저장소의 도구 소유 계약에는 이 예제를 자동 적용하지 않는다.",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "조건: 등록한 ontology 데이터·shape·query 변경"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-rule",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "규칙: 소유 조회기로 구조·바이트를 각각 확인",
+        "standard_graph_role": "TOOL_HARNESS_RULE",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "requirement": "선택 entry의 validate/query/bindings를 사용한다. 설명문만으로 검사 통과를 대신하지 않는다.",
+        "fallback": "설치본이나 등록 entry가 없으면 원인을 보고하고 해당 owner 사용법을 확인한다. 다른 CLI 실행을 같은 검사 증거로 표시하지 않는다.",
+        "enforcement_status": "EXAMPLE_NOT_RUNTIME_ENFORCED",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "선택 entry의 validate/query/bindings를 사용한다. 설명문만으로 검사 통과를 대신하지 않는다."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-tool",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "hswm-workspace 참조",
+        "standard_graph_role": "TOOL_HARNESS_TOOL",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/agent-rules/CLI.md",
+        "source_sha256": "b54de870ae8576b100671437f52eccc747cfdbcf9d67a568413014f9717b169b",
+        "status": "EXISTING_CLI_REFERENCE",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "command": "src/hswm/effect-runtime/bin/hswm-workspace",
+        "help": "src/hswm/effect-runtime/bin/hswm-workspace --help",
+        "native_uid": "sym:Concept:hswm-optimization-hswm-workspace-2026-10-07",
+        "version_source": "src/hswm/effect-runtime/package.json",
+        "input_contract": "등록된 entry ID, query alias와 선택 checkout",
+        "output_contract": "구조·질의 결과 및 별도의 bindingSummary; execution/learning status를 생성하지 않음",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "hswm-workspace 참조"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-guide",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Workspace usage 참조",
+        "standard_graph_role": "TOOL_HARNESS_GUIDE",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/agent-rules/CLI.md",
+        "source_sha256": "b54de870ae8576b100671437f52eccc747cfdbcf9d67a568413014f9717b169b",
+        "status": "EXISTING_GUIDE_REFERENCE",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "source_fragment": "workspace-usage",
+        "native_uid": "sym:Concept:hswm-optimization-hswm-workspace-usage-2026-10-07",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "Workspace usage 참조"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-verification",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "구조·바이트·정확한 질의 답의 구분",
+        "standard_graph_role": "TOOL_HARNESS_VERIFICATION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "verification": "validate의 conforms, bindings의 MATCH 여부, query의 정확한 UID·역할·출처를 각각 확인한다.",
+        "nonclaim": "SHACL_CONFORMANCE_NOT_RUNTIME_ENFORCEMENT_OR_LEARNING",
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "구조·바이트·정확한 질의 답의 구분"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-task",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "task",
+        "standard_graph_role": "TOOL_HARNESS_PARTICIPATION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "participant_role": "task",
+        "ordinal": 0,
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "task"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-condition",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "condition",
+        "standard_graph_role": "TOOL_HARNESS_PARTICIPATION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "participant_role": "condition",
+        "ordinal": 1,
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "condition"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-rule",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "rule",
+        "standard_graph_role": "TOOL_HARNESS_PARTICIPATION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "participant_role": "rule",
+        "ordinal": 2,
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "rule"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-tool",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "tool",
+        "standard_graph_role": "TOOL_HARNESS_PARTICIPATION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "participant_role": "tool",
+        "ordinal": 3,
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "tool"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-guide",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "guide",
+        "standard_graph_role": "TOOL_HARNESS_PARTICIPATION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "participant_role": "guide",
+        "ordinal": 4,
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "guide"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-verification",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "verification",
+        "standard_graph_role": "TOOL_HARNESS_PARTICIPATION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "source_sha256": "6c273be78bc0f69641bc7ad772e0568771b086dd1124fdffbb5c42181b7a167d",
+        "status": "REGISTERED_DESIGN",
+        "claim_boundary": "DESIGN_REFERENCE_NOT_EXECUTION_ENFORCEMENT_OR_EFFICACY",
+        "participant_role": "verification",
+        "ordinal": 5,
+        "projection_nonclaim": "READ_ONLY_DESIGN_NOT_CANONICAL_STATE_OR_PERMISSION_OR_LEARNING",
+        "description": "verification"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-user",
+      "type": "HAS_SOURCE",
+      "scope": "USER_DIRECTION",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S1",
+      "type": "HAS_CONCEPT",
+      "scope": "DESIGN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S1",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S2",
+      "type": "REFERENCES",
+      "scope": "NEXT_STAGE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S2",
+      "type": "HAS_CONCEPT",
+      "scope": "DESIGN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S2",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S3",
+      "type": "REFERENCES",
+      "scope": "NEXT_STAGE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S3",
+      "type": "HAS_CONCEPT",
+      "scope": "DESIGN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S3",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S4",
+      "type": "REFERENCES",
+      "scope": "NEXT_STAGE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S4",
+      "type": "HAS_CONCEPT",
+      "scope": "DESIGN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S4",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S5",
+      "type": "REFERENCES",
+      "scope": "NEXT_STAGE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S5",
+      "type": "HAS_CONCEPT",
+      "scope": "DESIGN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S5",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S6",
+      "type": "REFERENCES",
+      "scope": "NEXT_STAGE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S6",
+      "type": "HAS_CONCEPT",
+      "scope": "DESIGN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S6",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S2",
+      "type": "REFERENCES",
+      "scope": "NEXT_STAGE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-B1",
+      "type": "HAS_CONCEPT",
+      "scope": "DESIGN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-B2",
+      "type": "HAS_CONCEPT",
+      "scope": "DESIGN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-B3",
+      "type": "HAS_CONCEPT",
+      "scope": "DESIGN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-activation",
+      "type": "HAS_CONCEPT",
+      "scope": "DESIGN_MEMBER",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-activation",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-task",
+      "type": "HAS_PARTICIPATION",
+      "scope": "ACTIVATION_PARTICIPANT",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-task",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-S3",
+      "type": "REFERENCES",
+      "scope": "PARTICIPANT_TARGET",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-activation",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-condition",
+      "type": "HAS_PARTICIPATION",
+      "scope": "ACTIVATION_PARTICIPANT",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-condition",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-condition",
+      "type": "REFERENCES",
+      "scope": "PARTICIPANT_TARGET",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-activation",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-rule",
+      "type": "HAS_PARTICIPATION",
+      "scope": "ACTIVATION_PARTICIPANT",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-rule",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-rule",
+      "type": "REFERENCES",
+      "scope": "PARTICIPANT_TARGET",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-activation",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-tool",
+      "type": "HAS_PARTICIPATION",
+      "scope": "ACTIVATION_PARTICIPANT",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-tool",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-tool",
+      "type": "REFERENCES",
+      "scope": "PARTICIPANT_TARGET",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-activation",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-guide",
+      "type": "HAS_PARTICIPATION",
+      "scope": "ACTIVATION_PARTICIPANT",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-guide",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-guide",
+      "type": "REFERENCES",
+      "scope": "PARTICIPANT_TARGET",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-activation",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-verification",
+      "type": "HAS_PARTICIPATION",
+      "scope": "ACTIVATION_PARTICIPANT",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-part-verification",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-verification",
+      "type": "REFERENCES",
+      "scope": "PARTICIPANT_TARGET",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-tool",
+      "to_uid": "sym:Concept:hswm-tool-harness-2026-10-20-guide",
+      "type": "REFERENCES",
+      "scope": "OWNED_USAGE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:usl",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-optimization-r1-2026-10-07",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-optimization-r2-2026-10-07",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-optimization-r3-2026-10-07",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-optimization-r4-2026-10-07",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-optimization-r5-2026-10-07",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:Concept:hswm-optimization-r6-2026-10-07",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+      "to_uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-tool",
+      "to_uid": "sym:Concept:hswm-optimization-hswm-workspace-2026-10-07",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-tool-harness-2026-10-20-guide",
+      "to_uid": "sym:Concept:hswm-optimization-hswm-workspace-usage-2026-10-07",
+      "type": "REFERENCES",
+      "scope": "EXISTING_ANCHOR",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED"
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+@prefix kb: <https://hswm.invalid/kg-bundle-rdf/v1/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix h: <https://hswm.invalid/tool-harness/2026-10-20/> .
+
+h:SourceBound a sh:NodeShape ; sh:targetClass role:TOOL_HARNESS_ROOT, role:TOOL_HARNESS_USER_SOURCE, role:TOOL_HARNESS_STAGE, role:TOOL_HARNESS_BOUNDARY, role:TOOL_HARNESS_CONTRACT, role:TOOL_HARNESS_CONDITION, role:TOOL_HARNESS_RULE, role:TOOL_HARNESS_TOOL, role:TOOL_HARNESS_GUIDE, role:TOOL_HARNESS_VERIFICATION, role:TOOL_HARNESS_PARTICIPATION ;
+ sh:property [ sh:path p:source_path ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+h:AI a sh:NodeShape ; sh:targetClass role:TOOL_HARNESS_ROOT, role:TOOL_HARNESS_STAGE, role:TOOL_HARNESS_BOUNDARY, role:TOOL_HARNESS_CONTRACT, role:TOOL_HARNESS_CONDITION, role:TOOL_HARNESS_RULE, role:TOOL_HARNESS_TOOL, role:TOOL_HARNESS_GUIDE, role:TOOL_HARNESS_VERIFICATION, role:TOOL_HARNESS_PARTICIPATION ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] .
+
+h:User a sh:NodeShape ; sh:targetClass role:TOOL_HARNESS_USER_SOURCE ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "USER_PRIMARY" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:status ; sh:hasValue "USER_EXCERPTS_NOT_COMPLETE_MESSAGE" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:utterance_verbatim ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:utterance_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+h:Root a sh:NodeShape ; sh:targetClass role:TOOL_HARNESS_ROOT ;
+ sh:property [ sh:path p:status ; sh:hasValue "REGISTERED_DESIGN_NOT_EXECUTED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:execution_status ; sh:hasValue "NOT_RUN" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:learning_status ; sh:hasValue "NOT_RUN" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:enforcement_status ; sh:hasValue "NOT_DEPLOYED_BY_THIS_DESIGN" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:measured_efficacy ; sh:hasValue "UNMEASURED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:minCount 10 ; sh:maxCount 10 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:TOOL_HARNESS_STAGE ] ; sh:qualifiedMinCount 6 ; sh:qualifiedMaxCount 6 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:TOOL_HARNESS_BOUNDARY ] ; sh:qualifiedMinCount 3 ; sh:qualifiedMaxCount 3 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:TOOL_HARNESS_CONTRACT ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:class role:TOOL_HARNESS_USER_SOURCE ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+h:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:TOOL_HARNESS_STAGE ; sh:property [ sh:path p:stage_id ; sh:hasValue "S1" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:TOOL_HARNESS_STAGE ; sh:property [ sh:path p:stage_id ; sh:hasValue "S2" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:TOOL_HARNESS_STAGE ; sh:property [ sh:path p:stage_id ; sh:hasValue "S3" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:TOOL_HARNESS_STAGE ; sh:property [ sh:path p:stage_id ; sh:hasValue "S4" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:TOOL_HARNESS_STAGE ; sh:property [ sh:path p:stage_id ; sh:hasValue "S5" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:TOOL_HARNESS_STAGE ; sh:property [ sh:path p:stage_id ; sh:hasValue "S6" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:TOOL_HARNESS_BOUNDARY ; sh:property [ sh:path p:boundary_id ; sh:hasValue "B1" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:TOOL_HARNESS_BOUNDARY ; sh:property [ sh:path p:boundary_id ; sh:hasValue "B2" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Root sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:TOOL_HARNESS_BOUNDARY ; sh:property [ sh:path p:boundary_id ; sh:hasValue "B3" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Stage a sh:NodeShape ; sh:targetClass role:TOOL_HARNESS_STAGE ;
+ sh:property [ sh:path p:stage_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:inputs ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:outputs ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:acceptance ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:assessment_axis ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:execution_status ; sh:hasValue "NOT_RUN" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:class role:TOOL_HARNESS_STAGE ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+h:Stage sh:or (
+ [ sh:property [ sh:path p:stage_id ; sh:hasValue "S1" ] ; sh:property [ sh:path r:REFERENCES ; sh:node [ sh:property [ sh:path p:stage_id ; sh:hasValue "S2" ] ] ] ]
+ [ sh:property [ sh:path p:stage_id ; sh:hasValue "S2" ] ; sh:property [ sh:path r:REFERENCES ; sh:node [ sh:property [ sh:path p:stage_id ; sh:hasValue "S3" ] ] ] ]
+ [ sh:property [ sh:path p:stage_id ; sh:hasValue "S3" ] ; sh:property [ sh:path r:REFERENCES ; sh:node [ sh:property [ sh:path p:stage_id ; sh:hasValue "S4" ] ] ] ]
+ [ sh:property [ sh:path p:stage_id ; sh:hasValue "S4" ] ; sh:property [ sh:path r:REFERENCES ; sh:node [ sh:property [ sh:path p:stage_id ; sh:hasValue "S5" ] ] ] ]
+ [ sh:property [ sh:path p:stage_id ; sh:hasValue "S5" ] ; sh:property [ sh:path r:REFERENCES ; sh:node [ sh:property [ sh:path p:stage_id ; sh:hasValue "S6" ] ] ] ]
+ [ sh:property [ sh:path p:stage_id ; sh:hasValue "S6" ] ; sh:property [ sh:path r:REFERENCES ; sh:node [ sh:property [ sh:path p:stage_id ; sh:hasValue "S2" ] ] ] ]
+) .
+h:Boundary a sh:NodeShape ; sh:targetClass role:TOOL_HARNESS_BOUNDARY ;
+ sh:property [ sh:path p:boundary_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:statement ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:verification ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+h:Contract a sh:NodeShape ; sh:targetClass role:TOOL_HARNESS_CONTRACT ;
+ sh:property [ sh:path p:enforcement_status ; sh:hasValue "EXAMPLE_NOT_RUNTIME_ENFORCED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_PARTICIPATION ; sh:class role:TOOL_HARNESS_PARTICIPATION ; sh:minCount 6 ; sh:maxCount 6 ] .
+
+h:Participation a sh:NodeShape ; sh:targetClass role:TOOL_HARNESS_PARTICIPATION ;
+ sh:property [ sh:path p:participant_role ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:maxInclusive 5 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path [ sh:inversePath r:HAS_PARTICIPATION ] ; sh:class role:TOOL_HARNESS_CONTRACT ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+h:Contract sh:property [ sh:path r:HAS_PARTICIPATION ; sh:qualifiedValueShape [ sh:property [ sh:path p:participant_role ; sh:hasValue "task" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Contract sh:property [ sh:path r:HAS_PARTICIPATION ; sh:qualifiedValueShape [ sh:property [ sh:path p:participant_role ; sh:hasValue "condition" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Contract sh:property [ sh:path r:HAS_PARTICIPATION ; sh:qualifiedValueShape [ sh:property [ sh:path p:participant_role ; sh:hasValue "rule" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Contract sh:property [ sh:path r:HAS_PARTICIPATION ; sh:qualifiedValueShape [ sh:property [ sh:path p:participant_role ; sh:hasValue "tool" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Contract sh:property [ sh:path r:HAS_PARTICIPATION ; sh:qualifiedValueShape [ sh:property [ sh:path p:participant_role ; sh:hasValue "guide" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Contract sh:property [ sh:path r:HAS_PARTICIPATION ; sh:qualifiedValueShape [ sh:property [ sh:path p:participant_role ; sh:hasValue "verification" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+h:Participation sh:or (
+ [ sh:property [ sh:path p:participant_role ; sh:hasValue "task" ] ; sh:property [ sh:path p:ordinal ; sh:hasValue 0 ] ; sh:property [ sh:path r:REFERENCES ; sh:node [ sh:class role:TOOL_HARNESS_STAGE ; sh:property [ sh:path p:stage_id ; sh:hasValue "S3" ] ] ] ]
+ [ sh:property [ sh:path p:participant_role ; sh:hasValue "condition" ] ; sh:property [ sh:path p:ordinal ; sh:hasValue 1 ] ; sh:property [ sh:path r:REFERENCES ; sh:node [ sh:class role:TOOL_HARNESS_CONDITION ] ] ]
+ [ sh:property [ sh:path p:participant_role ; sh:hasValue "rule" ] ; sh:property [ sh:path p:ordinal ; sh:hasValue 2 ] ; sh:property [ sh:path r:REFERENCES ; sh:node [ sh:class role:TOOL_HARNESS_RULE ] ] ]
+ [ sh:property [ sh:path p:participant_role ; sh:hasValue "tool" ] ; sh:property [ sh:path p:ordinal ; sh:hasValue 3 ] ; sh:property [ sh:path r:REFERENCES ; sh:node [ sh:class role:TOOL_HARNESS_TOOL ] ] ]
+ [ sh:property [ sh:path p:participant_role ; sh:hasValue "guide" ] ; sh:property [ sh:path p:ordinal ; sh:hasValue 4 ] ; sh:property [ sh:path r:REFERENCES ; sh:node [ sh:class role:TOOL_HARNESS_GUIDE ] ] ]
+ [ sh:property [ sh:path p:participant_role ; sh:hasValue "verification" ] ; sh:property [ sh:path p:ordinal ; sh:hasValue 5 ] ; sh:property [ sh:path r:REFERENCES ; sh:node [ sh:class role:TOOL_HARNESS_VERIFICATION ] ] ]
+) .
+h:Condition a sh:NodeShape ; sh:targetClass role:TOOL_HARNESS_CONDITION ;
+ sh:property [ sh:path p:condition ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:exceptions ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+h:Rule a sh:NodeShape ; sh:targetClass role:TOOL_HARNESS_RULE ;
+ sh:property [ sh:path p:requirement ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:fallback ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:enforcement_status ; sh:hasValue "EXAMPLE_NOT_RUNTIME_ENFORCED" ; sh:maxCount 1 ] .
+
+h:Tool a sh:NodeShape ; sh:targetClass role:TOOL_HARNESS_TOOL ;
+ sh:property [ sh:path p:command ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:help ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:native_uid ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:version_source ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:input_contract ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:output_contract ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:TOOL_HARNESS_GUIDE ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+
+h:Guide a sh:NodeShape ; sh:targetClass role:TOOL_HARNESS_GUIDE ;
+ sh:property [ sh:path p:source_fragment ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:native_uid ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+h:Verification a sh:NodeShape ; sh:targetClass role:TOOL_HARNESS_VERIFICATION ;
+ sh:property [ sh:path p:verification ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:nonclaim ; sh:hasValue "SHACL_CONFORMANCE_NOT_RUNTIME_ENFORCEMENT_OR_LEARNING" ; sh:maxCount 1 ] .
+
+h:Edge a sh:NodeShape ; sh:targetClass kb:Relation ;
+ sh:property [ sh:path kb:authorityClass ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path kb:status ; sh:hasValue "PROPOSED" ; sh:maxCount 1 ] ;
+ sh:or (
+ [ sh:property [ sh:path kb:relationType ; sh:hasValue "HAS_CONCEPT" ] ; sh:property [ sh:path kb:scope ; sh:hasValue "DESIGN_MEMBER" ] ; sh:property [ sh:path kb:from ; sh:or ([ sh:class role:TOOL_HARNESS_ROOT ]) ] ; sh:property [ sh:path kb:to ; sh:or ([ sh:class role:TOOL_HARNESS_STAGE ] [ sh:class role:TOOL_HARNESS_BOUNDARY ] [ sh:class role:TOOL_HARNESS_CONTRACT ]) ] ]
+ [ sh:property [ sh:path kb:relationType ; sh:hasValue "HAS_SOURCE" ] ; sh:property [ sh:path kb:scope ; sh:hasValue "USER_DIRECTION" ] ; sh:property [ sh:path kb:from ; sh:or ([ sh:class role:TOOL_HARNESS_ROOT ]) ] ; sh:property [ sh:path kb:to ; sh:or ([ sh:class role:TOOL_HARNESS_USER_SOURCE ]) ] ]
+ [ sh:property [ sh:path kb:relationType ; sh:hasValue "REFERENCES" ] ; sh:property [ sh:path kb:scope ; sh:hasValue "NEXT_STAGE" ] ; sh:property [ sh:path kb:from ; sh:or ([ sh:class role:TOOL_HARNESS_STAGE ]) ] ; sh:property [ sh:path kb:to ; sh:or ([ sh:class role:TOOL_HARNESS_STAGE ]) ] ]
+ [ sh:property [ sh:path kb:relationType ; sh:hasValue "HAS_PARTICIPATION" ] ; sh:property [ sh:path kb:scope ; sh:hasValue "ACTIVATION_PARTICIPANT" ] ; sh:property [ sh:path kb:from ; sh:or ([ sh:class role:TOOL_HARNESS_CONTRACT ]) ] ; sh:property [ sh:path kb:to ; sh:or ([ sh:class role:TOOL_HARNESS_PARTICIPATION ]) ] ]
+ [ sh:property [ sh:path kb:relationType ; sh:hasValue "REFERENCES" ] ; sh:property [ sh:path kb:scope ; sh:hasValue "PARTICIPANT_TARGET" ] ; sh:property [ sh:path kb:from ; sh:or ([ sh:class role:TOOL_HARNESS_PARTICIPATION ]) ] ; sh:property [ sh:path kb:to ; sh:or ([ sh:class role:TOOL_HARNESS_STAGE ] [ sh:class role:TOOL_HARNESS_CONDITION ] [ sh:class role:TOOL_HARNESS_RULE ] [ sh:class role:TOOL_HARNESS_TOOL ] [ sh:class role:TOOL_HARNESS_GUIDE ] [ sh:class role:TOOL_HARNESS_VERIFICATION ]) ] ]
+ [ sh:property [ sh:path kb:relationType ; sh:hasValue "REFERENCES" ] ; sh:property [ sh:path kb:scope ; sh:hasValue "OWNED_USAGE" ] ; sh:property [ sh:path kb:from ; sh:or ([ sh:class role:TOOL_HARNESS_TOOL ]) ] ; sh:property [ sh:path kb:to ; sh:or ([ sh:class role:TOOL_HARNESS_GUIDE ]) ] ]
+ [ sh:property [ sh:path kb:relationType ; sh:hasValue "REFERENCES" ] ; sh:property [ sh:path kb:scope ; sh:hasValue "EXISTING_ANCHOR" ] ; sh:property [ sh:path kb:from ; sh:or ([ sh:class role:TOOL_HARNESS_ROOT ] [ sh:class role:TOOL_HARNESS_TOOL ] [ sh:class role:TOOL_HARNESS_GUIDE ]) ] ; sh:property [ sh:path kb:to ; sh:or ([ sh:class kb:Anchor ]) ] ]
+ ) .

@@ -13,6 +13,18 @@
 > [`HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json)의
 > burden-cap 노드다. 이 규칙은 연구 결과가 아니다.
 
+## 2026-10-20 — 도구 사용 native 활성화 학습: 2/6 → 6/6, 제거·복원 대조
+
+실제 `hswm-workspace` 출력으로 native `semantic_context_policy`를 18회 갱신했다.
+새 프로세스의 보류 과제는 초기 2/6→학습 6/6, 관측만 저장한 대조군 2/6,
+초기 상태 복원 2/6, 학습 상태 복원 6/6이다. 실제 Qwen 호출 51회·224,102 tokens이며
+원본 응답/명령 출력/trace/outcome/정책 bytes를 결속하고 A/b 통계를 독립 재계산했다.
+중복 피드백 18회 거부, 비정책 원문·역할 보존, native RDF export와 새 프로세스 재사용을 확인했다.
+선언된 3개 작업 의도·6개 상관된 보류 사례의 활성화 학습이며, 의미 텍스트·모델 가중치 학습이나
+일반화·전체 HSWM 효능 증명은 아니다. USL 주소 형식 오류로 멈춘 최초 준비(추론 0회)도 보존했다.
+[실행기·판정·한계](_research/tool_harness_learning_v1/README.md) ·
+[내용 주소형 근거](evidence/hswm_tool_harness_learning_2026-10-20/).
+
 <a id="finite-guard-live-20261020"></a>
 
 ## 2026-10-20 — 유한 실행 검사: 오답 4개 차단, 정확도 기준 미달

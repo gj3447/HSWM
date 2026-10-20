@@ -1,0 +1,204 @@
+{
+  "schema_version": "hswm-research-receipt/v1",
+  "date": "2026-10-20",
+  "actor": "agent(codex)",
+  "authority_class": "SECONDARY_AI",
+  "status": "VERIFIED_BOUNDED_NATIVE_POLICY_LEARNING",
+  "nativeBuildBase": "541b17b",
+  "sourceRootUid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+  "archives": [
+    {
+      "name": "runtime.tar.gz",
+      "sha256": "f8a551a9b72308d57417025b17dc2fbf24861b993de6e151aa038d31786592e3",
+      "bytes": 3874669
+    },
+    {
+      "name": "cohort-01.tar.gz",
+      "sha256": "f2ff5a4fe38bfaa1c7fbfd3b627fae1f61bb1007fc77befc7e5229e87cf74841",
+      "bytes": 25694
+    },
+    {
+      "name": "cohort-02.tar.gz",
+      "sha256": "4d3ec4211aceaa5b578ea343ad5aecc3c6b4e64763a2c2c81780a0378bd55f29",
+      "bytes": 652554
+    }
+  ],
+  "members": [
+    {
+      "archive": "cohort-02.tar.gz",
+      "path": "cohort/run/protocol.json",
+      "sha256": "771b8228b2d5b943bc9cdffad8325c2cc5299931557d52b7783e47d2e475f1fe",
+      "bytes": 74249
+    },
+    {
+      "archive": "cohort-02.tar.gz",
+      "path": "cohort/run/summary.json",
+      "sha256": "e15e074828335d55ebd75a12b2314461470aede963f1f855da2c800dcdc0edae",
+      "bytes": 26789
+    },
+    {
+      "archive": "cohort-02.tar.gz",
+      "path": "cohort/check.json",
+      "sha256": "fb43a1b9a11f7190c88e8ec024fcc553d691cf9e6aab729ec331b29c3aa4ecf3",
+      "bytes": 470
+    },
+    {
+      "archive": "cohort-02.tar.gz",
+      "path": "cohort/run/native.nq",
+      "sha256": "27751319c0041b868cc76caa374b760b154a76f579d68b97a24e374a06f8ad10",
+      "bytes": 531312
+    },
+    {
+      "archive": "cohort-02.tar.gz",
+      "path": "cohort/run/native-rdf-manifest.json",
+      "sha256": "462a418c8e407d7789e53625e713bb5f490dea74338c2b2ea2020142f25cd3d6",
+      "bytes": 2640
+    }
+  ],
+  "sources": [
+    {
+      "path": "_research/tool_harness_learning_v1/check.mts",
+      "sha256": "021d85a29082f494c4373416622b0f9b9ee0b334a9ae054cf91c9287f2d88ccf"
+    },
+    {
+      "path": "_research/tool_harness_learning_v1/domain.mts",
+      "sha256": "5965e1935a6053e6ecc48dd5a90dfbccadc86a9d688c1d56479c3b1c61d2e417"
+    },
+    {
+      "path": "_research/tool_harness_learning_v1/domain.test.mts",
+      "sha256": "88cdf9f8c0cef19be3717d3d69a9f2cd07237a7d5519a84ce93379723b1928a0"
+    },
+    {
+      "path": "_research/tool_harness_learning_v1/project.mts",
+      "sha256": "14c455c8ce15886f1c9ae78bb2e1941be5b5112aacc3208febc5fc7fe763594b"
+    },
+    {
+      "path": "_research/tool_harness_learning_v1/run.mts",
+      "sha256": "5e8ff896d96a5257225810eba02a0bef0a0d9f56114cbdc0e2361b1bd29546a7"
+    },
+    {
+      "path": "_research/tool_harness_learning_v1/tsconfig.json",
+      "sha256": "674bcd7ca9e2ff9bbe552a34910d24433f82c6bc255c5ee8b7971890f734963f"
+    },
+    {
+      "path": "_research/tool_harness_learning_v1/verify.mts",
+      "sha256": "3ef853e5c69ae52df99fdcce5c8d8cb91d3a4de5963401fa561bd05860c0800b"
+    }
+  ],
+  "observations": {
+    "actualProviderCalls": 51,
+    "scores": {
+      "baseline": 2,
+      "learned": 6,
+      "observations-only": 2,
+      "removed": 2,
+      "restored": 6
+    },
+    "casesPerCondition": 6,
+    "policyRevision": 18,
+    "policyUpdates": 18,
+    "duplicateFeedbackRefusals": 18,
+    "providerTokens": 224102,
+    "summedHttpMs": 95909.17753200006,
+    "nonPolicyAtomsPreserved": true,
+    "beforePolicyContent": {
+      "mediaType": "application/vnd.hswm.context-activation-policy-v1+json",
+      "byteLength": 643,
+      "sha256": "7dcf73066f709cd2e1cbc3422a2af4819c191bc9a4a7fcca6709cc885112bd57"
+    },
+    "afterPolicyContent": {
+      "mediaType": "application/vnd.hswm.context-activation-policy-v1+json",
+      "byteLength": 705,
+      "sha256": "41baa4cdd809364794a4987846c9c4df92a6aa65febec5b369d0a965abb0e862"
+    },
+    "priorPreparation": {
+      "status": "USL_LOCATOR_HOST_MISSING",
+      "inferenceCalls": 0
+    }
+  },
+  "graph": {
+    "@context": {
+      "prov": "http://www.w3.org/ns/prov#",
+      "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+    },
+    "@graph": [
+      {
+        "@id": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+        "@type": "prov:Entity",
+        "rdfs:label": "Original source design; historical design status retained"
+      },
+      {
+        "@id": "urn:sha256:771b8228b2d5b943bc9cdffad8325c2cc5299931557d52b7783e47d2e475f1fe",
+        "@type": [
+          "prov:Entity",
+          "prov:Plan"
+        ],
+        "rdfs:label": "Frozen tasks, controls, source/build pins and criteria"
+      },
+      {
+        "@id": "urn:hswm:tool-harness-learning:2026-10-20:cohort-02",
+        "@type": "prov:Activity",
+        "prov:used": [
+          {
+            "@id": "urn:sha256:771b8228b2d5b943bc9cdffad8325c2cc5299931557d52b7783e47d2e475f1fe"
+          },
+          {
+            "@id": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root"
+          }
+        ]
+      },
+      {
+        "@id": "urn:sha256:27751319c0041b868cc76caa374b760b154a76f579d68b97a24e374a06f8ad10",
+        "@type": "prov:Entity",
+        "prov:wasGeneratedBy": {
+          "@id": "urn:hswm:tool-harness-learning:2026-10-20:cohort-02"
+        },
+        "rdfs:label": "Actual source-bound native RDF projection, independently checked against durable bytes"
+      },
+      {
+        "@id": "urn:sha256:7dcf73066f709cd2e1cbc3422a2af4819c191bc9a4a7fcca6709cc885112bd57",
+        "@type": "prov:Entity",
+        "rdfs:label": "Initial native activation policy revision 0"
+      },
+      {
+        "@id": "urn:sha256:7816af86151f4243f28be4951ad28cee6f4d3f6386b185b48445b10c8ad670bc",
+        "@type": "prov:Entity",
+        "rdfs:label": "Outcome bound to actual final training execution"
+      },
+      {
+        "@id": "urn:sha256:41baa4cdd809364794a4987846c9c4df92a6aa65febec5b369d0a965abb0e862",
+        "@type": "prov:Entity",
+        "prov:wasGeneratedBy": {
+          "@id": "urn:hswm:tool-harness-learning:2026-10-20:cohort-02"
+        },
+        "prov:wasDerivedFrom": [
+          {
+            "@id": "urn:sha256:7dcf73066f709cd2e1cbc3422a2af4819c191bc9a4a7fcca6709cc885112bd57"
+          },
+          {
+            "@id": "urn:sha256:7816af86151f4243f28be4951ad28cee6f4d3f6386b185b48445b10c8ad670bc"
+          }
+        ],
+        "rdfs:label": "Admitted revision 18, used by separate processes; aggregate derivation across 18 updates"
+      },
+      {
+        "@id": "urn:sha256:fb43a1b9a11f7190c88e8ec024fcc553d691cf9e6aab729ec331b29c3aa4ecf3",
+        "@type": "prov:Entity",
+        "prov:wasDerivedFrom": [
+          {
+            "@id": "urn:sha256:e15e074828335d55ebd75a12b2314461470aede963f1f855da2c800dcdc0edae"
+          },
+          {
+            "@id": "urn:sha256:41baa4cdd809364794a4987846c9c4df92a6aa65febec5b369d0a965abb0e862"
+          },
+          {
+            "@id": "urn:sha256:771b8228b2d5b943bc9cdffad8325c2cc5299931557d52b7783e47d2e475f1fe"
+          }
+        ],
+        "rdfs:label": "Independent output/statistics reconstruction; bounded activation effect, not general efficacy"
+      }
+    ]
+  },
+  "claim_ceiling": "BOUNDED_NATIVE_CONTEXT_POLICY_LEARNING_ONLY; DECLARED_INTENTS; CORRELATED_AUTHORED_CASES; NO_SEMANTIC_TEXT_OR_MODEL_WEIGHT_TRAINING; NO_GENERAL_WORLDMODEL_EFFICACY",
+  "reproduce": "node _research/tool_harness_learning_v1/verify.mts PRIVATE_ARTIFACT_DIRECTORY RECEIPT.json; hydrate verified cohort in managed memory scratch; node _research/tool_harness_learning_v1/check.mts PRIVATE_COHORT/run"
+}

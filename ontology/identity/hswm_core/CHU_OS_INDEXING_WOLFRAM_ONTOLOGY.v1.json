@@ -1,0 +1,515 @@
+{
+  "schema_version": "chu-os-indexing-wolfram-kg/v1",
+  "bundle_uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+  "status": "LOCAL_SOURCE_BOUND_KNOWLEDGE_NOT_RUNTIME_LEARNING",
+  "nonclaim": "LOCAL_KNOWLEDGE_RECORD_NOT_RUNTIME_W_NOT_ENGINE_EXECUTION_NOT_OS_INTEGRATION",
+  "authority_boundary": "Exact user correction is USER_PRIMARY. All engineering interpretations, source observations and proposals are SECONDARY_AI; no inferred human ratification.",
+  "source_accessed_on": "2026-10-20",
+  "artifact_bindings": [
+    {
+      "path": "docs/canon/sources/USER_PRIMARY_CHU_OS_INDEXING_2026-10-20.txt",
+      "sha256": "33cfad2a6a7d496c7cdb86045b2599d985e803111fc0df052f669b39e0c43ca0"
+    },
+    {
+      "path": "docs/research/CHU_OS_INDEXING_AND_WOLFRAM_ENGINE_2026-10-20.md",
+      "sha256": "4da32b604c9bfae4de7821ee808097b3d210b3f6e2a5a7e3c618ae7fd3a06d20"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 13,
+    "relations": 14,
+    "anchors": 1
+  },
+  "anchors": [
+    {
+      "uid": "sym:AbstractNode:chu-hswm-scope-2026-09-27",
+      "name": "Existing CHU and HSWM scope record (2026-09-27)",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "CHU_OS indexing and Wolfram engine source review",
+        "description": "사용자의 인덱싱 용어 정정, 앞선 경로 설명, 두 재작성 엔진의 고정 소스 검토를 연결한 로컬 지식 기록.",
+        "standard_graph_role": "SYNTHESIS_BUNDLE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "claim_boundary": "PINNED_SOURCE_REVIEW_AND_EXPLICIT_PROPOSALS_ONLY",
+        "projection_nonclaim": "LOCAL_KNOWLEDGE_RECORD_NOT_RUNTIME_W_NOT_ENGINE_EXECUTION_NOT_OS_INTEGRATION",
+        "responsibility_owner": "hswm:ontology:chu-os-indexing",
+        "recorded_on": "2026-10-20",
+        "source_path": "docs/research/CHU_OS_INDEXING_AND_WOLFRAM_ENGINE_2026-10-20.md",
+        "source_sha256": "4da32b604c9bfae4de7821ee808097b3d210b3f6e2a5a7e3c618ae7fd3a06d20"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-indexing-2026-10-20-user",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "User correction: indexing, not embedding",
+        "description": "사용자가 앞선 질문의 임베딩을 인덱싱으로 정정하고 HSWM 저장과 울프람 엔진 구현 확인을 요청했다.",
+        "standard_graph_role": "USER_DIRECT_SOURCE",
+        "authority_class": "USER_PRIMARY",
+        "ontology_authority_class_v1": "USER_PRIMARY",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": false,
+        "claim_boundary": "USER_WORDING_CORRECTION_ONLY",
+        "projection_nonclaim": "LOCAL_KNOWLEDGE_RECORD_NOT_RUNTIME_W_NOT_ENGINE_EXECUTION_NOT_OS_INTEGRATION",
+        "responsibility_owner": "hswm:ontology:chu-os-indexing",
+        "recorded_on": "2026-10-20",
+        "source_path": "docs/canon/sources/USER_PRIMARY_CHU_OS_INDEXING_2026-10-20.txt",
+        "source_sha256": "33cfad2a6a7d496c7cdb86045b2599d985e803111fc0df052f669b39e0c43ca0",
+        "exact_user_text": "일단 그내용 hswm 으로 저장해주고 그 울프람 엔진은 어떻게 구현되있는지 확인해줘봐 ㅇㅇ 그냥 인덱싱 이야기엿어 임베딩 잘못말함 ㅇㅇ",
+        "actor": "user"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-indexing-2026-10-20-clarification",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Indexing is the intended question",
+        "description": "경로 질문을 그래프 관계의 정확 조회와 인덱싱으로 해석한다. 벡터 유사도 검색을 요청한 것으로 해석하지 않는다. 이 문장은 AI 해석이며 사용자 원문과 별도다.",
+        "standard_graph_role": "ENGINEERING_INTERPRETATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "claim_boundary": "PINNED_SOURCE_REVIEW_AND_EXPLICIT_PROPOSALS_ONLY",
+        "projection_nonclaim": "LOCAL_KNOWLEDGE_RECORD_NOT_RUNTIME_W_NOT_ENGINE_EXECUTION_NOT_OS_INTEGRATION",
+        "responsibility_owner": "hswm:ontology:chu-os-indexing",
+        "recorded_on": "2026-10-20",
+        "source_path": "docs/research/CHU_OS_INDEXING_AND_WOLFRAM_ENGINE_2026-10-20.md",
+        "source_sha256": "4da32b604c9bfae4de7821ee808097b3d210b3f6e2a5a7e3c618ae7fd3a06d20"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-indexing-2026-10-20-identity",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Content identity and projected paths",
+        "description": "CHU_OS의 raw bytes는 SHA-256 CID로 식별하며 경로는 snapshot과 group/관계 조건의 질의 뷰다. 동일 CID는 다중 그룹에 소속될 수 있다. unlink는 다른 소속과 이전 snapshot을 지우지 않는다. 일반 문서 handle binding과 POSIX 경로 adapter는 후속 작업이다.",
+        "standard_graph_role": "ENGINEERING_INTERPRETATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "claim_boundary": "PINNED_SOURCE_REVIEW_AND_EXPLICIT_PROPOSALS_ONLY",
+        "projection_nonclaim": "LOCAL_KNOWLEDGE_RECORD_NOT_RUNTIME_W_NOT_ENGINE_EXECUTION_NOT_OS_INTEGRATION",
+        "responsibility_owner": "hswm:ontology:chu-os-indexing",
+        "recorded_on": "2026-10-20",
+        "source_path": "docs/research/CHU_OS_INDEXING_AND_WOLFRAM_ENGINE_2026-10-20.md",
+        "source_sha256": "4da32b604c9bfae4de7821ee808097b3d210b3f6e2a5a7e3c618ae7fd3a06d20"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-indexing-2026-10-20-chu-index",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "CHU_OS snapshot indexes",
+        "description": "Snapshot은 nodeCID→edgeCID와 relationType→edgeCID BTreeMap 인덱스를 구축한다. GraphStore::query는 snapshot 전체 로드·검증·인덱스 재구축 뒤 유한 패턴을 실행하므로 전체 I/O 국소성은 확보된 것으로 주장할 수 없다.",
+        "standard_graph_role": "SOURCE_CODE_OBSERVATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "claim_boundary": "PINNED_SOURCE_REVIEW_AND_EXPLICIT_PROPOSALS_ONLY",
+        "projection_nonclaim": "LOCAL_KNOWLEDGE_RECORD_NOT_RUNTIME_W_NOT_ENGINE_EXECUTION_NOT_OS_INTEGRATION",
+        "responsibility_owner": "hswm:ontology:chu-os-indexing",
+        "recorded_on": "2026-10-20",
+        "source_path": "docs/research/CHU_OS_INDEXING_AND_WOLFRAM_ENGINE_2026-10-20.md",
+        "source_sha256": "4da32b604c9bfae4de7821ee808097b3d210b3f6e2a5a7e3c618ae7fd3a06d20",
+        "source_repository": "https://github.com/gj3447/CHU_OS",
+        "source_revision": "95acdab0e68f7b1df8c07fb788563fced5fdee80",
+        "code_path": "kernel/src/graph.rs",
+        "code_sha256": "78674578874c15d584d7360af9643bf4f4290bd43303ffc3999cd8a41fc1b295",
+        "external_url": "https://github.com/gj3447/CHU_OS/blob/95acdab0e68f7b1df8c07fb788563fced5fdee80/kernel/src/graph.rs",
+        "support_source_bindings": [
+          "https://github.com/gj3447/CHU_OS/blob/95acdab0e68f7b1df8c07fb788563fced5fdee80/kernel/src/store.rs sha256:df348fa078c8b4c93e8bccd5e0393a1bb57383cdcf23d26a594e5321c0cd10c4",
+          "https://github.com/gj3447/CHU_OS/blob/95acdab0e68f7b1df8c07fb788563fced5fdee80/spec/PROJECTION.md sha256:917b77db8e61f961e2e5da09ed7547f5a03f81bd3e6ee3ef31518d7726fca3f2",
+          "https://github.com/gj3447/CHU_OS/blob/95acdab0e68f7b1df8c07fb788563fced5fdee80/spec/IDENTITY.md sha256:978923028897b197ade4288e0505f53238c2adb04a9f726103b08de480a08f64"
+        ],
+        "verification_method": "STATIC_SOURCE_INSPECTION",
+        "execution_status": "NOT_RUN"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-indexing-2026-10-20-setreplace",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "SetReplace inverse index and matching",
+        "description": "AtomsIndex는 Atom→unordered_set<TokenID>이다. 매처는 bound 정점을 모두 포함하는 후보 중 적은 후보를 갖는 패턴부터 검사한다. replaceOnce는 출력과 사건을 추가하고 단일/다중 이력의 maxDestroyerEvents 정책에 맞춰 소비 엣지 후보를 제거한다.",
+        "standard_graph_role": "SOURCE_CODE_OBSERVATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "claim_boundary": "PINNED_SOURCE_REVIEW_AND_EXPLICIT_PROPOSALS_ONLY",
+        "projection_nonclaim": "LOCAL_KNOWLEDGE_RECORD_NOT_RUNTIME_W_NOT_ENGINE_EXECUTION_NOT_OS_INTEGRATION",
+        "responsibility_owner": "hswm:ontology:chu-os-indexing",
+        "recorded_on": "2026-10-20",
+        "source_path": "docs/research/CHU_OS_INDEXING_AND_WOLFRAM_ENGINE_2026-10-20.md",
+        "source_sha256": "4da32b604c9bfae4de7821ee808097b3d210b3f6e2a5a7e3c618ae7fd3a06d20",
+        "source_repository": "https://github.com/maxitg/SetReplace",
+        "source_revision": "44c868bf4622e4542b306846ffdcc47c19d0bba8",
+        "code_path": "libSetReplace/AtomsIndex.cpp",
+        "code_sha256": "ef34e3af6aec2f2a647b8a32469679565224918207241933ed7eba1f2b51d17e",
+        "external_url": "https://github.com/maxitg/SetReplace/blob/44c868bf4622e4542b306846ffdcc47c19d0bba8/libSetReplace/AtomsIndex.cpp",
+        "support_source_bindings": [
+          "https://github.com/maxitg/SetReplace/blob/44c868bf4622e4542b306846ffdcc47c19d0bba8/libSetReplace/IDTypes.hpp sha256:7fd5f059ff570609b96fc7b26b4d1c031b966c4fc95912c750f3f905c0481777",
+          "https://github.com/maxitg/SetReplace/blob/44c868bf4622e4542b306846ffdcc47c19d0bba8/libSetReplace/HypergraphMatcher.cpp sha256:14007cd6fdc7b04703e652ca3442fd6bb65f89d1bc8ffd5e3987f643b252c86d",
+          "https://github.com/maxitg/SetReplace/blob/44c868bf4622e4542b306846ffdcc47c19d0bba8/libSetReplace/HypergraphSubstitutionSystem.cpp sha256:bee0edc449512a2182b833f26b1853657585c20035e8361a8260489285e52e7f",
+          "https://github.com/maxitg/SetReplace/blob/44c868bf4622e4542b306846ffdcc47c19d0bba8/Kernel/A01$libSetReplace.m sha256:0cd701720b3e7bd366c68ca5e549f3ec2f927874b9f4afe8602b15e15f700938"
+        ],
+        "verification_method": "STATIC_SOURCE_INSPECTION",
+        "execution_status": "NOT_RUN"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-indexing-2026-10-20-hre-index",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "HRE ancestry vertex index",
+        "description": "각 상태가 자신의 추가 엣지를 정렬된 vertex/edge 인덱스로 보관한다. 조회는 부모 사슬을 따라 lower_bound하고 현재 bitset으로 생존 여부를 확인한다. 여러 bound 정점은 첫 정점으로 후보를 얻고 나머지를 검사한다. 이력 깊이에 따른 비용이 존재한다.",
+        "standard_graph_role": "SOURCE_CODE_OBSERVATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "claim_boundary": "PINNED_SOURCE_REVIEW_AND_EXPLICIT_PROPOSALS_ONLY",
+        "projection_nonclaim": "LOCAL_KNOWLEDGE_RECORD_NOT_RUNTIME_W_NOT_ENGINE_EXECUTION_NOT_OS_INTEGRATION",
+        "responsibility_owner": "hswm:ontology:chu-os-indexing",
+        "recorded_on": "2026-10-20",
+        "source_path": "docs/research/CHU_OS_INDEXING_AND_WOLFRAM_ENGINE_2026-10-20.md",
+        "source_sha256": "4da32b604c9bfae4de7821ee808097b3d210b3f6e2a5a7e3c618ae7fd3a06d20",
+        "source_repository": "https://github.com/WolframInstitute/HypergraphRewritingEngine",
+        "source_revision": "c2728093fb170ccff4bfe5d4a83561920882b427",
+        "code_path": "hypergraph/include/hypergraph/ancestry.hpp",
+        "code_sha256": "07bd6dbc744b34dc87749e09d7cff74ae4a5cb05584f255acd7e1301b1e898d5",
+        "external_url": "https://github.com/WolframInstitute/HypergraphRewritingEngine/blob/c2728093fb170ccff4bfe5d4a83561920882b427/hypergraph/include/hypergraph/ancestry.hpp",
+        "support_source_bindings": [
+          "https://github.com/WolframInstitute/HypergraphRewritingEngine/blob/c2728093fb170ccff4bfe5d4a83561920882b427/hypergraph/src/hypergraph.cpp sha256:b1fd39510d21fc1359396a18466d49ac7560c568611c8e69df3b8744a5fec953"
+        ],
+        "verification_method": "STATIC_SOURCE_INSPECTION",
+        "execution_status": "NOT_RUN"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-indexing-2026-10-20-hre-join",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "HRE edge-at-a-time backtracking join",
+        "description": "join_dfs는 패턴 엣지별 후보를 바인딩·재귀·되돌림한다. 엣지 매핑은 injective, 정점 매핑은 non-injective를 허용한다. bound 없는 패턴은 arity 또는 반복변수 signature로 거르고 bound가 있으면 ancestry 인덱스를 쓴다.",
+        "standard_graph_role": "SOURCE_CODE_OBSERVATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "claim_boundary": "PINNED_SOURCE_REVIEW_AND_EXPLICIT_PROPOSALS_ONLY",
+        "projection_nonclaim": "LOCAL_KNOWLEDGE_RECORD_NOT_RUNTIME_W_NOT_ENGINE_EXECUTION_NOT_OS_INTEGRATION",
+        "responsibility_owner": "hswm:ontology:chu-os-indexing",
+        "recorded_on": "2026-10-20",
+        "source_path": "docs/research/CHU_OS_INDEXING_AND_WOLFRAM_ENGINE_2026-10-20.md",
+        "source_sha256": "4da32b604c9bfae4de7821ee808097b3d210b3f6e2a5a7e3c618ae7fd3a06d20",
+        "source_repository": "https://github.com/WolframInstitute/HypergraphRewritingEngine",
+        "source_revision": "c2728093fb170ccff4bfe5d4a83561920882b427",
+        "code_path": "common/include/hgcommon/join_core.hpp",
+        "code_sha256": "cee9624e57792f448643408efd60da070b55586173637d0ed416c8bfc8056bfb",
+        "external_url": "https://github.com/WolframInstitute/HypergraphRewritingEngine/blob/c2728093fb170ccff4bfe5d4a83561920882b427/common/include/hgcommon/join_core.hpp",
+        "support_source_bindings": [
+          "https://github.com/WolframInstitute/HypergraphRewritingEngine/blob/c2728093fb170ccff4bfe5d4a83561920882b427/hypergraph/include/hypergraph/pattern_matcher.hpp sha256:08539a574bce4b95ed889243018b11b717952019d0ff44de1828da468a2deb7d"
+        ],
+        "verification_method": "STATIC_SOURCE_INSPECTION",
+        "execution_status": "NOT_RUN"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-indexing-2026-10-20-hre-rewrite",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "HRE immutable child state and rewrite events",
+        "description": "입력 state의 엣지 존재를 확인하고 bitset 자식에서 소비 엣지를 제외하며 RHS 전용 변수의 새 정점과 출력 엣지를 추가한다. raw state와 canonical state를 구별하고 소비/생성 사건을 기록한다. WXF 프로세스 경로와 CUDA 코드가 있으나 이번 실행 검증은 없다.",
+        "standard_graph_role": "SOURCE_CODE_OBSERVATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "claim_boundary": "PINNED_SOURCE_REVIEW_AND_EXPLICIT_PROPOSALS_ONLY",
+        "projection_nonclaim": "LOCAL_KNOWLEDGE_RECORD_NOT_RUNTIME_W_NOT_ENGINE_EXECUTION_NOT_OS_INTEGRATION",
+        "responsibility_owner": "hswm:ontology:chu-os-indexing",
+        "recorded_on": "2026-10-20",
+        "source_path": "docs/research/CHU_OS_INDEXING_AND_WOLFRAM_ENGINE_2026-10-20.md",
+        "source_sha256": "4da32b604c9bfae4de7821ee808097b3d210b3f6e2a5a7e3c618ae7fd3a06d20",
+        "source_repository": "https://github.com/WolframInstitute/HypergraphRewritingEngine",
+        "source_revision": "c2728093fb170ccff4bfe5d4a83561920882b427",
+        "code_path": "hypergraph/src/rewriter.cpp",
+        "code_sha256": "9c6338a3e20efec4b4e0e816e7f285484331496e8339419aa5fef9c6e5d29974",
+        "external_url": "https://github.com/WolframInstitute/HypergraphRewritingEngine/blob/c2728093fb170ccff4bfe5d4a83561920882b427/hypergraph/src/rewriter.cpp",
+        "support_source_bindings": [
+          "https://github.com/WolframInstitute/HypergraphRewritingEngine/blob/c2728093fb170ccff4bfe5d4a83561920882b427/hypergraph/src/parallel_evolution.cpp sha256:4d52ebd317ba9e00daac4f861f742377f74b119dbd8877aafe4b29904fcd7b16",
+          "https://github.com/WolframInstitute/HypergraphRewritingEngine/blob/c2728093fb170ccff4bfe5d4a83561920882b427/paclet_source/hg_evolve_main.cpp sha256:c6874780640709c7d8bfcf6bb6faaf830934df0a289218038a9567f12cfe178c",
+          "https://github.com/WolframInstitute/HypergraphRewritingEngine/blob/c2728093fb170ccff4bfe5d4a83561920882b427/hypergraph/include/hypergraph/types.hpp sha256:b3ff96d5790790ede6eee7f706f9130c6789a24810db1c314a7d314b63b794e9"
+        ],
+        "verification_method": "STATIC_SOURCE_INSPECTION",
+        "execution_status": "NOT_RUN"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-indexing-2026-10-20-hre-identity",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "HRE state identity modes",
+        "description": "None은 raw state를 합치지 않고 Automatic은 라벨 포함 엣지 내용을 비교한다. Full은 IR canonical form을 비교해 동형 상태를 합친다. hash만으로 동일시하지 않는다. 기존 token twin을 재사용해 IR을 생략하는 경로도 있다. 파일 bytes CID와는 별개인 동일성 계약이다.",
+        "standard_graph_role": "SOURCE_CODE_OBSERVATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "claim_boundary": "PINNED_SOURCE_REVIEW_AND_EXPLICIT_PROPOSALS_ONLY",
+        "projection_nonclaim": "LOCAL_KNOWLEDGE_RECORD_NOT_RUNTIME_W_NOT_ENGINE_EXECUTION_NOT_OS_INTEGRATION",
+        "responsibility_owner": "hswm:ontology:chu-os-indexing",
+        "recorded_on": "2026-10-20",
+        "source_path": "docs/research/CHU_OS_INDEXING_AND_WOLFRAM_ENGINE_2026-10-20.md",
+        "source_sha256": "4da32b604c9bfae4de7821ee808097b3d210b3f6e2a5a7e3c618ae7fd3a06d20",
+        "source_repository": "https://github.com/WolframInstitute/HypergraphRewritingEngine",
+        "source_revision": "c2728093fb170ccff4bfe5d4a83561920882b427",
+        "code_path": "hypergraph/src/hypergraph.cpp",
+        "code_sha256": "b1fd39510d21fc1359396a18466d49ac7560c568611c8e69df3b8744a5fec953",
+        "external_url": "https://github.com/WolframInstitute/HypergraphRewritingEngine/blob/c2728093fb170ccff4bfe5d4a83561920882b427/hypergraph/src/hypergraph.cpp",
+        "support_source_bindings": [
+          "https://github.com/WolframInstitute/HypergraphRewritingEngine/blob/c2728093fb170ccff4bfe5d4a83561920882b427/common/include/hgcommon/content_core.hpp sha256:7eb53a7f0b7de62128cb9c5be5dfd44b38a80962b4a7f1eef53bcf51af5784db"
+        ],
+        "verification_method": "STATIC_SOURCE_INSPECTION",
+        "execution_status": "NOT_RUN"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-indexing-2026-10-20-doc-mismatch",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "HRE documentation and matcher discrepancy",
+        "description": "ARCHITECTURE.md의 worst-case-optimal join 소개와 실제 edge-at-a-time DFS 구현이 불일치한다. 매처 주석도 3개 이상 LHS 엣지에서 일반적 최악 경우 최적성을 부정한다. 본 검토는 WCOJ 구현으로 분류하지 않으며 새로운 성능 측정이나 복잡도 증명은 아니다.",
+        "standard_graph_role": "SOURCE_CODE_OBSERVATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "claim_boundary": "PINNED_SOURCE_REVIEW_AND_EXPLICIT_PROPOSALS_ONLY",
+        "projection_nonclaim": "LOCAL_KNOWLEDGE_RECORD_NOT_RUNTIME_W_NOT_ENGINE_EXECUTION_NOT_OS_INTEGRATION",
+        "responsibility_owner": "hswm:ontology:chu-os-indexing",
+        "recorded_on": "2026-10-20",
+        "source_path": "docs/research/CHU_OS_INDEXING_AND_WOLFRAM_ENGINE_2026-10-20.md",
+        "source_sha256": "4da32b604c9bfae4de7821ee808097b3d210b3f6e2a5a7e3c618ae7fd3a06d20",
+        "source_repository": "https://github.com/WolframInstitute/HypergraphRewritingEngine",
+        "source_revision": "c2728093fb170ccff4bfe5d4a83561920882b427",
+        "code_path": "hypergraph/include/hypergraph/pattern_matcher.hpp",
+        "code_sha256": "08539a574bce4b95ed889243018b11b717952019d0ff44de1828da468a2deb7d",
+        "external_url": "https://github.com/WolframInstitute/HypergraphRewritingEngine/blob/c2728093fb170ccff4bfe5d4a83561920882b427/hypergraph/include/hypergraph/pattern_matcher.hpp",
+        "support_source_bindings": [
+          "https://github.com/WolframInstitute/HypergraphRewritingEngine/blob/c2728093fb170ccff4bfe5d4a83561920882b427/docs/ARCHITECTURE.md sha256:b9f731d7688d27ea83dc7594dd28dd915a3d66a04428ccd1244f65c50917ed8b",
+          "https://github.com/WolframInstitute/HypergraphRewritingEngine/blob/c2728093fb170ccff4bfe5d4a83561920882b427/common/include/hgcommon/join_core.hpp sha256:cee9624e57792f448643408efd60da070b55586173637d0ed416c8bfc8056bfb"
+        ],
+        "verification_method": "STATIC_SOURCE_INSPECTION",
+        "execution_status": "NOT_RUN"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-indexing-2026-10-20-proposal",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "CHU_OS follow-up indexing work",
+        "description": "snapshot별 인덱스 재사용·증분 갱신, role/ordinal/arity 후보 선택, 깊은 이력·고차수·큰 패턴 평가, T32/T33 경로 뷰 구현을 비교할 수 있다. 엔진의 그래프 동형 병합을 파일 CID나 권한 identity로 대체하지 않는다.",
+        "standard_graph_role": "ENGINEERING_PROPOSAL",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "claim_boundary": "PINNED_SOURCE_REVIEW_AND_EXPLICIT_PROPOSALS_ONLY",
+        "projection_nonclaim": "LOCAL_KNOWLEDGE_RECORD_NOT_RUNTIME_W_NOT_ENGINE_EXECUTION_NOT_OS_INTEGRATION",
+        "responsibility_owner": "hswm:ontology:chu-os-indexing",
+        "recorded_on": "2026-10-20",
+        "source_path": "docs/research/CHU_OS_INDEXING_AND_WOLFRAM_ENGINE_2026-10-20.md",
+        "source_sha256": "4da32b604c9bfae4de7821ee808097b3d210b3f6e2a5a7e3c618ae7fd3a06d20",
+        "status": "PROPOSED_NOT_IMPLEMENTED"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-indexing-2026-10-20-limits",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Verification and integration limits",
+        "description": "이번은 원문 보존과 소스 기반 지식 저장이다. 두 엔진 실행·벤치마크·CPU/GPU 동등성·CHU_OS 통합·HSWM runtime W 학습을 완료했다고 주장하지 않는다. Wolfram Language 전체 평가기의 내부 구현 조사도 아니다.",
+        "standard_graph_role": "IMPLEMENTATION_BOUNDARY",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "claim_boundary": "PINNED_SOURCE_REVIEW_AND_EXPLICIT_PROPOSALS_ONLY",
+        "projection_nonclaim": "LOCAL_KNOWLEDGE_RECORD_NOT_RUNTIME_W_NOT_ENGINE_EXECUTION_NOT_OS_INTEGRATION",
+        "responsibility_owner": "hswm:ontology:chu-os-indexing",
+        "recorded_on": "2026-10-20",
+        "source_path": "docs/research/CHU_OS_INDEXING_AND_WOLFRAM_ENGINE_2026-10-20.md",
+        "source_sha256": "4da32b604c9bfae4de7821ee808097b3d210b3f6e2a5a7e3c618ae7fd3a06d20"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+      "to_uid": "sym:Concept:chu-os-indexing-2026-10-20-user",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LOCAL_SOURCE_REVIEW",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-indexing-2026-10-20-user",
+      "to_uid": "sym:Concept:chu-os-indexing-2026-10-20-clarification",
+      "type": "HAS_ENGINEERING_INTERPRETATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LOCAL_SOURCE_REVIEW",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+      "to_uid": "sym:Concept:chu-os-indexing-2026-10-20-clarification",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LOCAL_SOURCE_REVIEW",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+      "to_uid": "sym:Concept:chu-os-indexing-2026-10-20-identity",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LOCAL_SOURCE_REVIEW",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+      "to_uid": "sym:Concept:chu-os-indexing-2026-10-20-chu-index",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LOCAL_SOURCE_REVIEW",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+      "to_uid": "sym:Concept:chu-os-indexing-2026-10-20-setreplace",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LOCAL_SOURCE_REVIEW",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+      "to_uid": "sym:Concept:chu-os-indexing-2026-10-20-hre-index",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LOCAL_SOURCE_REVIEW",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+      "to_uid": "sym:Concept:chu-os-indexing-2026-10-20-hre-join",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LOCAL_SOURCE_REVIEW",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+      "to_uid": "sym:Concept:chu-os-indexing-2026-10-20-hre-rewrite",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LOCAL_SOURCE_REVIEW",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+      "to_uid": "sym:Concept:chu-os-indexing-2026-10-20-hre-identity",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LOCAL_SOURCE_REVIEW",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+      "to_uid": "sym:Concept:chu-os-indexing-2026-10-20-doc-mismatch",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LOCAL_SOURCE_REVIEW",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+      "to_uid": "sym:Concept:chu-os-indexing-2026-10-20-proposal",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LOCAL_SOURCE_REVIEW",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+      "to_uid": "sym:Concept:chu-os-indexing-2026-10-20-limits",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LOCAL_SOURCE_REVIEW",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+      "to_uid": "sym:AbstractNode:chu-hswm-scope-2026-09-27",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LOCAL_SOURCE_REVIEW",
+      "status": "ACTIVE"
+    }
+  ]
+}

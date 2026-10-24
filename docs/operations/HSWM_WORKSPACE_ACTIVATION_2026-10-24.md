@@ -4,11 +4,11 @@
 [발표–헌법–다단계 실행 검사](HSWM_MULTIHOP_ACTIVATION_2026-10-24.md)의 후속 구현이다.
 사용자 원문이나 HSWM_LIKENESS의 점수·프로파일을 변경하지 않는다.
 
-현재 판정은 **구현 검사 통과, 최종 실모델 집단 검증 대기**다. 공유 실행기의 CPU headroom
-제한 때문에 수정 완료판의 49 TRAIN + 3 새 프로세스 AUDIT는 아직 시작하지 못했다.
-앞선 partial 실행을 최종 완료판의 성공으로 대신 세지 않는다.
-구현 검사는 413개 절 판본에서 수행했다. 이후 다른 writer의 헌법 지도 개정으로 현재
-관측은 **49개 출처·416개 절**이며, 이 판본의 실행 준비·source pin까지 확인했다.
+현재 판정은 **선언된 출처 읽기·제목 추출 범위의 실행–피드백–native W 개정–다음 프로세스
+재사용 검증 완료**다. 사용자 재개 요청에 따라 현재 판본 **49개 출처·416개 절**을 고정하고
+실모델 49 TRAIN + 별도 OS 프로세스 3 AUDIT를 실행했다. 독립 checker는 PASS다.
+제목 추출은 47/49, 재개방은 3/3이며, 오답 2건의 원본과 reward 0도 보존했다.
+이 결과는 임의 질문의 충분성·최소성, 자연 과제 일반화나 HSWM 전체 효능을 입증하지 않는다.
 
 ## 이번에 연결한 범위
 
@@ -19,7 +19,7 @@
 → 기존 native owner의 W 개정 → 새 프로세스의 다음 사용
 ```
 
-현재 등록된 49개 출처의 413개 완전한 ATX 절을 기존 native 원자로 저장하고, catalog가
+현재 등록된 49개 출처의 416개 완전한 ATX 절을 기존 native 원자로 저장하고, catalog가
 역할 있는 참조로 각 절을 가리키게 했다. 현재 관측한 문서 hash, 과거 bundle, 명시적
 route, 선택한 절의 범위·hash를 구분한다. `fractal`의 SOURCE_ONLY 지위는 유지한다.
 모든 저장소 파일이나 각 문서에 적힌 모든 프로그램을 실행한 것은 아니다.
@@ -63,28 +63,79 @@ owner 계약 아래의 opt-in 최적화이며 모든 파일의 상시 무결성 
 두 partial root는 보존하며 같은 root를 재시도하거나 과거 hash를 현재에 맞춰 덮어쓰지 않는다.
 후속 실행은 수정한 구현·범위로 별도 등록한다. 성공률에 이전 집단을 임의로 섞지 않는다.
 
-## 재현·구현·근거
+## 실제 실행과 독립 검사
 
 확인한 검사는 새 신경·workspace·손상 검사 12개, 기존 다단계 9개, 활성화 3개, 내용 탐색
 16개로 총 **40개**다. 수치 미분과 XOR, v1 호환, 원문/범위 변조, stale·중복·외부 writer,
 선택 content와 head 손상, 무관 content 손상의 종료 audit를 확인했다.
-49개 실제 출처의 전체 catalog admission도 이 검사에 포함한다.
+49개 실제 출처의 전체 catalog admission도 이 검사에 포함한다. 당시 단위 검사 판본은
+413개 절이었고, 이번 실제 실행은 개정된 416개 절 판본 전체를 admission·readback했다.
 최종 runtime의 `npm run check`와 `npm run build`, 변경 문서의 portable math 검사도 통과했다.
+이번 재개에서는 runtime을 바꾸지 않았고 구현·의존 파일 및 package lock의 총 49개 pin이
+일치함을 확인했다. 이어서 실제 모델·영속 상태·읽기 비교를 실행했다.
 
 | 실제 모델 관측 | 생성·W 저장 | 결과 |
 | --- | --- | --- |
 | 초기 전체 문서 전달판 | 2회·2회 | 1/2; 세 번째 요청 transport 중단 |
 | 절 선택 도입판 | 11회·11회 | 11/11; 다음 출처의 seed가 64개 쓰기 상한에서 중단 |
-| 최종 batch 수정판 | 시작 전 | source·구현 49개 파일·package lock·runner 고정; 52회 최대 예산으로 준비 |
+| 최종 batch 수정판 TRAIN | 49회·49회 | 47/49; 전 출처의 policy 0→1 개정·정확한 readback |
+| 별도 OS 프로세스 AUDIT | 3회·0회 | identity·fractal·tool-harness에서 저장된 policy 1판 사용; 3/3 |
 
-최종 집단의 성공률·별도 프로세스 재사용·독립 checker PASS와 파일 읽기 감소율은 아직
-미측정이다. 관리 대기 세 번은 명령 시작 전에 종료됐다. 그 사이 한 번 입장이 허용됐을 때는
-다른 writer가 개정한 manifest를 감지해 `NOT_READY`로 중단했다. 모두 모델 호출은 없었다.
-기존 pin을 덮어쓰지 않고 416개 절 판본을 별도 root에 등록했으나 마지막 입장 대기도
-CPU headroom·기존 대기열 때문에 만료됐다. 현재 활성 작업이나 자동 재시도는 남기지 않는다.
-준비된 root의 scope가 만료되면 자동 갱신하지 않고 새 등록이 필요하다.
-원시 request/response, 과거 실패, native 상태와 구현 archive는 ignored 로컬 root에 있다.
-다른 writer의 수정이 있는 작업 트리에서 검증했으므로 실행 당시의 정확한 구현 pins를 보존한다.
+최종 집단은 모델 ID `qwen3-4b-real`로 실제 생성 **52회**, 공급자 보고 **230,630 tokens**를
+사용했다. 정확한 checkpoint hash는 미확인이고 LLM 본체 가중치는 동결했다. 최대 입력은
+5,562 tokens이며 출력 예약 384를 더해도 관측한 8,192 한도 안이다. 논리 prompt 총합은
+634,360 bytes다. 관리 작업은 약 173.0초, 모델 HTTP 구간 합은 약 127.2초였다. 관리 작업
+시간에는 실행·checker·아래 세 읽기 비교가 포함되며, 준비와 이전 실패·대기는 제외한다.
+
+오답은 `performance-proof`와 `optimization-rules`다. 두 prediction은 원문의 첫 제목 대신
+각 workspace 요약 제목과 일치했다. 정답·허용 오차를 바꾸거나 재시도하지 않았고 실제 0
+reward가 해당 source의 신경 파라미터를 갱신했다. 이 두 오류가 이후 질문에서 교정됐다는
+주장은 하지 않는다. 사전에 정한 재개방 세 출처는 위 표의 별도 집단이다.
+
+checker는 실행기의 학습 함수를 재사용하지 않고 scalar chain rule과 clipping을 계산해
+49개 신경 파라미터 갱신을 대조했다. 최초·후속 native policy, 완전한 원문·절 catalog,
+선택 역할·실제 wire·trace·outcome을 확인했다. 명시적인 native content 대조는 404회,
+reward·필수 역할·W 변조 거부는 3건이다. checker 전후 **2,659개 native 파일의 경로와
+바이트 hash가 동일**했다. checker PASS는 원래 추출 오답을 성공으로 바꾸지 않는다.
+
+이전 관리 대기 세 번은 명령 시작 전에 종료됐고, 한 번은 대기 중 개정된 manifest를
+감지해 `NOT_READY`로 중단했다. 모두 모델 호출은 없었다. 만료된 scope와 과거 pin은
+그대로 보존했다. 이번 사용자 재개 요청으로 같은 프로젝트·기존 transport·52회 상한을
+새로 등록하고, 도달성을 확인한 후 실행했다. 이번 입장 대기는 약 0.006초였다.
+실행 완료 후 활성 작업이나 자동 재시도를 남기지 않는다.
+
+## 동일 문맥의 파일 읽기 비교
+
+각각 같은 source·policy·질문·단일 실행 조건에서 기존 native snapshot 조립과 scoped
+session 조립을 비교했다. 세 경우 모두 반환된 assembly가 정확히 같고 native submit은 0회다.
+실제 `readRegularBounded`가 반환한 바이트를 세었으며, 파일 경로별 원본 집계도 보존했다.
+
+| 출처 | 기존 읽기 bytes | session 읽기 bytes | 감소 | 기존/session 시간 ms |
+| --- | ---: | ---: | ---: | ---: |
+| identity | 658,689 | 227,215 | 65.5% | 309.2 / 76.3 |
+| fractal | 2,420,279 | 618,765 | 74.4% | 1,143.6 / 243.0 |
+| tool-harness | 1,274,184 | 366,731 | 71.2% | 505.3 / 93.0 |
+
+각 session은 snapshot 요청 9회를 시작·종료의 전체 복원 2회와 head 검사로 처리했다.
+계수는 runtime layer 최초 열기를 제외하고 **session 자체의 시작·종료 전체 audit를 포함**한다.
+모델 호출·tokenizer·workspace 탐색 비용이나 물리 디스크 I/O를 측정한 값은 아니다.
+각 출처에서 기존 조립 다음 session 조립을 한 번씩 측정했으므로 시간에는 cache·순서 효과가
+있을 수 있다. 지연 분포·동시성·큰 저널의 점근 성능이나 전체 시스템 읽기량으로 일반화하지 않는다.
+선택 partition의 차가운 복원과 commit은 여전히 그 partition 전체를 검증한다.
+
+## 재현·구현·근거
+
+원시 request/response, native 상태, source snapshot과 실행 구현 archive는 ignored
+`.hswm-local/workspace-activation-finish-2026-10-24/`에 있다. 다른 writer의 수정이 있는 작업
+트리에서 검증했으므로 Git HEAD만으로 동일한 실측 구성을 추정하지 않고 정확한 pins를 보존한다.
+checker와 `measure`는 모델 호출 없이 이 root를 읽는다. scope가 만료됐거나 집단이 이미 실행된
+root로 생성 호출을 다시 실행하지 않는다.
+
+| 로컬 재검사 대상 | SHA-256 |
+| --- | --- |
+| plan.json | `d2f8025e476e2ec73842289c3941a13d6ad6916b474332c863e98a1dc51874ba` |
+| verification.json | `7ddd184c178d7eb388489e8c85659a14f88f3ce4d13e8e231819da9adb44b8f1` |
+| checker 구현 | `cb70265f14b15e78111e8fe0c622e44e980ba3a39bf2f6eba35e1a353cd27e38` |
 
 [실행·재검사 방법과 1차 문헌](../../_research/workspace_activation_v2/README.md),
 [consumer](../../src/hswm/effect-runtime/src/workspace-activation-runtime.ts),

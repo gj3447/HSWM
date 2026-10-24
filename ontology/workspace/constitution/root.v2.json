@@ -1,0 +1,126 @@
+{
+  "schema_version": "hswm-constitution-navigation/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-constitution",
+  "status": "CONTENT_NAVIGATION",
+  "nonclaim": "NOT_CANONICAL_RUNTIME_STATE_OR_EXECUTION_OR_LEARNING_OR_EFFICACY",
+  "authority_boundary": "Module text and routes are SECONDARY_AI. User source attribution is separate. Existing targets retain their own status and authority.",
+  "source_accessed_on": "2026-10-24",
+  "artifact_bindings": [
+    {
+      "path": "docs/canon/HSWM_CONSTITUTION.md",
+      "sha256": "9fb83cd586e9ae98c00297ffdd4742772dade0d1247d62bc7b7d520fa26d2d4c"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 1,
+    "anchors": 5,
+    "relations": 5
+  },
+  "anchors": [
+    {
+      "uid": "sym:AbstractNode:hswm-constitution-state",
+      "name": "정체성·상태·관계",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-constitution-activation",
+      "name": "국소 활성화·다단계 Map·원문",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-constitution-learning",
+      "name": "월드모델·실행·지속학습",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-constitution-composition",
+      "name": "프랙탈 합성·CHU·철학",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-constitution-assurance",
+      "name": "평가·실현 범위·개정",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-constitution",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "HSWM 현재 통합 헌법",
+        "standard_graph_role": "CONSTITUTION_MODULE",
+        "authority_class": "SECONDARY_AI",
+        "status": "CURRENT_SOURCE_BOUND_SYNTHESIS",
+        "source_path": "docs/canon/HSWM_CONSTITUTION.md",
+        "source_sha256": "9fb83cd586e9ae98c00297ffdd4742772dade0d1247d62bc7b7d520fa26d2d4c",
+        "claim_boundary": "SOURCE_NAVIGATION_NOT_CANONICAL_STATE_OR_LEARNING_OR_EFFICACY",
+        "constitution_module": "root",
+        "source_revision": "2026-10-24-research-rationale",
+        "predecessor_bundle_path": "ontology/workspace/constitution/root.v1.json",
+        "predecessor_bundle_git_revision": "b7ac03c302749f5519b7387fd6b5c9364e71a673",
+        "predecessor_bundle_sha256": "d96148f226ad2a0dcae2812123a391542484393915bc2af2b726a5fb2240bad6"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution",
+      "to_uid": "sym:AbstractNode:hswm-constitution-state",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution",
+      "to_uid": "sym:AbstractNode:hswm-constitution-activation",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution",
+      "to_uid": "sym:AbstractNode:hswm-constitution-learning",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution",
+      "to_uid": "sym:AbstractNode:hswm-constitution-composition",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution",
+      "to_uid": "sym:AbstractNode:hswm-constitution-assurance",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    }
+  ]
+}

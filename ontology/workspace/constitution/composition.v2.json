@@ -1,0 +1,154 @@
+{
+  "schema_version": "hswm-constitution-navigation/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-constitution-composition",
+  "status": "CONTENT_NAVIGATION",
+  "nonclaim": "NOT_CANONICAL_RUNTIME_STATE_OR_EXECUTION_OR_LEARNING_OR_EFFICACY",
+  "authority_boundary": "Module text and routes are SECONDARY_AI. User source attribution is separate. Existing targets retain their own status and authority.",
+  "source_accessed_on": "2026-10-24",
+  "artifact_bindings": [
+    {
+      "path": "docs/canon/hswm/composition.md",
+      "sha256": "0834cacdd600fcecc3f54d98a1d3fcc6fbb88272b889c424e3b576bd2bb6fadd"
+    },
+    {
+      "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+      "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 2,
+    "anchors": 5,
+    "relations": 6
+  },
+  "anchors": [
+    {
+      "uid": "sym:AbstractNode:chu-being-bundle-2026-10-07",
+      "name": "CHU의 존재·HSWM의 구조·선의 공리",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+      "name": "CHU 운영체제의 HSWM 동작과 AI 정체성",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-metahumotonic-idea-2026-10-04",
+      "name": "완전한 HSWM 이데아와 metahumotonic",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-constitution-state",
+      "name": "정체성·상태·관계",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-constitution-assurance",
+      "name": "평가·실현 범위·개정",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-constitution-composition",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "프랙탈 합성·CHU·철학",
+        "standard_graph_role": "CONSTITUTION_MODULE",
+        "authority_class": "SECONDARY_AI",
+        "status": "CURRENT_SOURCE_BOUND_SYNTHESIS",
+        "source_path": "docs/canon/hswm/composition.md",
+        "source_sha256": "0834cacdd600fcecc3f54d98a1d3fcc6fbb88272b889c424e3b576bd2bb6fadd",
+        "claim_boundary": "SOURCE_NAVIGATION_NOT_CANONICAL_STATE_OR_LEARNING_OR_EFFICACY",
+        "constitution_module": "composition",
+        "source_revision": "2026-10-24-research-rationale",
+        "predecessor_bundle_path": "ontology/workspace/constitution/composition.v1.json",
+        "predecessor_bundle_git_revision": "b7ac03c302749f5519b7387fd6b5c9364e71a673",
+        "predecessor_bundle_sha256": "19a88604e706f8869877125990e97d9048edce36bb73d9e78854786ec7ada489"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-constitution-history-fractal",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "FCL-1..8와 과학적 연결",
+        "standard_graph_role": "HISTORICAL_SOURCE_REFERENCE",
+        "authority_class": "SECONDARY_AI",
+        "status": "CURRENT_SOURCE_BOUND_SYNTHESIS",
+        "source_path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+        "source_sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81",
+        "claim_boundary": "SOURCE_NAVIGATION_NOT_CANONICAL_STATE_OR_LEARNING_OR_EFFICACY",
+        "legacy_entry_id": "fractal",
+        "legacy_bundle_path": "ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json",
+        "projection_reason": "Historical created_at metadata is outside the strict native v2 bundle profile. Preserve the original bytes; use source inspection."
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution-composition",
+      "to_uid": "sym:AbstractNode:chu-being-bundle-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution-composition",
+      "to_uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution-composition",
+      "to_uid": "sym:AbstractNode:hswm-constitution-history-fractal",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution-composition",
+      "to_uid": "sym:AbstractNode:hswm-metahumotonic-idea-2026-10-04",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution-composition",
+      "to_uid": "sym:AbstractNode:hswm-constitution-state",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution-composition",
+      "to_uid": "sym:AbstractNode:hswm-constitution-assurance",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    }
+  ]
+}

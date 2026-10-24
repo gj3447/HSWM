@@ -247,6 +247,10 @@ continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 �
 발표 11·17·34·36쪽, MoE/LinUCB 기법 선택, native 자동 피드백과 다음 프로세스 재사용,
 늦은 예외·중복·순환·예산 검사를 연결한다. `constitution-activation`에서 원문과 검사 기록을 읽는다.
 
+[Workspace 국소 실행·신경 gate·읽기 비용](docs/operations/HSWM_WORKSPACE_ACTIVATION_2026-10-24.md)은
+49개 출처의 절 단위 native 결속, 실제 결과를 통한 policy/v2 갱신과 재개방,
+snapshot 읽기 비교 및 원문·토큰·입장 한도의 실패 보존을 다룬다.
+
 2026-09-07의 실사용 구현은
 [`적응 하이퍼그래프 런타임`](docs/research/HSWM_ADAPTIVE_HYPERGRAPH_RUNTIME_2026-09-07.md)에서
 시작한다. `hswm-live`는 허용된 cell을 재귀 실행하고, 명시한 검사 결과나 사용자 feedback으로

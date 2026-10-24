@@ -7,7 +7,7 @@ import { describeCanonicalAtomV2Envelope, makeCanonicalAtomV2ContentBoundInput }
 import { CanonicalAtomV2ContentSchema, CanonicalAtomV2KeySchema, canonicalAtomV2KeyId, HSWM_CANONICAL_ATOM_V2_CONTRACT_VERSION, HSWM_CANONICAL_TRANSITION_V2_CONTRACT_VERSION, type CanonicalAtomV2, type CanonicalAtomV2Key, type CanonicalAtomV2Content } from "./canonical-atom-v2-schema.js"
 import { contextError, contextHash, contextJson, type ContextPlan } from "./semantic-context-domain.js"
 import { assembleSelectedSemanticContext, checkSemanticContextPlan, executeSelectedSemanticContext } from "./semantic-context-runtime.js"
-import { ACTIVATION_MEDIA, ActivationFeaturesSchema, ActivationModeSchema, activationScopeHash, chooseActivation, decodeActivationPolicy, initializeActivation, updateActivation, type ActivationPolicy } from "./semantic-context-activation-domain.js"
+import { ACTIVATION_MEDIA, NEURAL_ACTIVATION_MEDIA, ActivationFeaturesSchema, ActivationModeSchema, activationScopeHash, chooseActivation, decodeActivationPolicy, initializeActivation, updateActivation, type ActivationPolicy } from "./semantic-context-activation-domain.js"
 import { renderVerifiedContextPrompt, ContextPresentationSchema, type ContextPresentation } from "./semantic-context-presentation-domain.js"
 import { FiniteExecutionGuardSchema, prepareFiniteExecutionGuard, checkFiniteExecution } from "./semantic-context-finite-execution-domain.js"
 
@@ -32,7 +32,10 @@ export const readActivationPolicy = (runtime: Runtime, plan: ContextPlan, policy
   const versions = snapshot.canonical.atoms.filter(a => lineage(a.key, policyKey))
   const atom = versions.find(a => same(a.key, policyKey))
   if (!atom || atom.kind !== "semantic_context_policy" || atom.lifecycle !== "ADMITTED" || versions.some(a => a.key.revisionId > policyKey.revisionId)) return yield* Effect.fail(invalid("Expected exact current admitted activation policy revision"))
-  const policy = yield* decodeActivationPolicy(yield* readJson(runtime, atom.content, ACTIVATION_MEDIA, 262144))
+  if (![ACTIVATION_MEDIA, NEURAL_ACTIVATION_MEDIA].includes(atom.content.mediaType)) return yield* Effect.fail(invalid("Unsupported activation policy media"))
+  const policy = yield* decodeActivationPolicy(yield* readJson(runtime, atom.content, atom.content.mediaType, 262144))
+  if (atom.content.mediaType !== (policy.contract === "hswm-context-activation-policy/v2" ? NEURAL_ACTIVATION_MEDIA : ACTIVATION_MEDIA))
+    return yield* Effect.fail(invalid("Activation contract and media version differ"))
   if (policy.scopeSha256 !== activationScopeHash(plan) || contextHash(atom.references.filter(r => r.referenceType !== "hswm:reference:supersedes")) !== contextHash(roots(plan))) return yield* Effect.fail(invalid("Rule/source revision, role or activation scope changed"))
   return { atom, policy }
 })
@@ -58,7 +61,7 @@ const prepareWrite = (runtime: Runtime, plan: ContextPlan, policy: ActivationPol
     !lineage(prior.key, target.key) || target.key.revisionId !== prior.key.revisionId + 1 || target.owner !== prior.responsibilityOwner) return yield* Effect.fail(invalid("Initialize once or append one revision to the same owner's policy"))
   const first = plan.bindings[0]
   if (!first) return yield* Effect.fail(invalid("No source relation"))
-  const content = yield* runtime.stageContent(ACTIVATION_MEDIA, encode(policy))
+  const content = yield* runtime.stageContent(policy.contract === "hswm-context-activation-policy/v2" ? NEURAL_ACTIVATION_MEDIA : ACTIVATION_MEDIA, encode(policy))
   const atom: CanonicalAtomV2 = { _tag: "CanonicalAtomV2", contractVersion: HSWM_CANONICAL_ATOM_V2_CONTRACT_VERSION,
     key: target.key, kind: "semantic_context_policy", responsibilityOwner: target.owner, content, lifecycle: "ADMITTED",
     provenance: { mode: "DERIVATION", sourceRef: prior?.key ?? first.key, evidenceSha256: policy.feedbackSha256 ?? content.sha256 },

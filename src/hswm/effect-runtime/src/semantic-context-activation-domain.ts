@@ -1,8 +1,10 @@
 /** Disjoint LinUCB over caller-scoped, role-preserving relation bundles. No I/O. */
 import { Either, Schema } from "effect"
 import { contextError, contextHash, type ContextPlan } from "./semantic-context-domain.js"
+import { NeuralGateConfigSchema, NeuralGateSchema, initializeNeuralGate, neuralGateForward, trainNeuralGate, validateNeuralGate } from "./semantic-context-neural-domain.js"
 
 export const ACTIVATION_MEDIA = "application/vnd.hswm.context-activation-policy-v1+json"
+export const NEURAL_ACTIVATION_MEDIA = "application/vnd.hswm.context-activation-policy-v2+json"
 const finite = Schema.Number.pipe(Schema.finite())
 const names = Schema.Array(Schema.NonEmptyString.pipe(Schema.maxLength(128))).pipe(Schema.minItems(1), Schema.maxItems(16), Schema.filter(xs => new Set(xs).size === xs.length))
 export const ActivationConfigSchema = Schema.Struct({
@@ -21,7 +23,11 @@ export const ActivationPolicySchema = Schema.Struct({
   feedbackSha256: Schema.NullOr(Schema.String.pipe(Schema.pattern(/^[a-f0-9]{64}$/))),
   authority: Schema.Literal("OWNER_ADMITTED_CALLER_REWARDS_NOT_AUTHENTICATED")
 })
-export type ActivationPolicy = typeof ActivationPolicySchema.Type
+export const NeuralActivationConfigSchema = Schema.Struct({ ...ActivationConfigSchema.fields, neural: NeuralGateConfigSchema })
+export const NeuralActivationPolicySchema = Schema.Struct({ ...ActivationPolicySchema.fields,
+  contract: Schema.Literal("hswm-context-activation-policy/v2"), algorithm: Schema.Literal("TANH_REWARD_SGD_COUNT_EXPLORATION"),
+  config: NeuralActivationConfigSchema, network: NeuralGateSchema })
+export type ActivationPolicy = typeof ActivationPolicySchema.Type | typeof NeuralActivationPolicySchema.Type
 export const ActivationFeaturesSchema = Schema.Struct({
   encoderRevision: Schema.NonEmptyString, eventSha256: Schema.String.pipe(Schema.pattern(/^[a-f0-9]{64}$/)),
   values: Schema.Array(finite.pipe(Schema.between(-1, 1))).pipe(Schema.minItems(1), Schema.maxItems(16))
@@ -75,7 +81,7 @@ const solve = (a: ReadonlyArray<ReadonlyArray<number>>, b: ReadonlyArray<number>
 })
 
 export const decodeActivationPolicy = (raw: unknown) => Either.gen(function* () {
-  const policy = yield* decode(ActivationPolicySchema, raw)
+  const policy = yield* decode(Schema.Union(ActivationPolicySchema, NeuralActivationPolicySchema), raw)
   const n = policy.config.featureNames.length
   if (new Set(policy.arms.map(a => a.candidateId)).size !== policy.arms.length) return yield* Either.left(invalid("Duplicate arm"))
   for (const arm of policy.arms) {
@@ -84,17 +90,21 @@ export const decodeActivationPolicy = (raw: unknown) => Either.gen(function* () 
       i === j ? v < 1 || v > arm.observations + 1 : Math.abs(v) > arm.observations))) return yield* Either.left(invalid("Statistics exceed bounded observation support"))
     yield* solve(arm.a, arm.b)
   }
+  if (policy.contract === "hswm-context-activation-policy/v2") yield* validateNeuralGate(policy.network, n, policy.arms.length, policy.config.neural)
   return policy
 })
 export const initializeActivation = (plan: ContextPlan, rawConfig: unknown) => Either.gen(function* () {
-  const config = yield* decode(ActivationConfigSchema, rawConfig)
+  const config = yield* decode(Schema.Union(ActivationConfigSchema, NeuralActivationConfigSchema), rawConfig)
   const n = config.featureNames.length
-  return yield* decodeActivationPolicy({
-    contract: "hswm-context-activation-policy/v1", algorithm: "DISJOINT_LINUCB_RIDGE_1", scopeSha256: activationScopeHash(plan), config,
+  const base = {
+    scopeSha256: activationScopeHash(plan), config,
     arms: plan.spec.candidates.map(c => ({ candidateId: c.id, observations: 0,
       a: Array.from({ length: n }, (_, i) => Array.from({ length: n }, (_, j) => i === j ? 1 : 0)), b: Array.from({ length: n }, () => 0) })),
     feedbackSha256: null, authority: "OWNER_ADMITTED_CALLER_REWARDS_NOT_AUTHENTICATED"
-  })
+  }
+  return yield* decodeActivationPolicy("neural" in config ? { ...base, contract: "hswm-context-activation-policy/v2",
+    algorithm: "TANH_REWARD_SGD_COUNT_EXPLORATION", network: initializeNeuralGate(n, plan.spec.candidates.length, config.neural) } :
+    { ...base, contract: "hswm-context-activation-policy/v1", algorithm: "DISJOINT_LINUCB_RIDGE_1" })
 })
 
 export const chooseActivation = (plan: ContextPlan, rawPolicy: unknown, rawFeatures: unknown, rawMode: unknown) => Either.gen(function* () {
@@ -104,11 +114,12 @@ export const chooseActivation = (plan: ContextPlan, rawPolicy: unknown, rawFeatu
   if (policy.scopeSha256 !== activationScopeHash(plan) || contextHash(policy.arms.map(a => a.candidateId)) !== contextHash(plan.spec.candidates.map(c => c.id))) return yield* Either.left(invalid("Source scope or arm order changed"))
   if (features.encoderRevision !== policy.config.encoderRevision || features.eventSha256 !== contextHash(plan.spec.event) || features.values.length !== policy.config.featureNames.length || features.values.every(x => x === 0)) return yield* Either.left(invalid("Features must identify this event and encoder, with a nonzero bounded vector"))
   const scores = []
-  for (const arm of policy.arms) {
+  const neural = policy.contract === "hswm-context-activation-policy/v2" ? neuralGateForward(policy.network, features.values) : null
+  for (const [index, arm] of policy.arms.entries()) {
     const theta = yield* solve(arm.a, arm.b)
     const inverseX = yield* solve(arm.a, features.values)
-    const mean = dot(theta, features.values)
-    const uncertaintyRadius = Math.sqrt(Math.max(0, dot(features.values, inverseX)))
+    const mean = neural === null ? dot(theta, features.values) : at(neural.means, index)
+    const uncertaintyRadius = neural === null ? Math.sqrt(Math.max(0, dot(features.values, inverseX))) : 1 / Math.sqrt(arm.observations + 1)
     const score = mean + (mode === "EXPLORE" ? policy.config.alpha * uncertaintyRadius : 0)
     if (![mean, uncertaintyRadius, score].every(Number.isFinite)) return yield* Either.left(invalid("Non-finite activation score"))
     scores.push({ candidateId: arm.candidateId, mean, uncertaintyRadius, score })
@@ -118,7 +129,8 @@ export const chooseActivation = (plan: ContextPlan, rawPolicy: unknown, rawFeatu
   if (!selected) return yield* Either.left(invalid("No activation candidates"))
   return { contract: "hswm-context-activation-selection/v1" as const, planSha256: plan.planSha256, status: "SELECTED" as const,
     candidateId: selected.candidateId, policySha256: contextHash(policy), features, mode, scores,
-    selectionProbability: 1 as const, confidence: null, source: "CONTEXTUAL_BANDIT_NOT_NEURAL_MOE" as const }
+    selectionProbability: 1 as const, confidence: null,
+    source: neural === null ? "CONTEXTUAL_BANDIT_NOT_NEURAL_MOE" as const : "NEURAL_TOP1_OPERATOR_GATE_NOT_LLM_WEIGHT_TRAINING" as const }
 })
 
 /** Update only the executed bundle. Never invent rewards for unselected alternatives. */
@@ -127,7 +139,9 @@ export const updateActivation = (rawPolicy: unknown, candidateId: string, featur
   const x = yield* decode(ActivationFeaturesSchema, features)
   const r = yield* decode(finite.pipe(Schema.between(0, 1)), reward)
   if (x.encoderRevision !== policy.config.encoderRevision || x.values.length !== policy.config.featureNames.length || x.values.every(v => v === 0) || !policy.arms.some(a => a.candidateId === candidateId)) return yield* Either.left(invalid("Feedback action/features differ from the policy"))
-  return yield* decodeActivationPolicy({ ...policy, feedbackSha256, arms: policy.arms.map(arm => arm.candidateId !== candidateId ? arm : {
+  const network = policy.contract === "hswm-context-activation-policy/v2" ? yield* trainNeuralGate(policy.network, x.values,
+    policy.arms.findIndex(a => a.candidateId === candidateId), r, policy.config.neural) : null
+  return yield* decodeActivationPolicy({ ...policy, ...(network === null ? {} : { network }), feedbackSha256, arms: policy.arms.map(arm => arm.candidateId !== candidateId ? arm : {
     ...arm, observations: arm.observations + 1,
     a: arm.a.map((row, i) => row.map((v, j) => v + at(x.values, i) * at(x.values, j))),
     b: arm.b.map((v, i) => v + r * at(x.values, i))

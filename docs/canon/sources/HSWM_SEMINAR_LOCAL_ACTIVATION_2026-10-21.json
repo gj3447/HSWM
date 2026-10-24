@@ -1,0 +1,44 @@
+{
+  "contract": "hswm-user-presentation-excerpts/v1",
+  "authority": "USER_PRIMARY_TRANSCRIBED",
+  "source": {
+    "id": "seminar:2026-10",
+    "title": "10월 세미나 — Agent Native",
+    "author": "라경준",
+    "presentedAt": "2026-10-21T16:00:00+09:00",
+    "file": "10월 세미나.pdf",
+    "bytes": 34297782,
+    "sha256": "3d405479fce2a08785d8f1bf277fa7e6dad91b3114ceafb53357c8d28c55f6c5",
+    "pages": 40,
+    "extractor": "pdftotext 26.01.0 (poppler), 기본 읽기 순서 — 한 쪽씩 손대지 않은 그대로"
+  },
+  "repository": "gj3447/HOW_TO_AGENT_UNIVERSE",
+  "revision": "c84660accfd1ea2285a6c07f85aea80b421a1e6f",
+  "path": "source/seminar-20261021.slides.json",
+  "sourceSha256": "4474dad4aafc931705dc42403fbd042bea9928bd9e6543b6ffeb742ada4f79f1",
+  "slides": [
+    {
+      "n": 11,
+      "text": "HSWM\n\nHyperGraph\n\nSemantic\n\nWeight\n\nMap\n\n데이터 구조가\n하이퍼그래프인\n\n현실 물리 세계를\n기술하는\n\n피드백 가능한\n학습 가능한\n\n색인, 서칭 가능한\n작은 정보로 설명되는\n그것보다 더 큰 정보 구조\n\n"
+    },
+    {
+      "n": 17,
+      "text": "제가 생각한 미래 Agent System\nt\nen\ng\nA\n\nnt\nAge\n\n• 병렬적인 LLM 은 HSWM 구조에서\n컨텍스트 윈도우를 점유하며,\n각각 멀티 에이전트로 동작함\n\nnt\n\ne\nAg\n\n입체운행구름 위의\nCHU_OS 위의\nHSWM 데이터 구조\n(표준그래프엔지니어링으로\n정리한 개발환경)\n\n• LLM 을 함수로 하여 동작, 기술되는\nAgent\n\nAgent\n\nnt\n\nt\n\nen\nAg\n\n전체 HSWM 이 하나의 초거대 AI\n지속학습 가능한 AI 이고\n비용에 따라 유연하게\n지능을 증가시킬수 있습니다.\n\nt\n\n컴퓨터 클러스터 자원을 최대로 활용\n\nAgent\n\nen\n\n• 입체운행구름 아키텍쳐로,\n\nAg\n\n• 하이퍼 그래프 기반 CHU_OS\n\ne\nAg\n\n"
+    },
+    {
+      "n": 34,
+      "text": "2. 응용프로그램을 AI 가 쓸수있게 HSWM 에 연결한다.\n• Agent native 프로그램이란?\n1. 사용법이 md 파일로 정리 되있으며,\n2. 어떤 상황일때 사용하는 건지 ai 가 알수 있으며,\n3. 프로그램 조작 어댑터가 MCP, CLI 로 제공된다.\n\n• MCP CLI 로 semantic 한 상황 기반으로 ai 가 판단해서 도구들을 이용하는것 보다는,\n\n한번 프로그램, 도구 기반으로 활용되었던 방법이, 하네스 규칙을 따라 반복될수 있도록\nCLI 기반으로 프로그램 조작 어댑터를 만들고, 사용법과 CLI 주소들이 이 도구를 언제 사용해야하는가에 대한\n의미론적 규칙적 인 요인으로 표준그래프엔지니어링에 연결되어있는게 가장 이상적이라고 생각합니다.\n사용사례에 대한 사용 후 피드백도 표준그래프에 넣어줄수 있고.\n프로그램 사용법과 사용처가 항상 컨텍스트 윈도우를 점유하지 않고 국소 활성화 됩니다.\n\n"
+    },
+    {
+      "n": 36,
+      "text": "4. HSWM 연결 규칙들은 최적화한다.\n표준 그래프 엔지니어링의 가장 큰 장점으로 그래프 연결을 통한 국소 활성화가 있습니다.\n실수에 대한 피드백으로 하네스 규칙들을 싹 다 갖다 붙이면,\nagent 가 해당 제약을 따르느라, 많은 시간과 토큰을 허비하게 됩니다.\n단순 비용적 문제 뿐 아니라, 논리적 업무 수행에 관련해서도,\n무한한 시간동안 무한한 실수에 대한 경우의 수가 있다고 생각했을때,\nagent 는 환각이 있고 실수하기 때문에, 하네스 규칙을 통해 해결해야하는데,\n무한하게 제약이 추가 되다가, 결국 해당 규칙과 제약을 다 지키면서 동작하는게\n불가능해지는 논리적 오답에 빠집니다.\nMOE 와 표준그래프에 하네스를 심는 등의 국소 활성화 기법은\n단순 계산 적게하려는 꼼수같은게 아닌\n지능의 근본 원리중 하나라고 주장합니다.\n\n"
+    }
+  ],
+  "review": {
+    "actor": "agent(codex)",
+    "date": "2026-10-24",
+    "method": "PDF byte hash, PDFium text, visual rendering of all four pages",
+    "interpretationAuthority": "SECONDARY_AI",
+    "note": "Column and diagram text extraction order differs; excerpts retain the pinned upstream transcript exactly. No presentation edits."
+  }
+}

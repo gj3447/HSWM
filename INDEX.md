@@ -243,6 +243,10 @@ continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 �
 국소 다단계 활성화·CHU·의미 위상 학습을 포함하고, `hswm-workspace navigate constitution`에서
 작은 주제 지도를 거쳐 기존 원문으로 이동한다. 8월 헌법은 원래 판본으로 보존한다.
 
+[발표–헌법–다단계 활성화 검사](docs/operations/HSWM_MULTIHOP_ACTIVATION_2026-10-24.md)는
+발표 11·17·34·36쪽, MoE/LinUCB 기법 선택, native 자동 피드백과 다음 프로세스 재사용,
+늦은 예외·중복·순환·예산 검사를 연결한다. `constitution-activation`에서 원문과 검사 기록을 읽는다.
+
 2026-09-07의 실사용 구현은
 [`적응 하이퍼그래프 런타임`](docs/research/HSWM_ADAPTIVE_HYPERGRAPH_RUNTIME_2026-09-07.md)에서
 시작한다. `hswm-live`는 허용된 cell을 재귀 실행하고, 명시한 검사 결과나 사용자 feedback으로

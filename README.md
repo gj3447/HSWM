@@ -81,6 +81,11 @@ S2S·F1·F3의 미연결 실행 경로와 연구 완료 조건을 구분해 기�
 [프랙탈 합성 계약](docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md),
 [적응 연구 전략](docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md)에 각각 연결합니다.
 
+[발표의 국소 활성화와 다단계 실행 검사](docs/operations/HSWM_MULTIHOP_ACTIVATION_2026-10-24.md)는
+11·17·34·36쪽 원문을 헌법·구현·반례에 연결합니다. 새 native 다단계 API는 방문 지점별
+선택·실행·외부 평가·W 저장·다음 이동을 연결하며, 실제 모델 42회와 별도 프로세스 재사용을
+검사했습니다. 작성된 진단 사례의 결과이며 자연 과제 전반의 효능이나 저장소 전체 국소성은 아닙니다.
+
 Semantic Weight는 **역할·문맥에 따라 관계가 다음 전이를 어떻게 바꾸는지에 관한 학습 가능한 성향**입니다.
 이를 [Lean4 정의와 하이퍼그래프 표현 정리](docs/research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md)로
 구체화했습니다. 다자 관계를 단순한 쌍별 연결로 투영할 때의 손실과,

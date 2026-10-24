@@ -236,10 +236,12 @@ SHACL/SPARQL로 구조와 성급한 완료 표시를 검사하며 이식과 연�
 > 영수증만 가리킨다.
 
 HSWM의 최상위 목표 정체성은
-[`HSWM Constitution — 살아 있는 토큰 신경 월드모델`](docs/canon/HSWM_CONSTITUTION_2026-08-20.md)에
+[`HSWM Constitution — 현재 통합본`](docs/canon/HSWM_CONSTITUTION.md)에
 고정한다. 신경망, living harness-document, Wolframian hypergraph world model,
 continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 얼굴이다. 이 정전은
-철학적 정의를 닫지만 현재 효능을 승격하지 않는다.
+사용자 방향과 AI 해석을 구별하며 현재 효능을 승격하지 않는다. 2026-10-24 통합본은
+국소 다단계 활성화·CHU·의미 위상 학습을 포함하고, `hswm-workspace navigate constitution`에서
+작은 주제 지도를 거쳐 기존 원문으로 이동한다. 8월 헌법은 원래 판본으로 보존한다.
 
 2026-09-07의 실사용 구현은
 [`적응 하이퍼그래프 런타임`](docs/research/HSWM_ADAPTIVE_HYPERGRAPH_RUNTIME_2026-09-07.md)에서

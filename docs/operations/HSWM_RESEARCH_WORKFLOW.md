@@ -1,6 +1,6 @@
 # HSWM 연구 작업환경
 
-2026-10-20 갱신. 현재 작업 안내는 이 문서와 [AGENTS.md](../../AGENTS.md)를 따른다.
+2026-10-24 갱신. 현재 작업 안내는 이 문서와 [AGENTS.md](../../AGENTS.md)를 따른다.
 기본 흐름은 **관련 자료 확인 → 변경 → 필요한 검사 → Git 기록**이다.
 작업마다 전체 정전 읽기, 개발 episode·feedback, KG snapshot을 만들 필요는 없다.
 날짜가 붙은 이전 환경·도구 문서는 당시 구현과 재현 정보를 확인할 때 사용한다.
@@ -16,6 +16,11 @@ AI를 목표로 한다. 큰 그래프가 상태이고 LLM은 국소 연산자다
 확인한 오해·라이브 KG의 오래된 정의·구현과 증명의 연결 범위를 둔다.
 [접근 인터페이스 제안](HSWM_ACCESS_INTERFACE_2026-09-29.md)은 AI의 typed API 직접 호출,
 사람의 자연어 변환, DB 조회와 실행·학습의 경계를 구별한다. API 세부는 설계 제안이다.
+
+현재 개념 진입점은 [통합 헌법](../canon/HSWM_CONSTITUTION.md)이다. `hswm-workspace navigate constitution`으로
+한 주제씩 선택하고 `follow`로 다른 번들, `read`로 결속된 원문에 내려간다. 상세 옵션은
+[CLI 사용법](../agent-rules/CLI.md#workspace-usage)을 따른다. 내용 탐색과 native 의미 실행·학습은
+구별하며, 필요한 자료의 충분성을 검색 성공만으로 확정하지 않는다.
 
 ## 준비
 
@@ -289,7 +294,7 @@ RDF/SHACL은 타입·방향·필수 역할·출처·판정 경계를 검사하�
 
 | 작업 | 출발점 |
 | --- | --- |
-| 정체성·아키텍처 | [헌법](../canon/HSWM_CONSTITUTION_2026-08-20.md), [네 가지 정체성](../canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md), [상태·국소 연산자](../canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md) |
+| 정체성·아키텍처 | [현재 통합 헌법](../canon/HSWM_CONSTITUTION.md), [네 가지 정체성](../canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md), [상태·국소 연산자](../canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md) |
 | 아키텍처·독창성·실험 비교 | [Hyperon 직접 선행 조사](../research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md); 정확한 component·버전·구현 성숙도로 비교하며 backend 채택과 구별 |
 | 프랙탈·다중 규모 합성 | [과학적 연결과 FCL-1..8](../research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md) |
 | 층간 매핑·뇌 모델링·agent의 바깥 역할 | [M = Map 사용자 방향](../canon/USER_PRIMARY_HSWM_CROSS_LAYER_MAP_2026-09-27.md), [매핑의 충분성과 후속 실험](../research/HSWM_CROSS_LAYER_MAP_RESEARCH_2026-09-27.md), [문헌·기존 코드·공학 연결 설계](../research/HSWM_CROSS_LAYER_MAP_ENGINEERING_2026-09-27.md), [겔만 양파껍질·층 닮음 형식화](../research/HSWM_GELL_MANN_ONION_CONFORMABILITY_2026-10-20.md) |

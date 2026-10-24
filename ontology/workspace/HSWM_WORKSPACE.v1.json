@@ -1189,6 +1189,405 @@
         "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
         "ontology/queries/hswm_tool_harness_2026-10-20/shapes.ttl"
       ]
+    },
+    {
+      "id": "constitution",
+      "title": "HSWM 현재 통합 헌법",
+      "lane": "IDENTITY",
+      "reading": "Current source-bound synthesis. Navigate one neighborhood, follow explicit pinned anchors, and preserve original authority and negative evidence.",
+      "bundle": "ontology/workspace/constitution/root.v1.json",
+      "document": "docs/canon/HSWM_CONSTITUTION.md",
+      "anchor_routes": [
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-state",
+          "entry": "constitution-state",
+          "sha256": "a3093942c0d1790a18a743851d02b2159cb592f2d1400b3792bad27f57bf0b80"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-activation",
+          "entry": "constitution-activation",
+          "sha256": "e563dfafd97dbb8bf55f2bb9af697090a9b0a64ceb3e69e7f40776195b5d52c9"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-learning",
+          "entry": "constitution-learning",
+          "sha256": "e903e61fc2d7c6aa95e42d4a479a3646516e908b1e213013e837fd41ab0e577b"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-composition",
+          "entry": "constitution-composition",
+          "sha256": "19a88604e706f8869877125990e97d9048edce36bb73d9e78854786ec7ada489"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-assurance",
+          "entry": "constitution-assurance",
+          "sha256": "c2e72fe2419124a67c5f494e847f248b65d0635c06836098ac8e0cb92029c68e"
+        }
+      ],
+      "queries": [
+        {
+          "id": "contents",
+          "path": "ontology/queries/hswm_constitution/contents.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_CONSTITUTION_NAVIGATION_SHACL_1_0.ttl"
+      ]
+    },
+    {
+      "id": "constitution-state",
+      "title": "정체성·상태·관계",
+      "lane": "ENGINEERING",
+      "reading": "Current source-bound synthesis. Navigate one neighborhood, follow explicit pinned anchors, and preserve original authority and negative evidence.",
+      "bundle": "ontology/workspace/constitution/state.v1.json",
+      "document": "docs/canon/hswm/state.md",
+      "anchor_routes": [
+        {
+          "uid": "sym:AbstractNode:hswm-hypergraph-neural-ai-identity-2026-09-14",
+          "entry": "identity",
+          "sha256": "1e22b92ff4df3f1ea2e56adcff15070a5adc9126cf3b0428a56bae0d49a30d88"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-state-local-operator-hyperon-2026-09-14",
+          "entry": "state-operator",
+          "sha256": "261b5a024adf45e565033e00c12b96c8f08e425ae690fa4235cc4d26d601db33"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14",
+          "entry": "semantic-theory",
+          "sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-semantic-weight-definition-2026-09-14",
+          "entry": "semantic-definition",
+          "sha256": "d76a68964a94c46d568692a753254e8fa43042291a25ea56e64036690bb92543"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-02-v6",
+          "entry": "graph-contracts",
+          "sha256": "cd510a10ae4f7d534dfd202dce2f7b49fbdc47c207ce5f46244512d96d48c545"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-learning",
+          "entry": "constitution-learning",
+          "sha256": "e903e61fc2d7c6aa95e42d4a479a3646516e908b1e213013e837fd41ab0e577b"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-composition",
+          "entry": "constitution-composition",
+          "sha256": "19a88604e706f8869877125990e97d9048edce36bb73d9e78854786ec7ada489"
+        }
+      ],
+      "queries": [
+        {
+          "id": "contents",
+          "path": "ontology/queries/hswm_constitution/contents.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_CONSTITUTION_NAVIGATION_SHACL_1_0.ttl"
+      ]
+    },
+    {
+      "id": "constitution-activation",
+      "title": "국소 활성화·다단계 Map·원문",
+      "lane": "ENGINEERING",
+      "reading": "Current source-bound synthesis. Navigate one neighborhood, follow explicit pinned anchors, and preserve original authority and negative evidence.",
+      "bundle": "ontology/workspace/constitution/activation.v1.json",
+      "document": "docs/canon/hswm/activation.md",
+      "anchor_routes": [
+        {
+          "uid": "sym:AbstractNode:hswm-knowledge-map-2026-09-13",
+          "entry": "knowledge-map-0913",
+          "sha256": "b539c2f217c960d5e02250ec250aaf7434afb6d5665bd4a577b6ec7ebc045cca"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-whole-map-20261001-root",
+          "entry": "whole-map-1001",
+          "sha256": "c888bbe4c75cfb883587e291e57e74b0a2007d35c2f7ee52bf8d7fe27dff4b59"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-research-atlas-20261002-root",
+          "entry": "research-atlas-1002",
+          "sha256": "946c2037309bf1ac148da75fb3202352f09d10be3af4d2aa5c13c3db49590b00"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+          "entry": "optimization-contract",
+          "sha256": "93fb31089cb176c7751c538a84ef7445e04b4b070f5629b9d909ae0d774b8739"
+        },
+        {
+          "uid": "sym:Concept:hswm-optimization-bundle-2026-10-07",
+          "entry": "optimization-rules",
+          "sha256": "4e1fec0b0ab76d7982cf89a067e83ce4bfb602a82e43e4f195217cae6de5e4f3"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-jev-context-2026-10-09-root",
+          "entry": "jev-context",
+          "sha256": "21bc3b208aa7049fd8f8dc5c253e013a1a6f921edaa50a677127ef88f1460351"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-jev-principles-2026-09-21",
+          "entry": "jev-observations",
+          "sha256": "18200d2fbfb9803a3ab9d50461ef5d72dfb0643f49f0d44bdc57544ebb242da7"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-jev-graph-engineering-2026-09-22",
+          "entry": "jev-graph",
+          "sha256": "48b7454d902f41237f4d0317a04c75c15624ac6d43d0c0b196dcf723d836d32d"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-tool-harness-2026-10-20-root",
+          "entry": "tool-harness",
+          "sha256": "5b4a81caa9badcc81928fb8991dd6d743e2a600004194e3d1b5b1eecdb8bb62b"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-state",
+          "entry": "constitution-state",
+          "sha256": "a3093942c0d1790a18a743851d02b2159cb592f2d1400b3792bad27f57bf0b80"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-learning",
+          "entry": "constitution-learning",
+          "sha256": "e903e61fc2d7c6aa95e42d4a479a3646516e908b1e213013e837fd41ab0e577b"
+        }
+      ],
+      "queries": [
+        {
+          "id": "contents",
+          "path": "ontology/queries/hswm_constitution/contents.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_CONSTITUTION_NAVIGATION_SHACL_1_0.ttl"
+      ]
+    },
+    {
+      "id": "constitution-learning",
+      "title": "월드모델·실행·지속학습",
+      "lane": "ENGINEERING",
+      "reading": "Current source-bound synthesis. Navigate one neighborhood, follow explicit pinned anchors, and preserve original authority and negative evidence.",
+      "bundle": "ontology/workspace/constitution/learning.v1.json",
+      "document": "docs/canon/hswm/learning.md",
+      "anchor_routes": [
+        {
+          "uid": "sym:AbstractNode:hswm-llm-semantic-engine-research-2026-09-14",
+          "entry": "semantic-engine",
+          "sha256": "90670ec9463ef0ae2ddd14118ac65a25149fc3530d2d4861a80131abc174bb9e"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+          "entry": "semantic-runtime",
+          "sha256": "c7ed415bed6aa921195537b58f59b4295e1043ab73446204d6aa0561d169b409"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-core-learning-2026-10-10-root",
+          "entry": "core-learning",
+          "sha256": "bcc84f64119b2a2e3a319a4531b4b5f4d63151167a20c8e6085671c64455a661"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-semantic-topology-2026-10-12",
+          "entry": "semantic-topology",
+          "sha256": "605721865bffaa28250f6446db93c111197583ddd3a87c4fbfbf1b827fb45009"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+          "entry": "local-semantic-instrument",
+          "sha256": "622bed5ff6ca6bb57e9167d0c39f6de8fa88fe546a23d7a4d696cfae02aaa206"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-semantic-w-plan-2026-10-18-root",
+          "entry": "semantic-w-plan",
+          "sha256": "ad4e4d3c3bad4eccd87a5c9cfb0158401ebc8e806ed4627fd5c825505ca4b579"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-likeness-transfer-2026-10-18-root",
+          "entry": "likeness-transfer",
+          "sha256": "603812cdea3983d9e111ed36b568d935e16742e59cf724b5ccf05061bafde34b"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-research-integration-2026-09-20",
+          "entry": "research-integration",
+          "sha256": "b361596768c8e56807464b7723aea3c2bfdcfeb9644e04412a7ed82161c08453"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-activation",
+          "entry": "constitution-activation",
+          "sha256": "e563dfafd97dbb8bf55f2bb9af697090a9b0a64ceb3e69e7f40776195b5d52c9"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-assurance",
+          "entry": "constitution-assurance",
+          "sha256": "c2e72fe2419124a67c5f494e847f248b65d0635c06836098ac8e0cb92029c68e"
+        }
+      ],
+      "queries": [
+        {
+          "id": "contents",
+          "path": "ontology/queries/hswm_constitution/contents.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_CONSTITUTION_NAVIGATION_SHACL_1_0.ttl"
+      ]
+    },
+    {
+      "id": "constitution-composition",
+      "title": "프랙탈 합성·CHU·철학",
+      "lane": "ENGINEERING",
+      "reading": "Current source-bound synthesis. Navigate one neighborhood, follow explicit pinned anchors, and preserve original authority and negative evidence.",
+      "bundle": "ontology/workspace/constitution/composition.v1.json",
+      "document": "docs/canon/hswm/composition.md",
+      "anchor_routes": [
+        {
+          "uid": "sym:AbstractNode:chu-being-bundle-2026-10-07",
+          "entry": "chu-being",
+          "sha256": "c00294c02cd0105ec6fe7c4931f8627addffef59d776c66abc0e30ffc1e2abab"
+        },
+        {
+          "uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+          "entry": "chu-os-ai",
+          "sha256": "348101e0d634a6f09358bcf664693939cbe2153a2e3854547c42466db57fb847"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-metahumotonic-idea-2026-10-04",
+          "entry": "metahumotonic",
+          "sha256": "5307e66032a841a16faa43625c7a050795c2cac33d630508177aeac9ceeda7fe"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-state",
+          "entry": "constitution-state",
+          "sha256": "a3093942c0d1790a18a743851d02b2159cb592f2d1400b3792bad27f57bf0b80"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-assurance",
+          "entry": "constitution-assurance",
+          "sha256": "c2e72fe2419124a67c5f494e847f248b65d0635c06836098ac8e0cb92029c68e"
+        }
+      ],
+      "queries": [
+        {
+          "id": "contents",
+          "path": "ontology/queries/hswm_constitution/contents.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_CONSTITUTION_NAVIGATION_SHACL_1_0.ttl"
+      ]
+    },
+    {
+      "id": "constitution-assurance",
+      "title": "평가·실현 범위·개정",
+      "lane": "ENGINEERING",
+      "reading": "Current source-bound synthesis. Navigate one neighborhood, follow explicit pinned anchors, and preserve original authority and negative evidence.",
+      "bundle": "ontology/workspace/constitution/assurance.v1.json",
+      "document": "docs/canon/hswm/assurance.md",
+      "anchor_routes": [
+        {
+          "uid": "sym:AbstractNode:hswm-w1-full-instrument-progress-2026-10-07-v1",
+          "entry": "progress",
+          "sha256": "a365c3d089b7782af21d21350221e47a02835058d35e35c774008738cab6c469"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-w1-reference-lean-2026-10-07-v1",
+          "entry": "w1-reference",
+          "sha256": "b6f58ba5a88ff3a253c57bb32b4ae9e354f8f6acd2a30d113955391a4e800166"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-runtime-conformance-progress-2026-10-07-v1",
+          "entry": "progress-2026-10-07-runtime-conformance",
+          "sha256": "de5a12134e770efba08f489bf90e392a8cc860b52f9d6d7c324fa1fbdbe4c6f4"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+          "entry": "progress-2026-10-07-preflight",
+          "sha256": "8c2385e1d610b4debea2ea2ca1ccfcb16bdae75e4ceca26dbebb480e515f6fb3"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+          "entry": "progress-2026-10-07-consolidation",
+          "sha256": "0058400c35543d439043811098cb8e52ed835e0a50c88fc07832972bbbebf17b"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-operational-quotient-2026-10-04",
+          "entry": "operational-quotient",
+          "sha256": "3b7e733add6b9b7dd05992a8c0602ca546ceb0d83bb408df921a20bba40a7994"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-adaptive-research-strategy-ontology-2026-08-30",
+          "entry": "strategy",
+          "sha256": "b44c13a76724f545c492a36b5a32cf02339f6fa89846aae5ec218de14d1e6cbb"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-semantic-weight-constructive-proof-2026-09-14",
+          "entry": "constructive-proof",
+          "sha256": "605e69fa925468ae880f72abd0149240f80b18630aab371df060f808e924e224"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-semantic-performance-proof-2026-09-14",
+          "entry": "performance-proof",
+          "sha256": "1b0ddad3bef9a754a1f85044da3d99303de75c32e25ee7c5150c63db9d4c7a87"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-semantic-frontier-proof-2026-09-14",
+          "entry": "frontier-proof",
+          "sha256": "68ffdd7552e4b616cd2719d9cf0c8f764ed46a15592c1280ddb18e16a26c088d"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-next-proof-research-2026-09-15",
+          "entry": "proof-frontier",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+          "entry": "proof-plan",
+          "sha256": "1dfa915a3514e4edcd95c8db6b3688ba2af2091c5e8f6e7434a42924c6f570cf"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-deep-research-2026-09-22",
+          "entry": "deep-research",
+          "sha256": "d3b8c0b0d7ddc74b441a46171b7e68c97fccc597c13a197fbb7dae932f398da5"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-jev-research-work-plan-2026-09-22",
+          "entry": "jev-plan",
+          "sha256": "3db347cee8941b375a23a467c29ed7091779092aa933320fc5c9a639d4d1d8a3"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+          "entry": "validation-contracts",
+          "sha256": "0c622ce457152760b0a9e42e5a682801512b7e1af949a2d297df9ed3fcff3051"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-native-engineering-checkpoint-2026-09-13",
+          "entry": "engineering-0913",
+          "sha256": "8d9bd38f9842de6a82f789f926e33fa51af7193a8301b97283167aa17f40d65a"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-research-map-2026-09-30",
+          "entry": "research-map-0930",
+          "sha256": "27054ad9bc88bd1467e1faac78c9f93bb27e0be5990a89c239f6ad00ef380eab"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-activation",
+          "entry": "constitution-activation",
+          "sha256": "e563dfafd97dbb8bf55f2bb9af697090a9b0a64ceb3e69e7f40776195b5d52c9"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-learning",
+          "entry": "constitution-learning",
+          "sha256": "e903e61fc2d7c6aa95e42d4a479a3646516e908b1e213013e837fd41ab0e577b"
+        }
+      ],
+      "queries": [
+        {
+          "id": "contents",
+          "path": "ontology/queries/hswm_constitution/contents.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_CONSTITUTION_NAVIGATION_SHACL_1_0.ttl"
+      ]
     }
   ],
   "workflows": [

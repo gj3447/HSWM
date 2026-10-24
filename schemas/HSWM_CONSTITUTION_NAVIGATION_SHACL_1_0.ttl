@@ -1,0 +1,23 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+
+<urn:hswm:constitution:module> a sh:NodeShape ;
+  sh:targetClass role:CONSTITUTION_MODULE ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:constitution_module ; sh:minCount 1 ; sh:maxCount 1 ;
+    sh:in ("root" "state" "activation" "learning" "composition" "assurance") ] ;
+  sh:property [ sh:path p:status ; sh:hasValue "CURRENT_SOURCE_BOUND_SYNTHESIS" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_boundary ; sh:hasValue "SOURCE_NAVIGATION_NOT_CANONICAL_STATE_OR_LEARNING_OR_EFFICACY" ; sh:maxCount 1 ] .
+
+<urn:hswm:constitution:source-binding> a sh:NodeShape ;
+  sh:targetSubjectsOf p:source_path ;
+  sh:property [ sh:path p:source_path ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:minCount 1 ; sh:maxCount 1 ;
+    sh:datatype xsd:string ; sh:pattern "^[a-f0-9]{64}$" ] .
+
+<urn:hswm:constitution:user-source> a sh:NodeShape ;
+  sh:targetClass role:USER_DIRECT_SOURCE ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "USER_PRIMARY" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:status ; sh:hasValue "USER_WORDS_WITH_ATTRIBUTED_METADATA" ; sh:maxCount 1 ] .

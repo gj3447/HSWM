@@ -77,7 +77,7 @@ S2S·F1·F3의 미연결 실행 경로와 연구 완료 조건을 구분해 기�
 | 지속 상태 | SQLite revision, CAS 갱신, replay, 관계 복원 | 분산 상태·전역 admission·상위 인지 합성 검증 |
 | 개발 적용 | 메이플리니지·버엑시·수풀림 검사 실행과 피드백 기록. 버엑시 독립 레포는 AGENTS·Skill로 에이전트가 CLI를 쓰도록 연결 | 메이플리니지·수풀림 에이전트 지침, MCP 자동 연결, 사용자 피드백 축적 |
 
-목표 정체성과 현재 증거는 [헌법](docs/canon/HSWM_CONSTITUTION_2026-08-20.md),
+목표 정체성과 현재 증거는 [현재 통합 헌법](docs/canon/HSWM_CONSTITUTION.md),
 [프랙탈 합성 계약](docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md),
 [적응 연구 전략](docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md)에 각각 연결합니다.
 
@@ -285,7 +285,7 @@ flowchart LR
 
 | 따라갈 관계 | 읽을 출처 |
 | --- | --- |
-| 목표 → 정체성·철학 | [헌법](docs/canon/HSWM_CONSTITUTION_2026-08-20.md), [THE_WORLD_REMEMBERS.md](docs/canon/THE_WORLD_REMEMBERS.md) |
+| 목표 → 정체성·철학 | [현재 통합 헌법](docs/canon/HSWM_CONSTITUTION.md), [THE_WORLD_REMEMBERS.md](docs/canon/THE_WORLD_REMEMBERS.md) |
 | 합성 목표 → FCL-1..8 | [프랙탈 연결](docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md), [기계 온톨로지](ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json) |
 | Semantic Weight → 정의·명제·반례·기존 증명 의무 | [현재 이론 기반](docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md), [이론 KG](ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json), [기법 채택 조건 질의](ontology/queries/hswm_semantic_weight_theory_2026-09-14/README.md) |
 | 설계 → 조건·관계 계약 | [조건부 능력 계약](docs/research/HSWM_CONDITIONAL_CAPABILITY_CONTRACT_2026-09-07.md), [현재 적응 런타임](docs/research/HSWM_ADAPTIVE_HYPERGRAPH_RUNTIME_2026-09-07.md) |

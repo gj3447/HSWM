@@ -20,7 +20,7 @@ report when the next authorized step can be carried out.
   is the versioned interpreter and I/O implementation; routine learning does not
   edit its source. Preserve this distinction when designing query/tool interfaces.
 - For identity or architecture changes, start with the
-  [constitution](../../docs/canon/HSWM_CONSTITUTION_2026-08-20.md),
+  [current constitution](../../docs/canon/HSWM_CONSTITUTION.md),
   [user definition](../../docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md),
   and [state/operator definition](../../docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md).
   Otherwise read only the topic-specific sources needed for the task, linked

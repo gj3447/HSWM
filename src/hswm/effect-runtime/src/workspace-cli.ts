@@ -9,9 +9,10 @@ import { compileKgBundle, type KgBundleSource } from "./native-kg-bundle-domain.
 import { queryKgBundle, validateKgShacl } from "./native-kg-standards.js"
 import { inspectWorkspaceBundle, summarizeWorkspaceBundles, type WorkspaceBundleSummary } from "./workspace-catalog-domain.js"
 import { decodeWorkspaceManifest, type WorkspaceEntry } from "./workspace-manifest-domain.js"
+import { runWorkspaceNavigation } from "./workspace-navigation-runtime.js"
 
 export const WORKSPACE_MANIFEST_PATH = "ontology/workspace/HSWM_WORKSPACE.v1.json"
-const usage = "hswm-workspace <status|doctor|inventory|show ID|bindings ID|validate ID|query ID QUERY> [--checkout PATH] [--uid UID] [--details]"
+const usage = "hswm-workspace <status|doctor|inventory|show ID|bindings ID|validate ID|query ID QUERY|navigate ID|follow ID|read ID> [--checkout PATH] [--uid UID] [--details] [--sha256 SHA] [--offset N] [--limit N] [--max-bytes N]"
 const sha = (bytes: Uint8Array) => createHash("sha256").update(bytes).digest("hex")
 const reply = (value: unknown, exitCode = 0): ProcessReply => ({ stdout: `${JSON.stringify(value, null, 2)}\n`, exitCode })
 const parseJson = (bytes: Uint8Array) => Effect.try({ try: () => JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes)) as unknown, catch: () => refuse("invalid UTF-8 JSON") })
@@ -56,17 +57,36 @@ const countStatuses = (rows: readonly { readonly status: string }[]) => Object.f
 
 export const runWorkspaceCli = (argv: readonly string[]) => Effect.gen(function* () {
   const parsed = yield* Effect.try({ try: () => parseArgs({ args: [...argv], allowPositionals: true, strict: true,
-    options: { checkout: { type: "string" }, uid: { type: "string" }, details: { type: "boolean" }, help: { type: "boolean" } } }), catch: () => refuse(usage) })
-  if (parsed.values.help) return { stdout: `${usage}\nRead-only; no model call, install, database write or workflow execution.\n`, exitCode: 0 }
+    options: { checkout: { type: "string" }, uid: { type: "string" }, details: { type: "boolean" }, help: { type: "boolean" },
+      sha256: { type: "string" }, offset: { type: "string" }, limit: { type: "string" }, "max-bytes": { type: "string" } } }), catch: () => refuse(usage) })
+  if (parsed.values.help) return { stdout: `${usage}\nRead-only; no model call, install, database write or workflow execution.\n` +
+    "navigate: one node's incident relations; default UID is the bundle root. follow: resolve an explicitly routed external --uid in one other bundle. read: complete digest-bound UTF-8 source for a local --uid.\n" +
+    "Navigation options: --sha256 pins the current bundle; --offset defaults to 0; --limit defaults to 16 (1..50); --max-bytes bounds returned JSON, defaults to 65536 (1024..1048576). follow/read require --uid. read accepts no pagination. --details is inventory-only.\n", exitCode: 0 }
   const [command, id, queryId] = parsed.positionals
-  if (!command || !["status", "doctor", "inventory", "show", "bindings", "validate", "query"].includes(command)) return yield* Effect.fail(refuse(usage))
-  const expected = command === "query" ? 3 : ["show", "bindings", "validate"].includes(command) ? 2 : 1
-  if (parsed.positionals.length !== expected || (command !== "inventory" && parsed.values.uid !== undefined) || (command !== "inventory" && parsed.values.details)) return yield* Effect.fail(refuse(usage))
+  if (!command || !["status", "doctor", "inventory", "show", "bindings", "validate", "query", "navigate", "follow", "read"].includes(command)) return yield* Effect.fail(refuse(usage))
+  const navigation = command === "navigate" || command === "follow" || command === "read"
+  const expected = command === "query" ? 3 : navigation || ["show", "bindings", "validate"].includes(command) ? 2 : 1
+  if (parsed.positionals.length !== expected || (command !== "inventory" && !navigation && parsed.values.uid !== undefined) || (command !== "inventory" && parsed.values.details) ||
+      (!navigation && [parsed.values.sha256, parsed.values.offset, parsed.values.limit, parsed.values["max-bytes"]].some(value => value !== undefined)) ||
+      ((command === "follow" || command === "read") && parsed.values.uid === undefined) ||
+      (command === "read" && (parsed.values.offset !== undefined || parsed.values.limit !== undefined))) return yield* Effect.fail(refuse(usage))
   const fs = yield* PosixFileSystem
   const checkout = yield* fs.realpath(resolve(parsed.values.checkout ?? process.cwd()), "workspace-checkout")
   const decoded = decodeWorkspaceManifest(yield* parseJson(yield* read(checkout, WORKSPACE_MANIFEST_PATH, 1024 * 1024)))
   if (Either.isLeft(decoded)) return yield* Effect.fail(refuse(decoded.left.message))
   const manifest = decoded.right
+  if (navigation && id !== undefined) {
+    const decimal = (value: string | undefined, fallback: number) => value === undefined ? fallback : /^\d+$/.test(value) ? Number(value) : NaN
+    const offset = decimal(parsed.values.offset, 0)
+    const limit = decimal(parsed.values.limit, 16)
+    const maximumBytes = decimal(parsed.values["max-bytes"], 65536)
+    if (!Number.isSafeInteger(offset) || offset < 0 || !Number.isSafeInteger(limit) || limit < 1 || limit > 50 ||
+        !Number.isSafeInteger(maximumBytes) || maximumBytes < 1024 || maximumBytes > 1048576 ||
+        (parsed.values.sha256 !== undefined && !/^[a-f0-9]{64}$/.test(parsed.values.sha256)))
+      return yield* Effect.fail(refuse("invalid navigation bounds or SHA-256"))
+    return yield* runWorkspaceNavigation({ command, entryId: id, uid: parsed.values.uid, expectedSha256: parsed.values.sha256,
+      offset, limit, maximumBytes, manifest, read: (path, bound) => read(checkout, path, bound) })
+  }
   const tracked = new Set((yield* git(checkout, ["ls-files", "-z"])).split("\0").filter(Boolean))
   const base = { schema_version: "hswm-workspace-observation/v1", scope: "READ_ONLY_WORKTREE_OBSERVATION", claim_ceiling: "NAVIGATION_AND_ENGINEERING_NOT_HSWM_EFFICACY", manifest: WORKSPACE_MANIFEST_PATH }
   if (command === "status") return reply({ ...base, entries: manifest.entries, workflows: manifest.workflows })

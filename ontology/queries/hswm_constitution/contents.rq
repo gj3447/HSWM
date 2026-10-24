@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX kg: <https://hswm.invalid/kg-bundle-rdf/v1/>
+SELECT ?module ?name ?target WHERE {
+  ?root a role:CONSTITUTION_MODULE ; p:constitution_module ?module ;
+        p:name ?name ; r:HAS_CONCEPT ?targetNode .
+  ?targetNode kg:uid ?target .
+} ORDER BY ?module ?target

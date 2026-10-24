@@ -13,6 +13,11 @@ const AdditionalSource = Schema.Struct({
   bundle: Path,
   sha256: Schema.String.pipe(Schema.pattern(/^[0-9a-f]{64}$/)),
 })
+const AnchorRoute = Schema.Struct({
+  uid: Schema.NonEmptyString,
+  entry: Id,
+  sha256: Schema.String.pipe(Schema.pattern(/^[0-9a-f]{64}$/)),
+})
 const Entry = Schema.Struct({
   id: Id, title: Schema.NonEmptyString,
   lane: Schema.Literal("IDENTITY", "THEORY", "RESEARCH", "PLAN", "ENGINEERING", "HISTORY"),
@@ -21,6 +26,7 @@ const Entry = Schema.Struct({
   projection_reason: Schema.optional(Schema.NonEmptyString),
   bundle: Path, document: Path,
   additional_sources: Schema.optional(Schema.Array(AdditionalSource).pipe(Schema.maxItems(127))),
+  anchor_routes: Schema.optional(Schema.Array(AnchorRoute).pipe(Schema.maxItems(128))),
   queries: Schema.Array(Query).pipe(Schema.maxItems(32)),
   shapes: Schema.Array(Path).pipe(Schema.maxItems(8)),
 })
@@ -42,6 +48,10 @@ export const decodeWorkspaceManifest = (value: unknown): Either.Either<Workspace
   const decoded = Schema.decodeUnknownEither(Manifest, { onExcessProperty: "error" })(value)
   if (Either.isLeft(decoded)) return Either.left(new Error("invalid workspace manifest"))
   const manifest = decoded.right
+  if (manifest.entries.some(entry =>
+    new Set(entry.anchor_routes?.map(route => route.uid)).size !== (entry.anchor_routes?.length ?? 0) ||
+    entry.anchor_routes?.some(route => route.entry === entry.id || !manifest.entries.some(target => target.id === route.entry))
+  )) return Either.left(new Error("anchor routes must have unique UIDs and refer to another registered entry"))
   if (manifest.entries.some(e => e.projection_profile === "SOURCE_ONLY" &&
       (e.queries.length !== 0 || e.shapes.length !== 0 || e.projection_reason === undefined)))
     return Either.left(new Error("source-only entries require a reason and no executable queries or shapes"))
@@ -57,6 +67,7 @@ export const decodeWorkspaceManifest = (value: unknown): Either.Either<Workspace
   return Either.right(Object.freeze({ ...manifest,
     entries: Object.freeze(manifest.entries.map(e => Object.freeze({ ...e,
       ...(e.additional_sources === undefined ? {} : { additional_sources: Object.freeze(e.additional_sources.map(source => Object.freeze({ ...source }))) }),
+      ...(e.anchor_routes === undefined ? {} : { anchor_routes: Object.freeze(e.anchor_routes.map(route => Object.freeze({ ...route }))) }),
       queries: Object.freeze(e.queries.map(q => Object.freeze({ ...q }))), shapes: Object.freeze([...e.shapes]),
     }))),
     workflows: Object.freeze(manifest.workflows.map(w => Object.freeze({ ...w, argv: Object.freeze([...w.argv]) }))),

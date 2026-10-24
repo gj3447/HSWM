@@ -72,6 +72,13 @@ MoE·국소 활성화의 사용자 주장, 헌법 조항, 현재 구현, 반례�
 
 ## 내용에서 원문까지 실제로 이동하기
 
+검색의 충분성과 인터넷 참여는 [이번 사용자 원문](sources/USER_PRIMARY_HSWM_INTERNET_NATIVE_2026-10-24.md)을
+반영해 보강했다. **필수 근거의 누락·현재성·충돌을 판단하고, 필요한 때 원천을 찾아 읽으며,
+사람의 정정과 외부 변화가 관련 관계의 다음 판단을 바꾸는 방향**이다. 이 문장은 AI의 구체화다.
+[5조의 검색 판단](hswm/activation.md#5조의-보강-검색-충분성과-외부-획득-시점),
+[12조의 참여](hswm/composition.md#12조의-보강-인터넷-native-참여와-공동-변화),
+[구현 계약·추가 원전 7종](../research/HSWM_INTERNET_NATIVE_EVIDENCE_ACQUISITION_2026-10-24.md)으로 내려간다.
+
 기존 `hswm-workspace`를 사용한다. 자세한 옵션·예외는
 [CLI 사용법](../agent-rules/CLI.md#workspace-usage)에 있다.
 
@@ -80,6 +87,7 @@ src/hswm/effect-runtime/bin/hswm-workspace navigate constitution
 src/hswm/effect-runtime/bin/hswm-workspace follow constitution --uid sym:AbstractNode:hswm-constitution-activation
 src/hswm/effect-runtime/bin/hswm-workspace navigate constitution-activation
 src/hswm/effect-runtime/bin/hswm-workspace read constitution-activation --uid sym:AbstractNode:hswm-constitution-activation
+src/hswm/effect-runtime/bin/hswm-workspace read constitution-activation --uid sym:AbstractNode:hswm-internet-evidence-acquisition-2026-10-24
 ```
 
 `follow`는 해당 지도에 명시된 목적지 하나의 바이트·UID·타입을 확인한다. `navigate`는
@@ -94,7 +102,8 @@ src/hswm/effect-runtime/bin/hswm-workspace read constitution-activation --uid sy
 해당 코드·문서·검사와 Git 이력으로 남긴다. 목표·판정 기준이나 실패 결과를 현재 구현에
 맞춰 축소하지 않는다. 세부 규약은 [15조](hswm/assurance.md#15-개정과-다음-사용)에서 읽는다.
 
-문헌·구현 설명을 보강한 현재 연결은 `ontology/workspace/constitution/*.v2.json`을 사용한다.
+문헌·구현 설명과 인터넷 획득 방향을 보강한 현재 연결은 `ontology/workspace/constitution/*.v3.json`을 사용한다.
 최초 통합본과 v1 번들의 원래 바이트는 Git `b7ac03c302749f5519b7387fd6b5c9364e71a673`에
-보존돼 있다. v2의 모듈 노드는 그 선행 Git 판본·번들 경로·hash를 기록한다. 현재 문서를
+보존돼 있다. v2와 15조 문헌 보강은 Git `cf1832d`에 보존된다. v3의 모듈 노드는 선행 v2의
+Git 판본·번들 경로·hash를 기록한다. 현재 문서를
 과거 hash에 맞춘 것으로 가장하지 않고, 과거 문서가 필요하면 그 Git 판본에서 함께 읽는다.

@@ -1,0 +1,142 @@
+{
+  "schema_version": "hswm-constitution-navigation/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-constitution",
+  "status": "CONTENT_NAVIGATION",
+  "nonclaim": "NOT_CANONICAL_RUNTIME_STATE_OR_EXECUTION_OR_LEARNING_OR_EFFICACY",
+  "authority_boundary": "Module text and routes are SECONDARY_AI. User source attribution is separate. Existing targets retain their own status and authority.",
+  "source_accessed_on": "2026-10-24",
+  "artifact_bindings": [
+    {
+      "path": "docs/canon/HSWM_CONSTITUTION.md",
+      "sha256": "158c09366411c5b502ae261a13f6e391361a922332c26b24aecffc9acf5ff982"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 1,
+    "anchors": 6,
+    "relations": 6
+  },
+  "anchors": [
+    {
+      "uid": "sym:AbstractNode:hswm-constitution-state",
+      "name": "정체성·상태·관계",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-constitution-activation",
+      "name": "국소 활성화·다단계 Map·원문",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-constitution-learning",
+      "name": "월드모델·실행·지속학습",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-constitution-composition",
+      "name": "프랙탈 합성·CHU·철학",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-constitution-assurance",
+      "name": "평가·실현 범위·개정",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-internet-evidence-acquisition-2026-10-24",
+      "name": "검색 충분성·외부 획득·인터넷 참여 설계",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-constitution",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "HSWM 현재 통합 헌법",
+        "standard_graph_role": "CONSTITUTION_MODULE",
+        "authority_class": "SECONDARY_AI",
+        "status": "CURRENT_SOURCE_BOUND_SYNTHESIS",
+        "source_path": "docs/canon/HSWM_CONSTITUTION.md",
+        "source_sha256": "158c09366411c5b502ae261a13f6e391361a922332c26b24aecffc9acf5ff982",
+        "claim_boundary": "SOURCE_NAVIGATION_NOT_CANONICAL_STATE_OR_LEARNING_OR_EFFICACY",
+        "constitution_module": "root",
+        "source_revision": "2026-10-24-internet-evidence-contract",
+        "predecessor_bundle_path": "ontology/workspace/constitution/root.v2.json",
+        "predecessor_bundle_git_revision": "cf1832d89f5d8d88a5fe29190607bcf864fb6ba2",
+        "predecessor_bundle_sha256": "7954cec0ce507d4c45f29ed33f491d26f6dab874edbaab83bbdfa21e455594e3"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution",
+      "to_uid": "sym:AbstractNode:hswm-constitution-state",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution",
+      "to_uid": "sym:AbstractNode:hswm-constitution-activation",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution",
+      "to_uid": "sym:AbstractNode:hswm-constitution-learning",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution",
+      "to_uid": "sym:AbstractNode:hswm-constitution-composition",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution",
+      "to_uid": "sym:AbstractNode:hswm-constitution-assurance",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-constitution",
+      "to_uid": "sym:AbstractNode:hswm-internet-evidence-acquisition-2026-10-24",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TOPIC_NAVIGATION",
+      "status": "PROPOSED"
+    }
+  ]
+}

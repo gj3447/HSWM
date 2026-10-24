@@ -173,7 +173,9 @@ describe("current HSWM constitution graph", () => {
       expect((await Effect.runPromise(validateKgShacl(projection, shapes))).conforms, entry.id).toBe(true)
       const rows = await Effect.runPromise(queryKgBundle(projection, read("ontology/queries/hswm_constitution/contents.rq").toString()))
       if (typeof rows === "boolean") throw new Error("SELECT expected")
-      expect(rows.map(row => row["target"]?.["value"]).sort()).toEqual(b.relations.filter(edge => edge.type === "HAS_CONCEPT").map(edge => edge.to_uid).sort())
+      const moduleUids = new Set(b.nodes.filter(node => node.properties["standard_graph_role"] === "CONSTITUTION_MODULE").map(node => node.uid))
+      expect(rows.map(row => row["target"]?.["value"]).sort()).toEqual(b.relations
+        .filter(edge => edge.type === "HAS_CONCEPT" && moduleUids.has(edge.from_uid)).map(edge => edge.to_uid).sort())
     }
     const b = source("constitution")
     const forged = { ...b, nodes: b.nodes.map(node => ({ ...node, properties: { ...node.properties, authority_class: "USER_PRIMARY" } })) }
@@ -203,6 +205,30 @@ describe("current HSWM constitution graph", () => {
     expect(result.text).toContain("타고타고타고")
     expect(result.text).toContain("HSWM 헌법도 부족하고")
     expect(result.text).not.toContain("국소성은 한두 홉")
+    expect(result.complete).toBe(true)
+  })
+
+  it.each(["constitution", "constitution-learning", "constitution-composition", "constitution-assurance"])(
+    "reaches the Internet evidence contract from %s with an exact source pin", async entry => {
+      const designUid = uid("hswm-internet-evidence-acquisition-2026-10-24")
+      const hop = JSON.parse((await cli(["follow", entry, "--uid", designUid])).stdout)
+      expect(hop.next.entry).toBe("constitution-activation")
+      const result = JSON.parse((await cli(["read", hop.next.entry, "--uid", hop.next.uid, "--sha256", hop.next.sha256])).stdout)
+      expect(result.source.authority).toBe("SECONDARY_AI")
+      expect(result.text).toBe(read("docs/research/HSWM_INTERNET_NATIVE_EVIDENCE_ACQUISITION_2026-10-24.md").toString())
+      expect(result.complete).toBe(true)
+    },
+  )
+
+  it("keeps the Internet-native request separate from the proposed retrieval and participation design", async () => {
+    const sourceUid = uid("hswm-internet-native-user-source-2026-10-24")
+    const design = JSON.parse((await cli(["navigate", "constitution-activation", "--uid", uid("hswm-internet-evidence-acquisition-2026-10-24")])).stdout)
+    expect(design.neighborhood.neighbors.map((neighbor: { target: { uid: string } }) => neighbor.target.uid)).toContain(sourceUid)
+    const hop = JSON.parse((await cli(["follow", "constitution-composition", "--uid", sourceUid])).stdout)
+    const result = JSON.parse((await cli(["read", hop.next.entry, "--uid", sourceUid, "--sha256", hop.next.sha256])).stdout)
+    expect(result.source.authority).toBe("USER_PRIMARY")
+    expect(result.text).toContain("그 검색이 부족한지도 만들어줘야하는데 ㅇㅇ 언제 검색해서 가져올지 이런것도 그리고 HSWM 이 인터넷 native 하게 인류랑 같이 움직여줘야함 ㅇㅇ")
+    expect(result.text).toBe(read("docs/canon/sources/USER_PRIMARY_HSWM_INTERNET_NATIVE_2026-10-24.md").toString())
     expect(result.complete).toBe(true)
   })
 })

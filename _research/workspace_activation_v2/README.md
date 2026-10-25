@@ -87,6 +87,12 @@ node _research/workspace_activation_v2/check.mjs NEW_PRIVATE_ROOT
 source span·원래 wire·판정·외부 평가·native outcome·독립 gradient·재개방 상태를 대조한다.
 오답이 차단됐다는 결과와 모델이 실제 정답을 냈다는 결과를 구별한다.
 
+전체 49개 출처를 같은 추출 계약으로 재검사하려면 첫 명령을
+`prepare-extraction-all NEW_PRIVATE_ROOT EXISTING_MODEL_ID`로 바꾼다. 이 v4 계획은
+49 TRAIN + 별도 OS의 49 AUDIT, 총 98회·2시간으로 제한한다. checker는 manifest의
+49개 ID와 실행 집합이 정확히 같고, 각 항목이 W 1판으로 다시 실행됐는지 검사한다.
+기존 `prepare`의 49+3 및 `prepare-extraction`의 2+2 계획은 별도로 보존한다.
+
 절/출처별 partition은 **같은 기존 native runtime의 별도 owner scope**다. 여러 partition을
 통과하는 원자적 transaction이나 전역 policy 공유를 제공하지 않는다. sourceId가 달라지면
 과거 W를 조용히 복사하지 않는다. 이 consumer의 경로는 정확한 entry ID 기반이며 미지의

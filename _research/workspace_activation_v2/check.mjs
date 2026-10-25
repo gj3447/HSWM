@@ -94,9 +94,14 @@ const inspect = (row,source,c,plan) => {
 const main = root => Effect.gen(function* () {
   const nativeBefore=yield* nativeInventory(root)
   const plan=yield* json(join(root,"plan.json")),summary=yield* json(join(root,"summary.json")),reopened=yield* json(join(root,"reopened.json"))
-  const extraction=plan.contract==="hswm-workspace-activation-study/v3-extraction",entryCount=extraction?2:49,restartCount=extraction?2:3,callCount=entryCount+restartCount
+  const allEntries=plan.contract==="hswm-workspace-activation-study/v4-extraction-all",extraction=allEntries||plan.contract==="hswm-workspace-activation-study/v3-extraction"
+  const entryCount=extraction&&!allEntries?2:49,restartCount=allEntries?49:extraction?2:3,callCount=entryCount+restartCount
+  const manifest=allEntries?yield* read("ontology/workspace/HSWM_WORKSPACE.v1.json"):null
   yield* checked(()=>{assert(extraction||plan.contract==="hswm-workspace-activation-study/v2");
-    if(extraction){assert.equal(plan.extraction,"FIRST_ATX_H1_TEXT_V1");assert.deepEqual(plan.cases.map(c=>c.id),["performance-proof","optimization-rules"]);assert.deepEqual(plan.restart,plan.cases.map(c=>c.id))}
+    if(extraction){assert.equal(plan.extraction,"FIRST_ATX_H1_TEXT_V1");
+      if(allEntries){assert.equal(hash(manifest),plan.manifestSha256);assert.deepEqual(plan.cases.map(c=>c.id),JSON.parse(manifest).entries.map(e=>e.id));assert.equal(new Set(plan.cases.map(c=>c.id)).size,49);assert.equal(plan.presentation,"source_evidence_tail")}
+      else assert.deepEqual(plan.cases.map(c=>c.id),["performance-proof","optimization-rules"])
+      assert.deepEqual(plan.restart,plan.cases.map(c=>c.id))}
     else assert.equal(plan.extraction,undefined)
     assert.equal(plan.maximumCalls,callCount);assert.equal(plan.cases.length,entryCount);assert.equal(summary.rows.length,entryCount);assert.equal(reopened.separateOsProcess,true);assert.equal(reopened.rows.length,restartCount)})
   for(const pin of plan.pins){const actual=hash(yield* read(pin.path)),archived=hash(yield* read(join(root,"implementation",pin.sha256)));yield* checked(()=>{assert.equal(actual,pin.sha256,`Implementation drift: ${pin.path}`);assert.equal(archived,pin.sha256)})}

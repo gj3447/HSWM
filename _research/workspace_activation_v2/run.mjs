@@ -22,6 +22,7 @@ import { runArgvProcessMain } from "../../src/hswm/effect-runtime/dist/effect-pr
 
 const help = `node _research/workspace_activation_v2/run.mjs prepare NEW_PRIVATE_ROOT MODEL_ID
 node _research/workspace_activation_v2/run.mjs prepare-extraction NEW_PRIVATE_ROOT MODEL_ID
+node _research/workspace_activation_v2/run.mjs prepare-extraction-all NEW_PRIVATE_ROOT MODEL_ID
 node _research/workspace_activation_v2/run.mjs run ROOT
 node _research/workspace_activation_v2/check.mjs ROOT
 node _research/workspace_activation_v2/run.mjs measure ROOT ENTRY_ID
@@ -29,6 +30,7 @@ Internal: resume ROOT (the plan's fresh-process AUDIT calls)
 Prepare pins the current 49-entry manifest, complete selected sources and implementation.
 Run uses existing loopback http://127.0.0.1:18801/v1; 49 TRAIN + 3 AUDIT, maximum 52 calls / 2 hours.
 prepare-extraction selects only the two prior failure entries: 2 TRAIN + 2 AUDIT, maximum 4 calls / 2 hours, with an exact source-span guard.
+prepare-extraction-all applies that guard to every current entry: 49 TRAIN + 49 fresh-process AUDIT, maximum 98 calls / 2 hours.
 No service changes, remote publishing, retries, credential reads or policy promotion.
 Source scope is the complete first level-one Markdown section; its full parent and section catalog are stored natively.\nThe task is exact source-heading extraction: integration coverage, not natural-task efficacy.
 Read-only measure compares actual bounded-file reads of native assembly, excluding runtime opening.
@@ -70,13 +72,13 @@ const scope = root => Effect.gen(function* () {
     plan.runnerSha256===hash(yield* read(new URL(import.meta.url))) && plan.manifestSha256===hash(yield* read(manifestPath)), "NOT_READY: scope expired, revoked or changed")
   return plan
 })
-const prepare = (root, model, extraction = false) => Effect.gen(function* () {
+const prepare = (root, model, extraction = false, allEntries = false) => Effect.gen(function* () {
   yield* need(typeof model==="string" && model.length>0 && model.length<256,"Explicit existing model ID required")
   yield* io(() => mkdir(root,{recursive:false,mode:0o700}))
   yield* io(() => mkdir(join(root,"native"),{mode:0o700}))
   yield* io(() => mkdir(join(root,"sources"),{mode:0o700}))
   const manifest = yield* getManifest(), cases=[]
-  for (const entry of manifest.entries.filter(e => !extraction || ["performance-proof", "optimization-rules"].includes(e.id))) {
+  for (const entry of manifest.entries.filter(e => !extraction || allEntries || ["performance-proof", "optimization-rules"].includes(e.id))) {
     const whole=yield* getSource(manifest,entry.id), unit=whole.units.find(u=>u.heading?.level===1)
     yield* need(!!unit,`No complete level-one heading unit for ${entry.id}`)
     const source=yield* selectWorkspaceSourceUnit(whole,unit.id), expected=heading(whole.documentText)
@@ -86,8 +88,8 @@ const prepare = (root, model, extraction = false) => Effect.gen(function* () {
   }
   const createdAt=new Date().toISOString(),expiresAt=new Date(Date.now()+7200000).toISOString()
   const restart=extraction?cases.map(c=>c.id):["identity","fractal","tool-harness"]
-  yield* need(!extraction || cases.length===2,"Both original failure entries are required")
-  const plan={contract:extraction?"hswm-workspace-activation-study/v3-extraction":"hswm-workspace-activation-study/v2",root,createdAt,expiresAt,model,transport:"http://127.0.0.1:18801/v1",maximumCalls:cases.length+restart.length,
+  yield* need(!extraction || cases.length===(allEntries?49:2),"Declared extraction cohort must be complete")
+  const plan={contract:allEntries?"hswm-workspace-activation-study/v4-extraction-all":extraction?"hswm-workspace-activation-study/v3-extraction":"hswm-workspace-activation-study/v2",root,createdAt,expiresAt,model,transport:"http://127.0.0.1:18801/v1",maximumCalls:cases.length+restart.length,
     ...(extraction?{extraction:"FIRST_ATX_H1_TEXT_V1",presentation:"source_evidence_tail"}:{}),sourceRoles:"NAVIGATION_DISTINCT_V1",
     cases, restart,manifestSha256:hash(yield* read(manifestPath)),pins:yield* pins(),runnerSha256:hash(yield* read(new URL(import.meta.url))),
     evaluator:"EXACT_FIRST_MARKDOWN_HEADING/v1",scope:"REAL_SOURCE_EXTRACTION_INTEGRATION_NOT_NATURAL_EFFICACY",checkpoint:"NOT_ATTESTED",maxTokens:384}
@@ -157,7 +159,7 @@ const run = root => Effect.gen(function* () {
   yield* save(join(root,"reachability.json"),{reachable:true,model:plan.model,at:new Date().toISOString()})
   const rows=[]
   for(const c of plan.cases) { const r=yield* one(root,plan,c,"TRAIN");rows.push(r);yield* Effect.sync(()=>process.stderr.write(text({entry:r.entry,reward:r.reward,updated:r.updated}))) }
-  const child=yield* io(()=>promisify(execFile)(process.execPath,[new URL(import.meta.url).pathname,"resume",root],{timeout:180000,maxBuffer:1048576}))
+  const child=yield* io(()=>promisify(execFile)(process.execPath,[new URL(import.meta.url).pathname,"resume",root],{timeout:Math.max(180000,plan.restart.length*45000),maxBuffer:1048576}))
   const restarted=JSON.parse(child.stdout);yield* save(join(root,"reopened.json"),restarted)
   const summary={status:"COMPLETED",rows,restarted};yield* save(join(root,"summary.json"),summary);return summary
 })
@@ -192,6 +194,7 @@ const main = args => {
   const root=resolve(args[1]??"")
   if(args[0]==="prepare")return prepare(root,args[2]).pipe(Effect.map(text))
   if(args[0]==="prepare-extraction")return prepare(root,args[2],true).pipe(Effect.map(text))
+  if(args[0]==="prepare-extraction-all")return prepare(root,args[2],true,true).pipe(Effect.map(text))
   if(args[0]==="run")return run(root).pipe(Effect.map(text))
   if(args[0]==="resume")return resume(root).pipe(Effect.map(text))
   if(args[0]==="measure")return measure(root,args[2]).pipe(Effect.map(text))

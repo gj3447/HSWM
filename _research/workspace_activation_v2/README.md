@@ -51,6 +51,42 @@ vLLM tokenizer를 한 번 호출해 실제 입력 토큰과 출력 예약량을 
 `http/evaluate/admit` capability를 받는다. 평가자는 실제 관측을 제공해야 하며 unknown reward는
 null이다. 문서에 적힌 shell 명령이나 설명으로 도구 실행 권한이 생기지 않는다.
 
+### 정확한 제목 추출 계약 (2026-10-25)
+
+`intent: "EXACT"`는 임의 질문의 정답을 자동으로 정의하지 않는다. 첫 ATX H1을 복사하는
+호출자는 `extraction: "FIRST_ATX_H1_TEXT_V1"`을 함께 지정한다. 이 계약은 문서 전체의
+첫 비어 있지 않은 H1이 활성화한 완전한 절 안에 있는지 먼저 검사하고, 원문 해시와 UTF-8
+바이트 범위를 event에 결속한다. 정답 문자열 자체를 event에 추가하지 않는다. V1은 기존
+ATX 절 profile을 사용한다. 여는 `#`와 양끝 공백만 제외하며 inline Markdown·닫는 `#`는
+그대로 보존한다. Setext나 일반 CommonMark 렌더링 계약은 아니다.
+
+새 seed의 subject는 `navigationLabel`, context의 title은 `titleRole`로 역할을 밝힌다.
+required 관계도 원문 추출에는 evidence만 사용하도록 명시한다. 기존 partition과 과거
+원자를 수정하거나 그곳의 W를 새 partition으로 복사하지 않는다.
+추출 호출의 `source_evidence_tail`은 전체 canonical frame을 그대로 두고, 실제 evidence를
+JSON escape 없는 원문으로 끝에 다시 제시한다. 같은 key·hash의 원문만 중복 제거한다.
+정답 한 줄만 떼어 제공하지 않으며 선택한 절 전체와 필수 조건을 보존한다. 늘어난 prompt도
+기존 byte/token 예산 검사를 받아야 한다.
+
+`sourceVerification`은 `MATCH / MISMATCH / NOT_EXECUTED`를 반환한다. 최종 답으로 쓸
+`verifiedPrediction`은 MATCH일 때만 존재한다. 틀린 원래 출력은 execution trace에,
+외부 평가자의 판단은 native extraction outcome content에 보존한다. 불일치이면 양의 보상을
+차단하고 reward 0·continue false로 기존 owner 학습 경로에 연결한다. 자동 재시도나 정답
+대입은 하지 않는다. 계약을 지정하지 않은 호출은 sourceVerification null이며 검증됐다고
+표시할 수 없다. 이 검사는 제목의 바이트 일치만 보장하며 문서 주장 자체의 진실성 검사가 아니다.
+
+두 실패 사례 전용 재현은 다음과 같다. 기존 49개 실험의 수치나 pin을 덮어쓰지 않는다.
+
+```sh
+node _research/workspace_activation_v2/run.mjs prepare-extraction NEW_PRIVATE_ROOT EXISTING_MODEL_ID
+node _research/workspace_activation_v2/run.mjs run NEW_PRIVATE_ROOT
+node _research/workspace_activation_v2/check.mjs NEW_PRIVATE_ROOT
+```
+
+최대 2 TRAIN + 별도 OS 2 AUDIT이며, 같은 정확 일치 기준으로 결과를 판정한다. checker는
+source span·원래 wire·판정·외부 평가·native outcome·독립 gradient·재개방 상태를 대조한다.
+오답이 차단됐다는 결과와 모델이 실제 정답을 냈다는 결과를 구별한다.
+
 절/출처별 partition은 **같은 기존 native runtime의 별도 owner scope**다. 여러 partition을
 통과하는 원자적 transaction이나 전역 policy 공유를 제공하지 않는다. sourceId가 달라지면
 과거 W를 조용히 복사하지 않는다. 이 consumer의 경로는 정확한 entry ID 기반이며 미지의

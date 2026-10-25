@@ -5,12 +5,28 @@ import type { ContextAssembly } from "./semantic-context-runtime.js"
 import { compileFiniteRuleTable } from "./semantic-context-finite-presentation-domain.js"
 import type { FiniteExecutionGuard } from "./semantic-context-finite-execution-domain.js"
 
-export const ContextPresentationSchema = Schema.Literal("canonical_json", "execution_tail", "finite_table_tail")
+export const ContextPresentationSchema = Schema.Literal("canonical_json", "execution_tail", "finite_table_tail", "source_evidence_tail")
 export type ContextPresentation = typeof ContextPresentationSchema.Type
 export const renderContextPrompt = (assembly: Pick<ContextAssembly, "payload">, raw: unknown = "canonical_json") => Either.gen(function* () {
   const mode = yield* Schema.decodeUnknownEither(ContextPresentationSchema)(raw).pipe(Either.mapLeft(() => contextError("PRESENTATION_INVALID", "Unknown context presentation")))
   const canonical = contextJson(assembly.payload)
   if (mode === "canonical_json") return canonical
+  if (mode === "source_evidence_tail") {
+    const evidence = []
+    const seen = new Set<string>()
+    for (const frame of assembly.payload.frames) {
+      const sources = frame.roles.filter(r => r.role === "evidence")
+      const source = sources[0]
+      if (sources.length !== 1 || !source) return yield* Either.left(contextError("PRESENTATION_INVALID", "Source extraction requires one evidence participant per complete frame"))
+      const identity = contextJson({ key: source.key, contentSha256: source.contentSha256 })
+      if (!seen.has(identity)) { seen.add(identity); evidence.push(identity, source.contentUtf8) }
+    }
+    return ["Execute EVENT using the complete source-bound frames below. Return JSON with prediction and uncertainty strings.", canonical,
+      "RULES", ...assembly.payload.frames.map(f => f.relation.semantic.semanticText),
+      "LITERAL EVIDENCE SOURCE (navigation labels are not document headings)", ...evidence,
+      "END OF LITERAL EVIDENCE SOURCE", "EVENT", assembly.payload.event,
+      "Copy the requested text from the literal evidence above. Preserve its characters. Return only prediction and uncertainty JSON."].join("\n")
+  }
   if (mode === "finite_table_tail") {
     const tables = yield* Either.all(assembly.payload.frames.map(compileFiniteRuleTable))
     return ["Execute the supplied rules on EVENT, preserving mandatory constraints and exceptions. Return only JSON with prediction and uncertainty strings.",

@@ -16,8 +16,10 @@ import { readWorkspaceActivationSource, selectWorkspaceSourceUnit, seedWorkspace
   workspaceActivationSpec, type WorkspaceActivationSource } from "../../src/hswm/effect-runtime/src/workspace-activation-runtime.js"
 import { contextHash } from "../../src/hswm/effect-runtime/src/semantic-context-domain.js"
 import { workspaceSourceUnits } from "../../src/hswm/effect-runtime/src/workspace-source-units-domain.js"
+import { prepareWorkspaceExtraction, verifyWorkspaceExtraction } from "../../src/hswm/effect-runtime/src/workspace-extraction-domain.js"
 import { kgSha256 } from "../../src/hswm/effect-runtime/src/native-kg-bundle-domain.js"
 import { prepareSemanticContext } from "../../src/hswm/effect-runtime/src/semantic-context-runtime.js"
+import { renderContextPrompt } from "../../src/hswm/effect-runtime/src/semantic-context-presentation-domain.js"
 import { unwrap } from "./semantic-context-fixture.js"
 
 const neural = { hiddenUnits: 8, learningRate: 0.3, gradientNormLimit: 1, seed: 37 }
@@ -53,9 +55,8 @@ it("learns a nonlinear operator boundary without labels for unexecuted alternati
   expect(Either.isLeft(trainNeuralGate(gate, [1], 99, 1, neural))).toBe(true)
 })
 
-const source = (): WorkspaceActivationSource => {
-  const sourceText = "# Source title\n\nThis is a bounded source. Exception: unknown means UNKNOWN.\n"
-  const binding = { contract: "hswm-workspace-source-consumer/v1", entryId: "test", title: "test", document: "docs/test.md",
+const source = (sourceText = "# Source title\n\nThis is a bounded source. Exception: unknown means UNKNOWN.\n", title = "test"): WorkspaceActivationSource => {
+  const binding = { contract: "hswm-workspace-source-consumer/v1", entryId: "test", title, document: "docs/test.md",
     activationSha256: kgSha256(sourceText), activationBytes: new TextEncoder().encode(sourceText).byteLength,
     selection: { kind: "COMPLETE_DOCUMENT" as const, unitId: null, startByte: 0, endByte: new TextEncoder().encode(sourceText).byteLength },
     documentSha256: kgSha256(sourceText), documentBytes: new TextEncoder().encode(sourceText).byteLength, bundle: "ontology/test.json", bundleSha256: "0".repeat(64),
@@ -74,6 +75,72 @@ const ports = (runtime: CanonicalAtomV2DurableRuntime["Type"]) => ({
   admit: (p: { candidate: unknown }) => runtime.submit(p.candidate),
   evaluate: () => Effect.succeed({ reward: 1, observed: "Source title", source: "AUTHORED_SOURCE_HEADING_ORACLE", continue: true })
 })
+
+it("checks original H1 bytes rather than navigation titles, normalization or fenced decoys", () => {
+  for (const [heading, label] of [
+    ["문헌 성능 관측을 HSWM 성능 증명으로 잇는 조건", "문헌 결과와 HSWM 전이 의무"],
+    ["HSWM 최적화 6원칙과 7군단장의 연결", "HSWM 최적화 6원칙과 7군단장 대응"],
+    ["**e\u0301** 원문 ###", "é 원문"]
+  ] as const) {
+    const document = "서문\r\n```md\n# 가짜\n```\n~~~\n# 다른 가짜\n~~~\n   #\t" + heading + "  \r\n본문\n# 두 번째\n"
+    const prepared = unwrap(prepareWorkspaceExtraction(source(document, label), "FIRST_ATX_H1_TEXT_V1"))
+    expect(prepared.expected).toBe(heading)
+    expect(new TextDecoder().decode(new TextEncoder().encode(document).slice(prepared.binding.startByte, prepared.binding.endByte))).toBe(heading)
+    expect(verifyWorkspaceExtraction(prepared, heading).status).toBe("MATCH")
+    for (const wrong of [label, heading + " ", "# " + heading, "두 번째"]) expect(verifyWorkspaceExtraction(prepared, wrong).status).toBe("MISMATCH")
+    expect(verifyWorkspaceExtraction(prepared, null).status).toBe("NOT_EXECUTED")
+  }
+})
+
+it("refuses missing, forged and inactive heading sources before extraction", async () => {
+  for (const text of ["no heading\n", "```\n# fenced only\n```\n", "Setext only\n===\n"])
+    expect(Either.isLeft(prepareWorkspaceExtraction(source(text), "FIRST_ATX_H1_TEXT_V1"))).toBe(true)
+  const whole = source("# First\nA\n# Second\nB\n")
+  const selected = await Effect.runPromise(selectWorkspaceSourceUnit(whole, "section:1"))
+  expect(Either.isLeft(prepareWorkspaceExtraction(selected, "FIRST_ATX_H1_TEXT_V1"))).toBe(true)
+  expect(Either.isLeft(prepareWorkspaceExtraction({ ...whole, documentText: "# Forged\n" }, "FIRST_ATX_H1_TEXT_V1"))).toBe(true)
+  expect(Either.isLeft(prepareWorkspaceExtraction({ ...whole, sourceId: "0".repeat(64) }, "FIRST_ATX_H1_TEXT_V1"))).toBe(true)
+  expect(Either.isLeft(prepareWorkspaceExtraction(whole, "unknown selector"))).toBe(true)
+})
+
+it("rejects a wrong model title and positive caller reward, preserves both, and accepts exact output after reopening", () => fixture(async root => {
+  await Effect.runPromise(Effect.gen(function* () {
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    yield* seedWorkspaceActivation(runtime, source())
+    const wrong = { ...ports(runtime), http: { postJson: () => Effect.succeed(new TextEncoder().encode(JSON.stringify({
+      choices: [{ message: { content: JSON.stringify({ prediction: "test", uncertainty: "confident but wrong" }) } }]
+    }))) } }
+    const result = yield* executeWorkspaceActivation(runtime, source(), { ...request, extraction: "FIRST_ATX_H1_TEXT_V1" }, wrong)
+    expect(result.status).toBe("UPDATED")
+    expect(result.execution.trace?.prediction).toBe("test")
+    expect(result.sourceVerification?.status).toBe("MISMATCH")
+    expect(result.verifiedPrediction).toBeNull()
+    expect(result.assessment.reward).toBe(0)
+    expect(result.assessment.continue).toBe(false)
+    const record = JSON.parse(result.assessment.observed).record
+    const saved = JSON.parse(new TextDecoder().decode(yield* runtime.readContent(record)))
+    expect(saved.callerAssessment.reward).toBe(1)
+    expect(saved.traceContent).toEqual(result.execution.trace?.traceContent)
+    expect(saved.verification).toEqual(result.sourceVerification)
+    if (!result.execution.trace || !result.execution.assembly) return yield* Effect.fail("Expected complete source execution")
+    const presented = JSON.parse(new TextDecoder().decode(yield* runtime.readContent(result.execution.trace.requestContent)))
+    expect(presented.presentation).toBe("source_evidence_tail")
+    expect(presented.prompt).toContain(JSON.stringify(result.execution.assembly.payload))
+    expect(presented.prompt.split(source().sourceText)).toHaveLength(2) // one literal copy; canonical JSON remains complete
+    const payload = result.execution.assembly.payload
+    expect(Either.isLeft(renderContextPrompt({ payload: { ...payload, frames: payload.frames.map(f => ({ ...f,
+      roles: f.roles.filter(r => r.role !== "evidence") })) } }, "source_evidence_tail"))).toBe(true)
+  }).pipe(Effect.provide(layer(root)), Effect.provide(NodePosixServicesLive)))
+  await Effect.runPromise(Effect.gen(function* () {
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    const before = (yield* runtime.snapshot).canonical.revision
+    const result = yield* executeWorkspaceActivation(runtime, source(), { ...request, mode: "AUDIT", extraction: "FIRST_ATX_H1_TEXT_V1" }, ports(runtime))
+    expect(result.sourceVerification?.status).toBe("MATCH")
+    expect(result.verifiedPrediction).toBe("Source title")
+    expect(result.execution.selection.policyKey.revisionId).toBe(1)
+    expect((yield* runtime.snapshot).canonical.revision).toBe(before)
+  }).pipe(Effect.provide(layer(root)), Effect.provide(NodePosixServicesLive)))
+}), 60000)
 
 it("persists neural parameters through the native owner and reopens the exact policy", () => fixture(async root => {
   const beforeAfter = await Effect.runPromise(Effect.gen(function* () {

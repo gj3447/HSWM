@@ -41,7 +41,7 @@ const learnedNetwork = (before,x,selected,reward) => {
   const step=config.learningRate*(norm>config.gradientNormLimit?config.gradientNormLimit/norm:1)
   return {hidden:g.hidden.map((row,i)=>row.map((v,j)=>v-step*dh[i][j])),outputs:g.outputs.map((row,i)=>row.map((v,j)=>v-step*dv[i][j]))}
 }
-const inspect = (row,source,c) => {
+const inspect = (row,source,c,plan) => {
   assert.equal(row.sourceId,source.sourceId);assert.equal(digest(source.binding),source.sourceId)
   assert.equal(source.sourceId,c.sourceId)
   assert.equal(hash(source.documentText),source.binding.documentSha256)
@@ -52,14 +52,27 @@ const inspect = (row,source,c) => {
   const result=row.session.result,expected=/^#\s+(.+)$/m.exec(source.documentText)?.[1]?.trim()
   assert.equal(expected,c.expected)
   const observed=Number(result.execution.trace.prediction===expected)
-  assert.equal(result.assessment.reward,observed);assert.equal(result.assessment.observed,expected)
+  assert.equal(result.assessment.reward,observed)
+  if(plan.extraction){
+    const v=result.sourceVerification
+    assert.equal(v.contract,"hswm-workspace-extraction/v1");assert.equal(v.selector,plan.extraction)
+    assert.equal(v.sourceId,source.sourceId);assert.equal(v.documentSha256,hash(source.documentText));assert.equal(v.activationSha256,hash(source.sourceText))
+    const match=/^#[\t ]+([^\r\n]*)/m.exec(source.documentText)
+    const start=match.index+match[0].indexOf(expected)
+    assert.equal(v.startByte,Buffer.byteLength(source.documentText.slice(0,start)));assert.equal(v.endByte,v.startByte+Buffer.byteLength(expected))
+    assert.equal(Buffer.from(source.documentText).subarray(v.startByte,v.endByte).toString("utf8"),expected)
+    assert.equal(v.status,observed?"MATCH":"MISMATCH");assert.equal(v.expectedSha256,hash(expected));assert.equal(v.observedSha256,hash(result.execution.trace.prediction))
+    assert.equal(result.verifiedPrediction,observed?expected:null)
+    const event=JSON.parse(result.execution.assembly.payload.event),{status,expectedSha256,observedSha256,...binding}=v
+    assert.deepEqual(event.extraction,binding);assert.deepEqual(JSON.parse(result.assessment.observed).verification,v)
+  }else assert.equal(result.assessment.observed,expected)
   assert.equal(result.execution.selection.policySha256,digest(row.beforePolicy))
   assert.equal(result.execution.selection.source,"NEURAL_TOP1_OPERATOR_GATE_NOT_LLM_WEIGHT_TRAINING")
   assert.deepEqual(result.execution.assembly.payload.frames.map(f=>f.relation.key.atomUid),["rule:required",`rule:${result.execution.selection.candidateId}`])
   for(const frame of result.execution.assembly.payload.frames){
     assert.deepEqual(frame.roles.map(r=>r.role),["subject","context","evidence","exception"])
     assert.equal(frame.roles.find(r=>r.role==="evidence").contentUtf8,source.sourceText)
-    assert.deepEqual(JSON.parse(frame.roles.find(r=>r.role==="context").contentUtf8),source.binding)
+    assert.deepEqual(JSON.parse(frame.roles.find(r=>r.role==="context").contentUtf8),plan.sourceRoles==="NAVIGATION_DISTINCT_V1"?{...source.binding,titleRole:"NAVIGATION_LABEL_NOT_DOCUMENT_HEADING"}:source.binding)
   }
   assert.equal(row.session.reads.fullSnapshots,2)
   if(row.mode==="TRAIN"){
@@ -81,11 +94,15 @@ const inspect = (row,source,c) => {
 const main = root => Effect.gen(function* () {
   const nativeBefore=yield* nativeInventory(root)
   const plan=yield* json(join(root,"plan.json")),summary=yield* json(join(root,"summary.json")),reopened=yield* json(join(root,"reopened.json"))
-  yield* checked(()=>{assert.equal(plan.cases.length,49);assert.equal(summary.rows.length,49);assert.equal(reopened.separateOsProcess,true);assert.equal(reopened.rows.length,3)})
+  const extraction=plan.contract==="hswm-workspace-activation-study/v3-extraction",entryCount=extraction?2:49,restartCount=extraction?2:3,callCount=entryCount+restartCount
+  yield* checked(()=>{assert(extraction||plan.contract==="hswm-workspace-activation-study/v2");
+    if(extraction){assert.equal(plan.extraction,"FIRST_ATX_H1_TEXT_V1");assert.deepEqual(plan.cases.map(c=>c.id),["performance-proof","optimization-rules"]);assert.deepEqual(plan.restart,plan.cases.map(c=>c.id))}
+    else assert.equal(plan.extraction,undefined)
+    assert.equal(plan.maximumCalls,callCount);assert.equal(plan.cases.length,entryCount);assert.equal(summary.rows.length,entryCount);assert.equal(reopened.separateOsProcess,true);assert.equal(reopened.rows.length,restartCount)})
   for(const pin of plan.pins){const actual=hash(yield* read(pin.path)),archived=hash(yield* read(join(root,"implementation",pin.sha256)));yield* checked(()=>{assert.equal(actual,pin.sha256,`Implementation drift: ${pin.path}`);assert.equal(archived,pin.sha256)})}
   const runnerSha=hash(yield* read(join(root,"implementation","runner.mjs")));yield* checked(()=>assert.equal(runnerSha,plan.runnerSha256))
   const wire=new Map()
-  for(let i=1;i<=52;i++){
+  for(let i=1;i<=callCount;i++){
     const timing=yield* json(join(root,`wire-${i}-time.json`)),request=yield* json(join(root,`wire-${i}-request.json`)),response=yield* json(join(root,`wire-${i}-response.json`))
     const key=`${timing.mode}:${timing.entry}`
     yield* checked(()=>assert(!wire.has(key),"Duplicate wire attempt"));const tokens=yield* json(join(root,`wire-${i}-tokens.json`))
@@ -98,9 +115,9 @@ const main = root => Effect.gen(function* () {
   for(const c of plan.cases){
     const source=yield* json(join(root,"sources",`${c.id}.json`)),row=yield* json(join(root,`train-${c.id}.json`))
     sourceUnits+=source.units.length
-    trainCorrect+=yield* checked(()=>inspect(row,source,c))
+    trainCorrect+=yield* checked(()=>inspect(row,source,c,plan))
     const rows=[row]
-    if(plan.restart.includes(c.id)){const audit=yield* json(join(root,`audit-${c.id}.json`));auditCorrect+=yield* checked(()=>inspect(audit,source,c));rows.push(audit)}
+    if(plan.restart.includes(c.id)){const audit=yield* json(join(root,`audit-${c.id}.json`));auditCorrect+=yield* checked(()=>inspect(audit,source,c,plan));rows.push(audit)}
     yield* Effect.gen(function* () {
       const runtime=yield* CanonicalAtomV2DurableRuntime,state=yield* runtime.snapshot
       yield* checked(()=>assert.equal(state.canonical.revision,row.afterRevision))
@@ -123,24 +140,28 @@ const main = root => Effect.gen(function* () {
         const storedTrace=yield* nativeJson(trace.traceContent)
         yield* checked(()=>{const {traceContent,...expected}=trace;assert.deepEqual(storedTrace,expected)})
         const request=yield* nativeJson(trace.requestContent),wireRequest=yield* nativeJson(trace.transport.request),wireResponse=yield* nativeJson(trace.transport.response)
-        yield* checked(()=>{assert.deepEqual(request.assembly,result.execution.assembly);assert.equal(wireRequest.messages[0].content,request.prompt);
+        yield* checked(()=>{assert.deepEqual(request.assembly,result.execution.assembly);assert.equal(request.presentation,plan.presentation??"execution_tail");assert.equal(wireRequest.messages[0].content,request.prompt);
           assert.deepEqual(wireRequest,wire.get(`${r.mode}:${r.entry}`)?.request);assert.deepEqual(wireResponse,wire.get(`${r.mode}:${r.entry}`)?.response);
           assert.equal(JSON.parse(wireResponse.choices[0].message.content).prediction,trace.prediction)})
         if(result.proposal){const feedback=yield* nativeJson(result.proposal.outcomeContent);yield* checked(()=>{assert.equal(feedback.reward,result.assessment.reward);assert.equal(feedback.traceContent.sha256,trace.traceContent.sha256)})}
+        if(extraction){const record=JSON.parse(result.assessment.observed).record,saved=yield* nativeJson(record)
+          yield* checked(()=>{assert.equal(record.mediaType,"application/vnd.hswm.workspace-extraction-outcome-v1+json");assert.equal(result.assessment.source,`EXACT_SOURCE_SPAN_VERIFIER:${record.sha256}`);
+            assert.deepEqual(saved.verification,result.sourceVerification);assert.deepEqual(saved.traceContent,trace.traceContent);
+            assert.equal(saved.callerAssessment.observed,c.expected);assert.equal(saved.callerAssessment.reward,Number(trace.prediction===c.expected))})}
         maxPromptTokens=Math.max(maxPromptTokens,wire.get(`${r.mode}:${r.entry}`).tokens.count)
         calls++;logicalPromptBytes+=Buffer.byteLength(request.prompt)
         if(Number.isFinite(wireResponse.usage?.total_tokens))totalTokens+=wireResponse.usage.total_tokens;else unknownUsage++
       }
     }).pipe(Effect.provide(makeCanonicalAtomV2DurableRuntimeFileLayer(join(root,"native",c.id),"workspace-source",schema.right)))
   }
-  const files=yield* io(()=>readdir(root));yield* checked(()=>{assert.equal(calls,52);assert.equal(files.filter(n=>/^wire-\d+-request.json$/.test(n)).length,calls)})
+  const files=yield* io(()=>readdir(root));yield* checked(()=>{assert.equal(calls,callCount);assert.equal(files.filter(n=>/^wire-\d+-request.json$/.test(n)).length,calls)})
   const c=plan.cases[0],source=yield* json(join(root,"sources",`${c.id}.json`)),row=yield* json(join(root,`train-${c.id}.json`))
   for(const mutate of [r=>{r.session.result.assessment.reward=1-r.session.result.assessment.reward},r=>{r.session.result.execution.assembly.payload.frames[0].roles.pop()},r=>{r.session.result.proposal.policy.network.hidden[0][0]+=0.1}]){
-    yield* checked(()=>{const changed=structuredClone(row);mutate(changed);assert.throws(()=>inspect(changed,source,c))})
+    yield* checked(()=>{const changed=structuredClone(row);mutate(changed);assert.throws(()=>inspect(changed,source,c,plan))})
   }
   const nativeAfter=yield* nativeInventory(root);yield* checked(()=>assert.deepEqual(nativeAfter,nativeBefore))
   const checkerSha256=hash(yield* read(new URL(import.meta.url)))
-  return {status:"PASS",nativeFilesUnchanged:true,nativeFiles:nativeBefore.length,checkerSha256,entries:49,sourceUnits,maxPromptTokens,calls,nativeUpdates:49,train:{correct:trainCorrect,total:49},restart:{correct:auditCorrect,total:3,policyRevision:1},
+  return {status:"PASS",nativeFilesUnchanged:true,nativeFiles:nativeBefore.length,checkerSha256,entries:entryCount,sourceUnits,maxPromptTokens,calls,nativeUpdates:entryCount,train:{correct:trainCorrect,total:entryCount},restart:{correct:auditCorrect,total:restartCount,policyRevision:1},
     totalTokens:unknownUsage?null:totalTokens,knownTokenSubtotal:totalTokens,unknownUsage,logicalPromptBytes,nativeContentChecks,mutationChecks:3,
     neuralParameterUpdates:true,modelWeightTraining:false,independentNaturalTaskEfficacy:false,locality:"ONE_SOURCE_PARTITION_WITH_GLOBAL_RECOVERY_WITHIN_THAT_PARTITION"}
 })

@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?capability ?name ?clauses ?implementation ?evidence ?nextQuestion ?verification WHERE {
+  ?root a role:SYNTHESIS_BUNDLE ; r:HAS_CONCEPT ?cap .
+  ?cap p:capability_id ?capability ; p:name ?name ; p:constitution_clauses ?clauses ;
+    p:implementation_scope ?implementation ; p:evidence_scope ?evidence ;
+    p:extension_question ?nextQuestion ; p:verification_target ?verification .
+} ORDER BY ?capability

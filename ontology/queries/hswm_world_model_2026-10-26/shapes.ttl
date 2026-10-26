@@ -1,0 +1,59 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix kg: <https://hswm.invalid/kg-bundle-rdf/v1/> .
+
+# Applies only to the world-model entry; complements the existing generic v2 shapes.
+<urn:hswm:world-model:root> a sh:NodeShape ;
+  sh:targetClass role:SYNTHESIS_BUNDLE ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:identity_position ; sh:hasValue "HSWM_IS_A_WORLD_MODEL" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:assessment_axis ; sh:hasValue "CAPABILITY_SCOPE_AND_DEVELOPMENT" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:class role:USER_DIRECT_SOURCE ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ;
+    sh:qualifiedValueShape [ sh:property [ sh:path p:capability_id ; sh:minCount 1 ] ] ;
+    sh:qualifiedMinCount 6 ; sh:qualifiedMaxCount 6 ] .
+
+<urn:hswm:world-model:user> a sh:NodeShape ;
+  sh:targetClass role:USER_DIRECT_SOURCE ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "USER_PRIMARY" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:ontology_authority_class_v1 ; sh:hasValue "USER_PRIMARY" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:ontology_review_required_v1 ; sh:hasValue false ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:exact_user_text ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:actor ; sh:hasValue "user" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_ENGINEERING_INTERPRETATION ; sh:class role:SYNTHESIS_BUNDLE ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:hswm:world-model:capability> a sh:NodeShape ;
+  sh:targetSubjectsOf p:capability_id ;
+  sh:class role:ENGINEERING_INTERPRETATION ;
+  sh:property [ sh:path p:capability_id ; sh:in ("C1" "C2" "C3" "C4" "C5" "C6") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:ontology_authority_class_v1 ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:identity_position ; sh:hasValue "HSWM_IS_A_WORLD_MODEL" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:constitution_clauses ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:implementation_scope ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:evidence_scope ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:extension_question ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:verification_target ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:class kg:Anchor ; sh:minCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:minCount 2 ;
+    sh:or ([ sh:class role:PLAN_SOURCE ] [ sh:class role:EVIDENCE_ARTIFACT ]) ] .
+
+<urn:hswm:world-model:source-binding> a sh:NodeShape ;
+  sh:targetClass kg:Node ;
+  sh:property [ sh:path p:source_path ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:datatype xsd:string ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:hswm:world-model:external-source> a sh:NodeShape ;
+  sh:targetClass role:PLAN_SOURCE ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:external_url ; sh:datatype xsd:string ; sh:pattern "^https://" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_accessed_on ; sh:hasValue "2026-10-26" ; sh:maxCount 1 ] .
+
+<urn:hswm:world-model:relation> a sh:NodeShape ;
+  sh:targetClass kg:Relation ;
+  sh:property [ sh:path kg:relationType ; sh:in ("HAS_CONCEPT" "HAS_SOURCE" "REFERENCES" "HAS_ENGINEERING_INTERPRETATION") ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kg:authorityClass ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kg:status ; sh:hasValue "PROPOSED" ; sh:maxCount 1 ] .

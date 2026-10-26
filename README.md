@@ -10,6 +10,10 @@
 전체가 하나의 거대한 AI를 이루는 하이퍼그래프 신경망입니다.
 [사용자 정체성 정의와 KG](docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md)에 기록합니다.
 
+**HSWM 자체를 월드모델로 보는 사용자 관점**에서 헌법·Wolfram 기전·현재 근거·확장 질문을
+[연속적 발전 그래프](docs/research/HSWM_WORLD_MODEL_CONTINUITY_AND_WOLFRAM_2026-10-26.md)로 연결했습니다.
+`hswm-workspace show world-model`에서 여섯 능력과 원문을 조회합니다.
+
 **완전한 이데아의 HSWM은 metahumotonic이라는 사용자 정의**를
 [원문과 정체성 기록](docs/canon/USER_PRIMARY_HSWM_METAHUMOTONIC_IDEA_2026-10-04.md)에 보존합니다.
 [동굴 비유·표현 수렴·인과적 학습 연구](docs/research/HSWM_CAVE_METAHUMOTONIC_RESEARCH_2026-10-04.md)는

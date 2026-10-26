@@ -1,0 +1,11 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX kg: <https://hswm.invalid/kg-bundle-rdf/v1/>
+SELECT ?capability ?sourceUid ?sourceName ?role ?authority ?description ?path ?sha256 ?url ?revision WHERE {
+  ?cap p:capability_id ?capability ; r:HAS_SOURCE ?source .
+  ?source kg:uid ?sourceUid ; p:name ?sourceName ; p:standard_graph_role ?role ;
+    p:authority_class ?authority ; p:description ?description ;
+    p:source_path ?path ; p:source_sha256 ?sha256 .
+  OPTIONAL { ?source p:external_url ?url . }
+  OPTIONAL { ?source p:source_revision ?revision . }
+} ORDER BY ?capability ?sourceUid

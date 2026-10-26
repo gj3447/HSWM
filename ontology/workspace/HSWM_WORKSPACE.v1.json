@@ -1702,6 +1702,91 @@
       "shapes": [
         "schemas/HSWM_CONSTITUTION_NAVIGATION_SHACL_1_0.ttl"
       ]
+    },
+    {
+      "id": "wolfram-engine-review",
+      "title": "Wolfram 재작성 엔진의 기존 소스 검토",
+      "lane": "ENGINEERING",
+      "reading": "2026-10-20 pinned source observations, reused by world-model capability research.",
+      "bundle": "ontology/identity/hswm_core/CHU_OS_INDEXING_WOLFRAM_ONTOLOGY.v1.json",
+      "document": "docs/research/CHU_OS_INDEXING_AND_WOLFRAM_ENGINE_2026-10-20.md",
+      "queries": [],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "world-model",
+      "title": "HSWM 월드모델: 헌법·Wolfram·능력의 연속적 발전",
+      "lane": "ENGINEERING",
+      "reading": "HSWM itself is a world model. Read attributed capability scope, evidence and extension questions together.",
+      "bundle": "ontology/identity/hswm_core/HSWM_WORLD_MODEL_CONTINUITY_ONTOLOGY.v1.json",
+      "document": "docs/research/HSWM_WORLD_MODEL_CONTINUITY_AND_WOLFRAM_2026-10-26.md",
+      "anchor_routes": [
+        {
+          "uid": "sym:AbstractNode:hswm-hypergraph-neural-ai-identity-2026-09-14",
+          "entry": "identity",
+          "sha256": "1e22b92ff4df3f1ea2e56adcff15070a5adc9126cf3b0428a56bae0d49a30d88"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution",
+          "entry": "constitution",
+          "sha256": "72aa743375e40b6e45ff94831622f08fc92f642ec84ab04d11eb6534c5ed2044"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-state",
+          "entry": "constitution-state",
+          "sha256": "d261e2c69659b3ca0ce516aca85ddb040f258aca4b407618123b5d5a04d7ba57"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-activation",
+          "entry": "constitution-activation",
+          "sha256": "876df63afebced3fcf8846ca949e5db690eab84660735377e147a979d351becc"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-learning",
+          "entry": "constitution-learning",
+          "sha256": "64dc9582457e9f4b869ed50ff9bdda8c7c110d2592f9208f095e58c190803ee5"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-composition",
+          "entry": "constitution-composition",
+          "sha256": "11e1eb67056187889275b9ad0e81784d27a07829583ccd34ab995bdd06cb0f39"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-constitution-assurance",
+          "entry": "constitution-assurance",
+          "sha256": "162c0e246d7e4f0de30aab4c0078853b81fd59de54ea6d477e235c5dd77a818f"
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-operational-quotient-2026-10-04",
+          "entry": "operational-quotient",
+          "sha256": "3b7e733add6b9b7dd05992a8c0602ca546ceb0d83bb408df921a20bba40a7994"
+        },
+        {
+          "uid": "sym:AbstractNode:chu-os-indexing-wolfram-2026-10-20",
+          "entry": "wolfram-engine-review",
+          "sha256": "d526db07269595bcb0a2ed1027ee898b4c12804974240f31b721cebaea4e55e8"
+        }
+      ],
+      "queries": [
+        {
+          "id": "identity",
+          "path": "ontology/queries/hswm_world_model_2026-10-26/identity.rq"
+        },
+        {
+          "id": "capabilities",
+          "path": "ontology/queries/hswm_world_model_2026-10-26/capabilities.rq"
+        },
+        {
+          "id": "sources",
+          "path": "ontology/queries/hswm_world_model_2026-10-26/sources.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+        "ontology/queries/hswm_world_model_2026-10-26/shapes.ttl"
+      ]
     }
   ],
   "workflows": [

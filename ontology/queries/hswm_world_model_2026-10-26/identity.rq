@@ -1,0 +1,10 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX kg: <https://hswm.invalid/kg-bundle-rdf/v1/>
+SELECT ?subject ?position ?assessment ?authority ?userText ?source ?sha256 WHERE {
+  ?root a role:SYNTHESIS_BUNDLE ; kg:uid ?subject ;
+    p:identity_position ?position ; p:assessment_axis ?assessment ; r:HAS_SOURCE ?user .
+  ?user a role:USER_DIRECT_SOURCE ; p:authority_class ?authority ;
+    p:exact_user_text ?userText ; p:source_path ?source ; p:source_sha256 ?sha256 .
+}

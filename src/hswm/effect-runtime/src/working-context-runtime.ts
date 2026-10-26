@@ -154,6 +154,23 @@ export const prepareWorkingMemoryUpdate = (runtime: Runtime, key: unknown, memor
   return yield* prepareWrite(runtime, context, target, current.atom)
 })
 
+/** Add complete evidence frames without dropping existing rules, copying W or resolving gaps by fiat. */
+export const prepareWorkingContextExtension = (runtime: Runtime, key: unknown, roots: ReadonlyArray<string>, target: unknown) => Effect.gen(function* () {
+  const current = yield* readWorkingContext(runtime, key)
+  if (current.context.lastRun?.status === "PENDING") return yield* Effect.fail(workingError("PENDING", "Reconcile the pending operation before extending context"))
+  if (current.status !== "CURRENT") return yield* Effect.fail(workingError("DEPENDENCY_STALE", "Refresh existing dependencies before extending context"))
+  const mandatoryRelationUids = [...new Set([...current.context.spec.mandatoryRelationUids, ...roots])]
+  if (mandatoryRelationUids.length === current.context.spec.mandatoryRelationUids.length) return null
+  const input = yield* decodeWorking(WorkingContextInputSchema, {
+    agentId: current.context.agentId, taskId: current.context.taskId, memory: current.context.memory,
+    spec: { ...current.context.spec, mandatoryRelationUids }, policyFamily: current.context.policyFamily
+  })
+  const writer = yield* decodeWorking(ActivationTargetSchema, target)
+  const plan = yield* planFor(runtime, input)
+  const policy = yield* policyFor(runtime, plan, input, writer)
+  return yield* prepareWrite(runtime, { ...current.context, ...input, dependencies: workingDependencies(plan), policyKey: policy.key }, writer, current.atom, policy.proposal)
+})
+
 const WorkingUseSchema = Schema.Struct({
   runId: Schema.NonEmptyString.pipe(Schema.maxLength(256)), mode: Schema.Literal("TRAIN", "AUDIT"), cell: Schema.Unknown,
   featureValues: Schema.Array(Schema.Number.pipe(Schema.finite(), Schema.between(-1, 1))).pipe(Schema.minItems(1), Schema.maxItems(16)),

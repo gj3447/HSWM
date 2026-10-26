@@ -236,9 +236,11 @@ requires a task/source predecessor. The successor test exceeded Vitest's default
 five seconds and passed with the documented 30-second limit.
 The full read-only `npm run check`, runner syntax check, Markdown math compilation
 and whitespace validation passed. The checks used Node 24.20.0, Effect 3.22.1 and
-Vitest 3.2.7. These results include the current checkout's unrelated native-runtime
-edits; isolated committed-source validation remains part of the capacity-dependent
-verification, not an already established result.
+Vitest 3.2.7. An additional read-only TypeScript compiler host read production
+sources directly from Git commit `849d761`: 373 roots, 376 Git-backed reads,
+zero diagnostics and zero emitted files. This excludes other writers' uncommitted
+source changes. Runtime tests above still used the current checkout; isolated
+committed-source runtime tests remain pending the capacity gate.
 
 The managed runner refused the build/disk test job because the host thin pool
 was critical (98.19%, later 98.24%). Read-only type checking, memory-only tests

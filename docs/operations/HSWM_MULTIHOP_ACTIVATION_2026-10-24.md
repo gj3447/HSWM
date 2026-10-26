@@ -3,6 +3,13 @@
 2026-10-24 · 설계·판정 `agent(codex) / SECONDARY_AI`. 사용자 원문은
 [고정 발췌](../canon/sources/HSWM_SEMINAR_LOCAL_ACTIVATION_2026-10-21.json)에 따로 보존한다.
 
+2026-10-26 후속 설계·적용: [USL 기반 질문별 근거 탐색](../../_research/multihop_activation_v1/README.md#2026-10-26-question-directed-evidence-traversal)은
+LLM이 현재 지도에서 다음 링크·인용 답·보류를 고르고 기존 native W 루프에 연결한다.
+2026년 논문 5편의 적용·미적용 범위와 동결 대조 실험 프로토콜을 해당 문서에 모았다.
+메모리 검사와 USL 국소 문맥 생성은 확인했지만 저장 풀 98.07%로 관리형 실행이 거부되어
+실제 모델·영속 재시작 실험은 `NOT_READY`다. 아래 42회 과거 실측을 새 구현의 성공으로
+전용하지 않으며, 인용 일치도 의미적 정답·최소 활성화 증명과 구분한다.
+
 ## 발표 원문과 검사
 
 라경준의 2026-10-21 16:00 KST 「10월 세미나 — Agent Native」 40쪽 중 11·17·34·36쪽을

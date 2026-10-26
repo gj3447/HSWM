@@ -3,6 +3,15 @@
 > 체크인 코드와 직접 측정으로 재현 가능한 현재 결과만 요약한다.
 > 삭제된 개인 판정·감사·오케스트레이션 계층의 기록은 현재 권위가 없으며 복원하지 않는다.
 
+## 2026-10-26 — USL 질문별 근거 탐색: 메모리 검사 통과, 영속 실험 NOT_READY
+
+2026년 원 논문 5편과 USL 현행 규약을 검토해 질문→현재 링크 선택→방문 근거 인용/보류를
+기존 native activation/W 루프에 연결했다. **메모리 테스트 9/9**, targeted strict
+typecheck와 Effect lint 통과; 실제 USL SDK의 7개 국소 문맥·6개 3항 링크 생성도 확인했다.
+관리형 실행은 thin pool 98.07%로 거부되어 새 실제 모델 호출·영속 W 갱신·새 프로세스
+대조 실험은 **미실행**이다. 메모리 W 갱신이나 과거 42/98회 결과를 새 통합 완료로
+확대하지 않는다. [설계·논문·대조 실행법](_research/multihop_activation_v1/README.md#2026-10-26-question-directed-evidence-traversal).
+
 > **운영 규칙 (2026-09-05, USER_PRIMARY D-4):** closure burden cap. audited commit
 > `4dcba752…` 이후 100 커밋 중 50% 이상이 core path
 > (`src/hswm/experiments/g1_micro*`, `src/hswm/effect-runtime/src/canonical-atom-v2-local-permit-commit*`,

@@ -196,6 +196,9 @@ rejects any attempt to reopen bootstrap. Bodies over the existing native role
 limit of 65,536 bytes refuse admission rather than being truncated. Identical
 observations are reused; older observations, conflicting identities and another
 owner's binding refuse. Immutable roles retain their original provenance.
+The HTTP reader preserves a leading UTF-8 BOM, but the current native semantic
+reader strips it. Publication refuses that representation before admission so
+the graph cannot claim an exact projection of bytes its reader would normalize.
 
 `prepareWorkingContextExtension` adds complete mandatory frames while retaining
 existing rules and unresolved gaps. New scope uses the existing policy-family
@@ -226,7 +229,7 @@ revalidation returned 304 with the same body SHA-256
 `1193f1c8710af162e1b9fb4250d79bc6dd26497df4caeeaaa8bcb2fefdd2529e`.
 This proves that transport path only; no model call or W update was performed.
 
-**10 focused tests passed; one file-journal test remains unexecuted.** Tests use
+**11 focused tests passed; one file-journal test remains unexecuted.** Tests use
 the existing native memory layer for source admission, gap binding, owner
 readback, handoff deduplication, observation successors and selective refresh.
 Transport cases cover scope/expiry refusal, time/byte limits, UTF-8, HTTP failures,
@@ -262,6 +265,11 @@ node _research/agent_working_context_v1/evidence.mjs check NEW_PRIVATE_ROOT
 The bounded runner uses at most three public GETs, creates an isolated native
 journal, hands the source to a peer, checks duplicate and return handoffs,
 revalidates, refreshes only dependents and reads the peer from a fresh OS process.
+Its recovery verifier requires the exact source revision in a selected assembly,
+all four source roles, matching role hashes, complete original body and exact
+observation metadata. Merely mentioning a source ID cannot pass. Counterexamples
+cover a missing assembly, wrong revision, altered body, rehashed but wrong
+metadata, missing exception role and leading-BOM publication.
 The `check` command independently consumes its private `result.json` and native
 source/context records. The runner's full execution is pending the capacity gate;
 its source is a reproducible verification path, not a claim that it has passed.

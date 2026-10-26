@@ -45,6 +45,8 @@ export const prepareEvidencePublication = (runtime: Runtime, rawObservation: unk
   const writer = yield* decodeEvidence(Writer, rawWriter)
   if (new TextEncoder().encode(observation.bodyUtf8).byteLength > 65536)
     return yield* Effect.fail(evidenceError("FRAME_BUDGET", "Source exceeds one complete native evidence role; select a source unit upstream, never truncate"))
+  if (observation.bodyUtf8.startsWith("\ufeff"))
+    return yield* Effect.fail(evidenceError("FRAME_ENCODING", "The existing native semantic reader strips a leading UTF-8 BOM; exact source projection is unsupported"))
   const snapshot = yield* runtime.snapshot
   const baseKey = { schemaVersion: runtime.schema.schemaVersion, lineageId: writer.lineageId, atomUid: `evidence-source:${observation.sourceId}`, revisionId: 0 }
   if (snapshot.canonical.atoms.some(atom => atom.key.atomUid === baseKey.atomUid && (atom.key.lineageId !== baseKey.lineageId || atom.key.schemaVersion !== baseKey.schemaVersion)))

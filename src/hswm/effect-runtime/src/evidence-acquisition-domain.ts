@@ -1,6 +1,8 @@
 /** Acquisition decisions are separate from relevance, source truth and learned activation. */
 import { createHash } from "node:crypto"
 import { Either, Schema } from "effect"
+import { parseJson } from "./adaptive-domain.js"
+import { CanonicalAtomV2KeySchema, canonicalAtomV2KeyId } from "./canonical-atom-v2-schema.js"
 import { contextError, contextHash } from "./semantic-context-domain.js"
 
 const text = (max: number) => Schema.NonEmptyString.pipe(Schema.maxLength(max), Schema.filter(s => s.trim().length > 0))
@@ -91,3 +93,35 @@ const CrossrefResponse = Schema.Struct({ status: Schema.Literal("ok"), message: 
 export const decodeCrossrefHits = (raw: unknown) => Schema.decodeUnknownEither(CrossrefResponse)(raw).pipe(
   Either.mapLeft(() => evidenceError("SEARCH_RESPONSE", "Expected bounded Crossref metadata; no guessed result")),
   Either.map(value => value.message.items.map(item => ({ doi: item.DOI, title: item.title.join(" — "), url: item.URL, publisher: item.publisher }))))
+
+const EvidenceSelectionSchema = Schema.Struct({
+  selection: Schema.Struct({ status: Schema.Literal("SELECTED") }),
+  assembly: Schema.Struct({ payload: Schema.Struct({ frames: Schema.Array(Schema.Struct({
+    relation: Schema.Struct({ key: CanonicalAtomV2KeySchema }),
+    roles: Schema.Array(Schema.Struct({ role: text(128), contentSha256: sha, contentUtf8: text(65536) })).pipe(Schema.maxItems(16))
+  })).pipe(Schema.minItems(1), Schema.maxItems(72)) }) })
+})
+/** Verify actual projected bytes, not an ID mentioned elsewhere in a process response. No truth/authority claim. */
+export const verifyEvidenceSelection = (rawSelection: unknown, rawKey: unknown, rawObservation: unknown) => Either.gen(function* () {
+  const key = yield* decodeEvidence(CanonicalAtomV2KeySchema, rawKey)
+  const observation = yield* checkEvidenceObservation(rawObservation)
+  const selected = yield* Schema.decodeUnknownEither(EvidenceSelectionSchema)(rawSelection).pipe(
+    Either.mapLeft(() => evidenceError("SELECTION", "Expected a selected complete semantic assembly")))
+  const frames = selected.assembly.payload.frames.filter(frame => canonicalAtomV2KeyId(frame.relation.key) === canonicalAtomV2KeyId(key))
+  const frame = frames[0]
+  if (frames.length !== 1 || frame === undefined || key.atomUid !== `evidence-source:${observation.sourceId}`)
+    return yield* Either.left(evidenceError("SELECTION", "Selection lacks the exact original source revision"))
+  if (frame.roles.length !== 4 || ["subject", "context", "evidence", "exception"].some(role => frame.roles.filter(r => r.role === role).length !== 1) ||
+    frame.roles.some(role => evidenceBytesHash(role.contentUtf8) !== role.contentSha256))
+    return yield* Either.left(evidenceError("SELECTION", "Source roles are missing, duplicated or differ from their byte hashes"))
+  const body = frame.roles.find(role => role.role === "evidence")
+  const metadata = frame.roles.find(role => role.role === "context")
+  if (!body || !metadata || body.contentUtf8 !== observation.bodyUtf8 || body.contentSha256 !== observation.bodySha256)
+    return yield* Either.left(evidenceError("SELECTION", "Selected evidence is not the complete original representation"))
+  const record = yield* Schema.decodeUnknownEither(Schema.Record({ key: Schema.String, value: Schema.Unknown }))(yield* parseJson(metadata.contentUtf8)).pipe(
+    Either.mapLeft(() => evidenceError("SELECTION", "Selected observation metadata is invalid")))
+  const projected = yield* checkEvidenceObservation({ ...record, bodyUtf8: body.contentUtf8 })
+  if (contextHash(projected) !== contextHash(observation)) return yield* Either.left(evidenceError("SELECTION", "Selected source metadata belongs to another observation"))
+  return { evidenceKey: key, sourceId: observation.sourceId, bodySha256: observation.bodySha256,
+    bodyBytes: new TextEncoder().encode(observation.bodyUtf8).byteLength, claim: "EXACT_SOURCE_REPRESENTATION_ONLY" as const }
+})

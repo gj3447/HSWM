@@ -6,10 +6,11 @@ import { execFile } from "node:child_process"
 import { Effect, Either } from "../../src/hswm/effect-runtime/node_modules/effect/dist/esm/index.js"
 import { CanonicalAtomV2DurableRuntime, makeCanonicalAtomV2DurableRuntimeFileLayer } from "../../src/hswm/effect-runtime/dist/canonical-atom-v2-durable-runtime.js"
 import { canonicalAtomV2SchemaContentBytes, decodeCanonicalAtomV2SchemaContent } from "../../src/hswm/effect-runtime/dist/canonical-atom-v2-content-bound.js"
+import { canonicalAtomV2KeyId } from "../../src/hswm/effect-runtime/dist/canonical-atom-v2-schema.js"
 import { workspaceActivationSchema } from "../../src/hswm/effect-runtime/dist/workspace-activation-runtime.js"
 import { workingContextKind } from "../../src/hswm/effect-runtime/dist/working-context-domain.js"
 import { prepareWorkingContextCreation, prepareWorkingContextRefresh, openWorkingContext } from "../../src/hswm/effect-runtime/dist/working-context-runtime.js"
-import { crossrefSearchUrl } from "../../src/hswm/effect-runtime/dist/evidence-acquisition-domain.js"
+import { crossrefSearchUrl, verifyEvidenceSelection } from "../../src/hswm/effect-runtime/dist/evidence-acquisition-domain.js"
 import { acquireEvidence } from "../../src/hswm/effect-runtime/dist/evidence-acquisition-http.js"
 import { acquireWorkingContextEvidence, prepareEvidencePublication, prepareWorkingEvidenceHandoff, readEvidenceObservation } from "../../src/hswm/effect-runtime/dist/evidence-acquisition-runtime.js"
 import { runArgvProcessMain } from "../../src/hswm/effect-runtime/dist/effect-process-main.js"
@@ -95,7 +96,8 @@ const run = root => Effect.gen(function* () {
     yield* ensure(handoff !== null, "Peer handoff missing")
     yield* runtime.submit(handoff.candidate)
     const child = yield* childRead(root, handoff.contextKey)
-    yield* ensure(child.pid !== process.pid && JSON.stringify(child.selected).includes(fetched.evidenceKey.atomUid), "Fresh process did not consume the original source")
+    yield* ensure(child.pid !== process.pid, "Expected a distinct consumer process")
+    const recoveredEvidence = yield* verifyEvidenceSelection(child.selected, fetched.evidenceKey, fetched.observation)
     const before = (yield* runtime.snapshot).canonical.revision
     yield* ensure((yield* prepareEvidencePublication(runtime, fetched.observation, writer())).status === "REUSED", "Repeated source was promoted twice")
     yield* ensure((yield* prepareWorkingEvidenceHandoff(runtime, fetched.contextKey, handoff.contextKey, fetched.evidenceKey, target(key("peer"), 2))) === null, "Repeated handoff was not a no-op")
@@ -110,7 +112,7 @@ const run = root => Effect.gen(function* () {
     return { contract: "hswm-public-evidence-integration/v1", observedAt: new Date().toISOString(), requests: count.requests,
       searchKey: publishedSearch.relationKey, evidenceKey: revalidated.evidenceKey, sourceId: fetched.observation.sourceId, bodySha256: fetched.observation.bodySha256,
       bodyBytes: Buffer.byteLength(fetched.observation.bodyUtf8), revalidationStatus: revalidated.observation.httpStatus,
-      workerKey: revalidated.contextKey, peerKey: refreshed.contextKey, unrelatedKey: key("unrelated"), freshProcessPid: child.pid,
+      workerKey: revalidated.contextKey, peerKey: refreshed.contextKey, unrelatedKey: key("unrelated"), freshProcessPid: child.pid, recoveredEvidence,
       duplicateAdmission: false, gapsResolvedByTransport: false, modelCalls: 0, weightUpdates: 0, separateHostTransport: false }
   }).pipe(Effect.provide(layer(root)))
   yield* save(join(root, "result.json"), result)
@@ -118,19 +120,20 @@ const run = root => Effect.gen(function* () {
 })
 const check = root => Effect.gen(function* () {
   const result = yield* json(join(root, "result.json"))
-  yield* Effect.gen(function* () {
+  const observation = yield* Effect.gen(function* () {
     const runtime = yield* CanonicalAtomV2DurableRuntime
     const stored = yield* readEvidenceObservation(runtime, result.evidenceKey)
     yield* ensure(stored.observation.bodySha256 === result.bodySha256 && stored.observation.sourceId === result.sourceId, "Stored source differs from the observed receipt")
     for (const key of [result.workerKey, result.peerKey]) {
       const context = yield* openWorkingContext(runtime, key)
-      yield* ensure(context.status === "CURRENT" && context.context.memory.gaps.every(gap => gap.status === "OPEN") &&
-        context.context.dependencies.some(d => JSON.stringify(d.key) === JSON.stringify(result.evidenceKey)), "Context lost source identity or invented gap resolution")
+      yield* ensure(canonicalAtomV2KeyId(context.atom.key) === canonicalAtomV2KeyId(key) && context.status === "CURRENT" && context.context.memory.gaps.every(gap => gap.status === "OPEN") &&
+        context.context.dependencies.some(d => canonicalAtomV2KeyId(d.key) === canonicalAtomV2KeyId(result.evidenceKey)), "Context lost source identity or invented gap resolution")
     }
+    return stored.observation
   }).pipe(Effect.provide(layer(root)))
   const child = yield* childRead(root, result.peerKey)
-  yield* ensure(JSON.stringify(child.selected).includes(result.evidenceKey.atomUid), "Fresh selection lacks the source")
-  return { ...result, independentRead: "PASS", checkProcessPid: child.pid }
+  const checkedEvidence = yield* verifyEvidenceSelection(child.selected, result.evidenceKey, observation)
+  return { ...result, independentRead: "PASS", checkProcessPid: child.pid, checkedEvidence }
 })
 if (process.argv[2] === "--help") process.stdout.write(help)
 else process.exitCode = await runArgvProcessMain({ refusalPrefix: "HSWM_PUBLIC_EVIDENCE_REFUSED", program: args => {

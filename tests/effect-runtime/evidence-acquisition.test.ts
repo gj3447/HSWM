@@ -7,10 +7,13 @@ import { CanonicalAtomV2DurableRuntime, makeCanonicalAtomV2DurableRuntimeFileLay
 import { canonicalAtomV2SchemaContentBytes, decodeCanonicalAtomV2SchemaContent } from "../../src/hswm/effect-runtime/src/canonical-atom-v2-content-bound.js"
 import { type HSWMCanonicalSchemaV2 } from "../../src/hswm/effect-runtime/src/canonical-atom-v2-schema.js"
 import { NodePosixServicesLive, type BoundedSubprocess, type PosixFileSystem } from "../../src/hswm/effect-runtime/src/effect-posix-services.js"
-import { workingContextKind } from "../../src/hswm/effect-runtime/src/working-context-domain.js"
+import { workingContextKind, workingSpec } from "../../src/hswm/effect-runtime/src/working-context-domain.js"
+import { contextHash } from "../../src/hswm/effect-runtime/src/semantic-context-domain.js"
+import { prepareSemanticContext } from "../../src/hswm/effect-runtime/src/semantic-context-runtime.js"
+import { assembleContextActivation } from "../../src/hswm/effect-runtime/src/semantic-context-activation-runtime.js"
 import { openWorkingContext, prepareWorkingContextCreation, prepareWorkingContextRefresh } from "../../src/hswm/effect-runtime/src/working-context-runtime.js"
 import { workingContextProcess } from "../../src/hswm/effect-runtime/src/working-context-process.js"
-import { crossrefSearchUrl, decideEvidenceAcquisition, type EvidenceAccess, type EvidenceNeed } from "../../src/hswm/effect-runtime/src/evidence-acquisition-domain.js"
+import { crossrefSearchUrl, decideEvidenceAcquisition, evidenceBytesHash, verifyEvidenceSelection, type EvidenceAccess, type EvidenceNeed } from "../../src/hswm/effect-runtime/src/evidence-acquisition-domain.js"
 import { acquireEvidence } from "../../src/hswm/effect-runtime/src/evidence-acquisition-http.js"
 import { acquireWorkingContextEvidence, prepareEvidencePublication, prepareWorkingEvidenceHandoff, readEvidenceObservation } from "../../src/hswm/effect-runtime/src/evidence-acquisition-runtime.js"
 import { schema, key, spec, seedContext, unwrap } from "./semantic-context-fixture.js"
@@ -159,9 +162,48 @@ const handoffCase = (runtime: Runtime, root: string | null) => Effect.gen(functi
   expect(peer.context.memory.gaps[0]?.status).toBe("OPEN")
   expect(peer.context.dependencies.filter(d => d.key.atomUid === result.evidenceKey?.atomUid)).toHaveLength(1)
   expect((yield* readEvidenceObservation(runtime, result.evidenceKey)).observation.bodyUtf8).toBe(body)
+  const plan = yield* prepareSemanticContext(runtime, yield* workingSpec(peer.context))
+  const selected = yield* assembleContextActivation(runtime, plan, { policyKey: peer.context.policyKey, mode: "EXPLOIT",
+    features: { encoderRevision: "bias/v1", eventSha256: contextHash(plan.spec.event), values: [1] } })
+  const verified = yield* verifyEvidenceSelection(selected, result.evidenceKey, result.observation)
+  expect(verified.bodySha256).toBe(result.observation.bodySha256)
+  expect(verified.bodyBytes).toBe(Buffer.byteLength(body))
+  if (!selected.assembly) return yield* Effect.fail(new Error("missing selected assembly"))
+  expect(Either.isLeft(verifyEvidenceSelection({ hint: result.evidenceKey.atomUid, assembly: null }, result.evidenceKey, result.observation))).toBe(true)
+  expect(Either.isLeft(verifyEvidenceSelection(selected, { ...result.evidenceKey, revisionId: 9 }, result.observation))).toBe(true)
+  for (const fault of ["body", "metadata", "exception"] as const) {
+    const broken = { ...selected, assembly: { ...selected.assembly, payload: { ...selected.assembly.payload,
+      frames: selected.assembly.payload.frames.map(frame => frame.relation.key.atomUid !== result.evidenceKey?.atomUid ? frame : { ...frame,
+        roles: frame.roles.filter(role => fault !== "exception" || role.role !== "exception").map(role => {
+          if (fault === "body" && role.role === "evidence") return { ...role, contentUtf8: "partial source" }
+          if (fault === "metadata" && role.role === "context") {
+            const changed = role.contentUtf8.replace(now, "2026-10-26T00:01:00.000Z")
+            return { ...role, contentUtf8: changed, contentSha256: evidenceBytesHash(changed) }
+          }
+          return role
+        })
+      })
+    } } }
+    expect(Either.isLeft(verifyEvidenceSelection(broken, result.evidenceKey, result.observation))).toBe(true)
+  }
+  if (root !== null) {
+    const nextProcess = yield* workingContextProcess({ contract: "hswm-working-context-cli/v1", action: "select", durableRoot: root, journalLineageId: "evidence-tests",
+      schema: workingSchema, contextKey: peer.atom.key, featureValues: [1] })
+    yield* verifyEvidenceSelection(nextProcess, result.evidenceKey, result.observation)
+  }
 })
 it("memory journal acquires and hands off exact source IDs without closing gaps or duplicating admission", () => memoryFixture(runtime => handoffCase(runtime, null)))
 it("file journal reopens the acquired and shared source through the recovery command", () => fixture(handoffCase))
+
+it("refuses source admission when the native reader would normalize its leading BOM", () => memoryFixture(runtime => Effect.gen(function* () {
+  const context = yield* create(runtime, "bom")
+  const acquired = yield* acquireEvidence(need, access, null, read("\ufeffOriginal source"))
+  if (!acquired.observation) return yield* Effect.fail(new Error("missing source"))
+  const before = (yield* runtime.snapshot).canonical.revision
+  const refused = yield* prepareEvidencePublication(runtime, acquired.observation, writer, context).pipe(Effect.either)
+  expect(Either.isLeft(refused) && "code" in refused.left && refused.left.code).toBe("EVIDENCE_FRAME_ENCODING")
+  expect((yield* runtime.snapshot).canonical.revision).toBe(before)
+})))
 
 it("new source observations refresh the acquiring task, stale only dependent peers, and refuse out-of-order or foreign handoffs", () => memoryFixture(runtime => Effect.gen(function* () {
   const a = yield* create(runtime, "a")

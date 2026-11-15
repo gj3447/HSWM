@@ -1,0 +1,138 @@
+{
+  "authority": "agent(codex):SOURCE_VERIFIED_OBSERVATION_AND_DERIVED_SUMMARY",
+  "claim_boundary": "FROZEN_W_PROGRAM_PILOT_NOT_W_LEARNING_NOT_POPULATION_GENERALIZATION",
+  "decision": "DEVELOPMENT_REJECTED_FRESH_TEST_NOT_OPENED",
+  "environment": {
+    "checkpoint": "NOT_WEIGHT_ATTESTED",
+    "effect": "3.22.1",
+    "model": "qwen3-4b-real",
+    "node": "v24.20.0",
+    "sampling": {
+      "seed": 20261104,
+      "temperature": 0.7,
+      "top_p": 0.8
+    },
+    "typescript": "5.9.3"
+  },
+  "fresh_question_exact_matches_in_requests": 0,
+  "fresh_request_rows": 0,
+  "paired": {
+    "grounded_gains": 2,
+    "grounded_losses": 1,
+    "label_gains": 2,
+    "label_losses": 1
+  },
+  "preflight": {
+    "native_isolation": "PASS",
+    "research_typecheck": "PASS",
+    "run_id": "a7d3977156364095b894c60ac19eb64a",
+    "tests_passed": 6
+  },
+  "reader": "semantic-repair-results-20261115.md and THE_GREAT_FLOW research provenance/readback",
+  "row_wire_inventories": {
+    "baseline": {
+      "contract": "lexically-sorted-path-sha256-size-canonical-json/v1",
+      "files": 220,
+      "sha256": "d496d5b91ccf287eb65da173bec6d8c9b9ba8844c1c1ad15055ca61104cb969b"
+    },
+    "candidate": {
+      "contract": "lexically-sorted-path-sha256-size-canonical-json/v1",
+      "files": 220,
+      "sha256": "c175c417697240bd19e1d4eee3022e891b1af4aba88f793d540565f16ed185ea"
+    }
+  },
+  "run_id": "d59d9c4c49be4d0e81e7817e688c9711",
+  "schema": "hswm-semantic-repair-observation/1",
+  "source_alias": ".hswm-local/semantic-repair-20261115",
+  "source_code": {
+    "executed_dependency_manifest_sha256": "f1c53677b9627849b83ce93d2b0b6f8436cc3d0fd5a8720ac6b3d0f38257212a",
+    "files": {
+      "_research/completion_evidence_learning_v1/semantic-repair-data.mjs": "41cf30d2492b3de5ba0c9ad3f92f1f12bc7191703c3288535bab395a36579bdd",
+      "_research/completion_evidence_learning_v1/semantic-repair-domain.mts": "2682c7df206bb73f99ef84d64a5f6ba755cb4cfc575b428172ff7b57bf480117",
+      "_research/completion_evidence_learning_v1/semantic-repair-run.mjs": "b8ec9fa3510c611fe0e81677e155ff451ab66a450067b8c9c0ff74d238049a0a",
+      "_research/completion_evidence_learning_v1/semantic-repair.test.mjs": "b062cabbfd89468626b4eadb236e36c6a11bb7a08a136fa79b91d050c3df134e"
+    },
+    "observed_head": "2e3fcc78d30cde93e2d9424e8a0ec1fbd43d718e",
+    "scope": "CURRENT_WORKTREE_BYTES_NOT_ASSERTED_IN_GIT_HEAD"
+  },
+  "source_files": {
+    "baseline/frozen.json": "b6068de3799fc8866afd720f19d1dc5a8f77baf878feb5bc528a86e6fcba68c2",
+    "baseline/model.json": "833c6d25cc770088e5b77e077cf545679fb121d3b235031b33a039527a7ed711",
+    "baseline/plan.json": "a82b6ca3757f643e619ce407c4fbb9577d790c1a49a3384ff83a79adae1225fd",
+    "candidate/frozen.json": "99e4c979e01d06b994f7729f9c8164c008cb4035b83bcb46f3c290805eb0797e",
+    "candidate/model.json": "833c6d25cc770088e5b77e077cf545679fb121d3b235031b33a039527a7ed711",
+    "candidate/plan.json": "f9a57fe5f67686d0afc5920ede542bcbd4493f1f2aa41ee78606840358522496",
+    "development.json": "7e193b284ea7ed93ca5009f33ac90056a1352e29ffdce0b2aea8afe72c0cbf2f",
+    "plan.json": "f8b7f6409ccac7766927fe7fee6eafa02d9572131ee7dbbd11d9cccfa2f3cd6f",
+    "summary.json": "d1153688e743608305c3e1fa42b05debf3ef2048448255e0e3c831d1558736eb"
+  },
+  "summary": {
+    "calls": 80,
+    "development": {
+      "boundary": 8,
+      "inference": "PROGRAM_REPAIR_WITH_FROZEN_W_NOT_W_LEARNING_NOT_GLOBAL_COMPLETION",
+      "insufficient": [
+        7,
+        8
+      ],
+      "passed": false,
+      "status": "DEVELOPMENT_SCORED",
+      "table": {
+        "baselineGrounded": 15,
+        "baselineLabels": 17,
+        "baselineTokens": 96963,
+        "candidateGrounded": 16,
+        "candidateLabels": 18,
+        "candidateTokens": 110618,
+        "cases": 20,
+        "labelGains": 2,
+        "labelLosses": 1
+      }
+    },
+    "evaluation": null,
+    "freshTestOpened": false,
+    "inference": "PROGRAM_REPAIR_WITH_FROZEN_W_NOT_W_LEARNING_NOT_GLOBAL_COMPLETION",
+    "nativeWireVerified": true,
+    "passed": false,
+    "providerFingerprints": [
+      "vllm-0.25.1-697a994d"
+    ],
+    "stats": [
+      {
+        "arm": "baseline",
+        "calls": 40,
+        "nativeWireVerified": true,
+        "reads": {
+          "contentBytes": 1658722,
+          "contentReads": 480,
+          "fullSnapshots": 2,
+          "headBytes": 14378664,
+          "headProbes": 283,
+          "nativeSubmissions": 0,
+          "snapshotRequests": 282
+        },
+        "rows": 20,
+        "tokens": 96963
+      },
+      {
+        "arm": "candidate",
+        "calls": 40,
+        "nativeWireVerified": true,
+        "reads": {
+          "contentBytes": 1939196,
+          "contentReads": 480,
+          "fullSnapshots": 2,
+          "headBytes": 14378664,
+          "headProbes": 283,
+          "nativeSubmissions": 0,
+          "snapshotRequests": 282
+        },
+        "rows": 20,
+        "tokens": 110618
+      }
+    ],
+    "status": "VERIFIED_NATIVE_SEMANTIC_REPAIR",
+    "tokens": 207581,
+    "wMode": "FROZEN_AUDIT"
+  }
+}
